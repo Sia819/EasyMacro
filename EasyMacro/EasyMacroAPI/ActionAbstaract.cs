@@ -11,5 +11,10 @@ namespace EasyMacroAPI
         int x, y;
         Action action;
         float time;
+
+        public void Do()
+        {
+            action.Invoke();
+        }
     }
 }

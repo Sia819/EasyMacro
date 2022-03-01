@@ -10,9 +10,8 @@ namespace EasyMacroAPI
     {
         private MacroManager macroManager = MacroManager.Instance;
 
-        int x, y;
+        public int index;
         Action action;
-        int time;
 
         public void Do()
         {

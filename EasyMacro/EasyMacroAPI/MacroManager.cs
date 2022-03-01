@@ -43,7 +43,6 @@ namespace EasyMacroAPI
         public void StopMacro()
         {
             isMacroStarted = false;
-            macroThread.Join();
         }
 
         private static void DoMacro()

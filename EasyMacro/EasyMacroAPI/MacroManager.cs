@@ -11,13 +11,16 @@ namespace EasyMacroAPI
 
         private List<ActionAbstaract> actionList;
         Thread macroThread;
-        public static MacroManager Instance()
+        public static MacroManager Instance
         {
-            if(instance == null)
+            get 
             {
-                instance = new MacroManager();
+                if (instance == null)
+                {
+                    instance = new MacroManager();
+                }
+                return instance;
             }
-            return instance;
         }
 
         public void StartMacro()

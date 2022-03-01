@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -9,8 +8,9 @@ namespace EasyMacroAPI
     {
         private static MacroManager instance = null;
 
-        private List<ActionAbstaract> actionList;
-        Thread macroThread;
+        private static List<ActionAbstaract> actionList;
+        private static bool isMacroStarted = false;
+        Thread macroThread = new Thread(DoMacro);
         public static MacroManager Instance
         {
             get 
@@ -25,15 +25,20 @@ namespace EasyMacroAPI
 
         public void StartMacro()
         {
-            
+            macroThread.Start();
         }
 
-        private void DoMacro()
+        private static void DoMacro()
         {
-            for (int i = 0; i < actionList.Count; i++)
+            while (true)
             {
-
-                actionList[i].Do();
+                for (int i = 0; i < actionList.Count; i++)
+                {
+                    if (isMacroStarted)
+                        actionList[i].Do();
+                    else
+                        return;
+                }
             }
         }
     }

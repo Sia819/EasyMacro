@@ -8,24 +8,37 @@ namespace EasyMacroAPI
     {
         private static MacroManager instance = null;
 
-        private static List<ActionAbstaract> actionList;
+        private static List<ActionAbstract> actionList;
         private static bool isMacroStarted = false;
-        Thread macroThread = new Thread(DoMacro);
+        static Thread macroThread = new Thread(DoMacro);
         public static MacroManager Instance
         {
             get 
             {
                 if (instance == null)
                 {
+                    Init();
                     instance = new MacroManager();
                 }
                 return instance;
             }
         }
 
+        private static void Init()
+        {
+            macroThread.IsBackground = true;
+        }
+
         public void StartMacro()
         {
+            isMacroStarted = true;
             macroThread.Start();
+        }
+
+        public void StopMacro()
+        {
+            isMacroStarted = false;
+            macroThread.Join();
         }
 
         private static void DoMacro()

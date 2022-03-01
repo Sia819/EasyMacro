@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace EasyMacroAPI
 {
-    public class ActionAbstaract
+    public class ActionAbstract
     {
+        private MacroManager macroManager = MacroManager.Instance;
+
         int x, y;
         Action action;
         float time;

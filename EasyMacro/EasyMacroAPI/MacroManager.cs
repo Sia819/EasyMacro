@@ -35,6 +35,11 @@ namespace EasyMacroAPI
             macroThread.Start();
         }
 
+        public void DelayMacro(int time)
+        {
+            Thread.Sleep(time);
+        }
+
         public void StopMacro()
         {
             isMacroStarted = false;

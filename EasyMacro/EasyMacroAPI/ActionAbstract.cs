@@ -12,7 +12,7 @@ namespace EasyMacroAPI
 
         int x, y;
         Action action;
-        float time;
+        int time;
 
         public void Do()
         {

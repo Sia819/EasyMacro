@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32126.315
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyMacroAPI", "EasyMacroAPI\EasyMacroAPI.csproj", "{5DA04EE0-B0D4-469F-A59E-935469B7B154}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyMacro", "EasyMacro\EasyMacro.csproj", "{82D9841E-BC78-4701-91B4-D9768FFC7ACB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5DA04EE0-B0D4-469F-A59E-935469B7B154}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DA04EE0-B0D4-469F-A59E-935469B7B154}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DA04EE0-B0D4-469F-A59E-935469B7B154}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DA04EE0-B0D4-469F-A59E-935469B7B154}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82D9841E-BC78-4701-91B4-D9768FFC7ACB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82D9841E-BC78-4701-91B4-D9768FFC7ACB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82D9841E-BC78-4701-91B4-D9768FFC7ACB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82D9841E-BC78-4701-91B4-D9768FFC7ACB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E364A604-21EB-4C56-BA20-EBFD1C3E1142}
+	EndGlobalSection
+EndGlobal

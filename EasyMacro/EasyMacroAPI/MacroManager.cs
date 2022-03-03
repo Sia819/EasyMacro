@@ -72,6 +72,11 @@ namespace EasyMacroAPI
             }
         }
 
+        public static void DoOnce(int index)
+        {
+            actionList[index].Do();
+        }
+
         public void SaveData()
         {
             BinaryFormatter bf = new BinaryFormatter();

@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace EasyMacroAPI
 {
-    [Serializable]
-    public class SerializableDataField
+    public interface IAction
     {
-        public List<IAction> copyList;
+        public MacroTypes MacroType { get; }
+
+        public void Do();
     }
 }

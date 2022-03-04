@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace EasyMacroAPI
 {
-    [Serializable]
-    public abstract class ActionAbstract
+    public enum MacroTypes
     {
-        public int index;
-
-        public abstract void Do();
+        Hello = -1,
+        Sleep = 0,
+        MouseMove = 1,
+        MouseClick = 2,
     }
 }

@@ -11,11 +11,12 @@ namespace EasyMacroAPI
         private static MacroManager instance;
         private bool isMacroStarted;
         private Thread macroThread;
-        private List<ActionAbstract> actionList;
+        // TODO : 임시로 private -> public 수정 나중에 고치기
+        public List<IAction> actionList;
 
         private MacroManager()
         {
-            actionList = new List<ActionAbstract>();
+            actionList = new List<IAction>();
             isMacroStarted = false;
             macroThread = new Thread(DoMacro);
             macroThread.IsBackground = true;
@@ -34,9 +35,8 @@ namespace EasyMacroAPI
         }
 
 
-        public void InsertList(ActionAbstract insertAction)
+        public void InsertList(IAction insertAction)
         {
-            insertAction.index = actionList.Count;
             actionList.Add(insertAction);
         }
         

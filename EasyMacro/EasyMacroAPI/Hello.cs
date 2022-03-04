@@ -6,10 +6,16 @@ using System.Threading.Tasks;
 
 namespace EasyMacroAPI
 {
+    /// <summary>
+    /// 임시 매크로 동작 예시입니다.
+    /// </summary>
     [Serializable]
-    public class Hello : ActionAbstract
+    public class Hello : IAction
     {
+        public MacroTypes MacroType => MacroTypes.Sleep;
+
         private string data;
+
         public Hello()
         {
             this.data = "Hello";
@@ -19,7 +25,7 @@ namespace EasyMacroAPI
             this.data = data;
         }
 
-        public override void Do()
+        public void Do()
         {
             Console.WriteLine(data);
         }

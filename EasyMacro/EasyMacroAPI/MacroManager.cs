@@ -8,28 +8,31 @@ namespace EasyMacroAPI
 {
     public class MacroManager
     {
-        private static MacroManager instance = null;
+        private static MacroManager instance;
+        private List<ActionAbstract> actionList;
+        private bool isMacroStarted;
+        private Thread macroThread;
 
-        private static List<ActionAbstract> actionList;
-        private static bool isMacroStarted = false;
-        static Thread macroThread = new Thread(DoMacro);
+        private MacroManager()
+        {
+            actionList = new List<ActionAbstract>();
+            isMacroStarted = false;
+            macroThread = new Thread(DoMacro);
+            macroThread.IsBackground = true;
+        }
+
         public static MacroManager Instance
         {
             get 
             {
                 if (instance == null)
                 {
-                    Init();
                     instance = new MacroManager();
                 }
                 return instance;
             }
         }
 
-        private static void Init()
-        {
-            macroThread.IsBackground = true;
-        }
 
         public void InsertList(ActionAbstract insertAction)
         {
@@ -58,7 +61,7 @@ namespace EasyMacroAPI
             isMacroStarted = false;
         }
 
-        private static void DoMacro()
+        private void DoMacro()
         {
             while (true)
             {
@@ -72,7 +75,7 @@ namespace EasyMacroAPI
             }
         }
 
-        public static void DoOnce(int index)
+        public void DoOnce(int index)
         {
             actionList[index].Do();
         }
@@ -80,12 +83,11 @@ namespace EasyMacroAPI
         public void SaveData()
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream fs = new FileStream("C:\\emsave.em", FileMode.Create);
+            FileStream fs = new FileStream("C:\\Users\\Sia819\\Desktop\\mynew\\macro.em", FileMode.Create);
 
             SerializableDataField filesaver = new SerializableDataField();
 
             filesaver.actionList = actionList;
-
             bf.Serialize(fs, filesaver);
             fs.Close();
         }
@@ -93,7 +95,7 @@ namespace EasyMacroAPI
         public void LoadData()
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream fs = new FileStream("C:\\emsave.em", FileMode.Open);
+            FileStream fs = new FileStream("C:\\Users\\Sia819\\Desktop\\mynew\\macro.em", FileMode.Open);
 
             SerializableDataField filesaver = new SerializableDataField();
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace EasyMacroAPI
 {
+    [Serializable]
     public abstract class ActionAbstract
     {
         private MacroManager macroManager = MacroManager.Instance;

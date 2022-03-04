@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace EasyMacroAPI
 {
-    [Serializable]
-    public class SerializableDataField
+    public class Hello : ActionAbstract
     {
-        public List<ActionAbstract> actionList;
+        public override void Do()
+        {
+            Console.WriteLine("Hello");
+        }
     }
 }

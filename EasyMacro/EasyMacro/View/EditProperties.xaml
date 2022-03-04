@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="EasyMacro.View.EditProperties"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EasyMacro.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="300" d:Background="White">
+    <Grid>
+        <DockPanel>
+            <ComboBox DockPanel.Dock="Top" Height="40" >
+                <TextBlock Text="마우스 이동"/>
+                <TextBlock Text="마우스 클릭"/>
+            </ComboBox>
+            <Border DockPanel.Dock="Bottom"
+                            MinHeight="100"
+                            BorderThickness="1" BorderBrush="Black">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Image Panel" 
+                                   Background="WhiteSmoke"
+                                   Grid.Row="0"/>
+                    <TextBlock Text="Image Content"
+                                   Grid.Row="2"></TextBlock>
+                </Grid>
+
+            </Border>
+
+            <StackPanel>
+                <CheckBox Content="1"></CheckBox>
+                <CheckBox Content="2"></CheckBox>
+            </StackPanel>
+
+
+        </DockPanel>
+    </Grid>
+</UserControl>

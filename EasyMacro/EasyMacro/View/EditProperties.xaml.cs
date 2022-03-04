@@ -16,14 +16,13 @@ using System.Windows.Shapes;
 namespace EasyMacro.View
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for EditProperties.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class EditProperties : UserControl
     {
-        public MainWindow()
+        public EditProperties()
         {
             InitializeComponent();
-
         }
     }
 }

@@ -9,9 +9,24 @@ namespace EasyMacroAPI
     [Serializable]
     public class Hello : ActionAbstract
     {
+        private string data;
+        public Hello()
+        {
+            this.data = "Hello";
+        }
+        public Hello(string data)
+        {
+            this.data = data;
+        }
+
         public override void Do()
         {
-            Console.WriteLine("Hello");
+            Console.WriteLine(data);
+        }
+
+        public void Edit(string editText)
+        {
+            this.data = editText;
         }
     }
 }

@@ -83,7 +83,7 @@ namespace EasyMacroAPI
         public void SaveData()
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream fs = new FileStream("C:\\Users\\이주흔\\Desktop\\test\\macro.em", FileMode.Create);
+            FileStream fs = new FileStream("C:\\Users\\Sia819\\Desktop\\test\\macro.em", FileMode.Create);
 
             SerializableDataField filesaver = new SerializableDataField();
 
@@ -95,7 +95,7 @@ namespace EasyMacroAPI
         public void LoadData()
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream fs = new FileStream("C:\\Users\\이주흔\\Desktop\\test\\macro.em", FileMode.Open);
+            FileStream fs = new FileStream("C:\\Users\\Sia819\\Desktop\\test\\macro.em", FileMode.Open);
 
             SerializableDataField filesaver = new SerializableDataField();
 

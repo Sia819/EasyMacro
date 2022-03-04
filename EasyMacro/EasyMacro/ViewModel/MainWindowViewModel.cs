@@ -17,24 +17,45 @@ namespace EasyMacro.ViewModel
     public class MainWindowViewModel : ViewModelBase
     {
         public ObservableCollection<Model.MacrosCommand> MacroList { get; set; } = new();
-        public MacroManager macroManager;
+
+        private MacroManager macroManager;
 
         public MainWindowViewModel()
         {
             macroManager = MacroManager.Instance;
-            MacroList.Add(new MacrosCommand("Hello"));
-            macroManager.InsertList(new Hello());
+
+            MacroList.Add(new MacrosCommand("Hello1"));
+            MacroList.Add(new MacrosCommand("Hello2", true));
+            MacroList.Add(new MacrosCommand("Hello3"));
+
+            //macroManager.InsertList(new Hello());
+            //macroManager.DoOnce(0);
         }
 
-        public ICommand SaveCommand { get; } = new RelayCommand(() => 
-        {
-            MacroManager.Instance.SaveData();
-            MessageBox.Show("Save Commend!");
-        });
+        public ICommand SaveCommand => new RelayCommand(Save);
+        public ICommand LoadCommand => new RelayCommand(Load);
+        public ICommand StartCommand => new RelayCommand(Start);
 
-        public ICommand LoadCommand { get; } = new RelayCommand(() =>
+        private void Save()
         {
-            MessageBox.Show("Load Commend!");
-        });
+            MessageBox.Show("Save Commend Excuted!");
+
+            macroManager.SaveData();
+        }
+
+        private void Load()
+        {
+            MessageBox.Show("Load Commend Excuted!");
+
+            macroManager.LoadData();
+        }
+
+        private void Start()
+        {
+            MessageBox.Show("Start Commend Excuted!");
+
+            macroManager.DoOnce(0);
+        }
+
     }
 }

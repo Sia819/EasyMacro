@@ -10,20 +10,25 @@ using System.Windows.Input;
 using EasyMacro.Model;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using EasyMacroAPI;
 
 namespace EasyMacro.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
         public ObservableCollection<Model.MacrosCommand> MacroList { get; set; } = new();
+        public MacroManager macroManager;
 
         public MainWindowViewModel()
         {
+            macroManager = MacroManager.Instance;
             MacroList.Add(new MacrosCommand("Hello"));
+            macroManager.InsertList(new Hello());
         }
 
         public ICommand SaveCommand { get; } = new RelayCommand(() => 
         {
+            MacroManager.Instance.SaveData();
             MessageBox.Show("Save Commend!");
         });
 

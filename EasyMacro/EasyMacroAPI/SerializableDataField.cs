@@ -10,6 +10,6 @@ namespace EasyMacroAPI
     [Serializable]
     public class SerializableDataField
     {
-        public List<ActionAbstract> actionList;
+        public List<ActionAbstract> copyList;
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace EasyMacroAPI
 {
+    [Serializable]
     public class Hello : ActionAbstract
     {
         public override void Do()

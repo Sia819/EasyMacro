@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace EasyMacro.View
 {
     /// <summary>
-    /// PoligonTest.xaml에 대한 상호 작용 논리
+    /// HelloProperties.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class PoligonTest : UserControl
+    public partial class HelloProperties : UserControl
     {
-        public PoligonTest()
+        public HelloProperties()
         {
             InitializeComponent();
         }

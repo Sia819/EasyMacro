@@ -1,5 +1,6 @@
 using EasyMacroAPI;
 using System;
+using System.Diagnostics;
 using Xunit;
 
 namespace EasyMacroApiTest
@@ -9,7 +10,9 @@ namespace EasyMacroApiTest
         [Fact]
         public void SaveTest()
         {
-            MacroManager macroManager;
+
+            Assert.True(true);
         }
     }
 }
+

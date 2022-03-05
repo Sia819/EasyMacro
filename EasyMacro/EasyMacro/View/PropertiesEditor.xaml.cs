@@ -18,9 +18,9 @@ namespace EasyMacro.View
     /// <summary>
     /// Interaction logic for EditProperties.xaml
     /// </summary>
-    public partial class EditProperties : UserControl
+    public partial class PropertiesEditor : UserControl
     {
-        public EditProperties()
+        public PropertiesEditor()
         {
             InitializeComponent();
         }

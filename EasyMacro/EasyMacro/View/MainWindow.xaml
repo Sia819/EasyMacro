@@ -9,7 +9,13 @@
         DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModelLocate}"
         Title="MainWindow" Height="450" Width="700">
     <Window.Resources>
-        <ResourceDictionary Source="pack://application:,,,/Theme/ListBoxNoPadding.xaml"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Theme/ListBoxNoPadding.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Theme/CircleButton.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+        
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -25,23 +31,41 @@
             </Grid.RowDefinitions>
 
             <!-- 전체적인 매크로 제어 패널 -->
-            <StackPanel Orientation="Horizontal">
+            <DockPanel>
                 <Border Grid.Column="0" Grid.Row="0" 
-                    Width="auto" Height="50" 
-                    BorderThickness="1" BorderBrush="Black">
-                    <TextBlock Text="Macro State"></TextBlock>
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Stretch"
+                        Padding="3"
+                        Margin="3"
+                        BorderThickness="1" BorderBrush="Black"
+                        DockPanel.Dock="Left">
+                    <TextBlock Text="Macro State"/>
                 </Border>
-                <Button Command="{Binding SaveCommand}" 
-                        Content="Save"/>
-                <Button Command="{Binding LoadCommand}" 
-                        Content="Load" />
-                <Button Command="{Binding StartCommand}" 
-                        Content="Start" />
-            </StackPanel>
+
+                <Button Content="Save"
+                        Command="{Binding SaveCommand}" 
+                        Style="{StaticResource CircleButton}"
+                        Width="50" Height="50"
+                        Margin="5"
+                        DockPanel.Dock="Right"/>
+                <Button Content="Load"
+                        Command="{Binding LoadCommand}" 
+                        Style="{StaticResource CircleButton}"
+                        Width="50" Height="50"
+                        Margin="5"
+                        DockPanel.Dock="Right"/>
+                <Button Content="Start"
+                        Command="{Binding StartCommand}" 
+                        Style="{StaticResource CircleButton}"
+                        Width="50" Height="50" 
+                        Margin="5"
+                        DockPanel.Dock="Right"/>
+                <Border/>
+            </DockPanel>
 
             <!-- 매크로가 보이는 패널 -->
             <ListBox Grid.Column="0" Grid.Row="1" 
-                     ItemsSource="{Binding MacroList}">
+                     ItemsSource="{Binding LogicList}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <!--<TextBlock Text="{Binding Name}"></TextBlock>-->
@@ -54,12 +78,11 @@
                                                 <Setter.Value>
                                                     <ControlTemplate>
                                                         <!-- 1 -->
-                                                        <Border BorderBrush="Black" BorderThickness="1"
+                                                        <Border BorderBrush="Black" 
+                                                                BorderThickness="1"
                                                                 Margin="0">
                                                             <Grid Margin="10">
-
-                                                                <TextBlock Text="{Binding Name}"/>
-
+                                                                <TextBlock Text="{Binding Text}"/>
                                                             </Grid>
                                                         </Border>
                                                     </ControlTemplate>
@@ -72,7 +95,10 @@
                                                     <ControlTemplate>
                                                         <StackPanel Orientation="Horizontal">
                                                             <Grid Margin="0 -20" MinHeight="0">
-                                                                <Ellipse x:Name="Border"  Stroke="#FF393785"  StrokeThickness="2" Fill="Transparent"/>
+                                                                <Ellipse x:Name="Border" 
+                                                                         Stroke="#FF393785" 
+                                                                         StrokeThickness="2" 
+                                                                         Fill="Transparent"/>
                                                                 <DockPanel LastChildFill="True" Margin="10 18 10 23"/>
                                                             </Grid>
                                                         </StackPanel>
@@ -87,13 +113,11 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-
-
         </Grid>
 
         <!-- 왼쪽 속성 패널 -->
         <Grid Grid.Column="1" Grid.Row="0">
-            <local:EditProperties/>
+            <local:PropertiesEditor/>
         </Grid>
 
     </Grid>

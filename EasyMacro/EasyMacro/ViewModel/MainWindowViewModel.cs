@@ -78,6 +78,7 @@ namespace EasyMacro.ViewModel
         /// </summary>
         private void Add()
         {
+            MacroManager.Instance.InsertList(new MouseMove(100, 100));
             MessageBox.Show("Add Commend Excuted!");
             // TODO : ComboBoxList 들의 ContentPresentor은 각각 ViewModel 이 있는데
             // 그 ViewModel에서 제공하는 모든 옵션들이 다르기에 Add가

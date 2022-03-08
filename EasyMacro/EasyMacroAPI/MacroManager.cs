@@ -9,6 +9,7 @@ namespace EasyMacroAPI
     public class MacroManager
     {
         private static MacroManager instance;
+        private HotKey hotKey;
         private bool isMacroStarted;
         private Thread macroThread;
         // TODO : 임시로 private -> public 수정 나중에 고치기
@@ -16,10 +17,9 @@ namespace EasyMacroAPI
 
         private MacroManager()
         {
+            hotKey = new HotKey();
             actionList = new List<IAction>();
             isMacroStarted = false;
-            macroThread = new Thread(DoMacro);
-            macroThread.IsBackground = true;
         }
 
         public static MacroManager Instance
@@ -47,7 +47,10 @@ namespace EasyMacroAPI
 
         public void StartMacro()
         {
+            macroThread = new Thread(DoMacro);
+            macroThread.IsBackground = true;
             isMacroStarted = true;
+            hotKey.RegisterHotKey();
             macroThread.Start();
         }
 
@@ -59,6 +62,7 @@ namespace EasyMacroAPI
         public void StopMacro()
         {
             isMacroStarted = false;
+            hotKey.UnregisterHotKey();
         }
 
         private void DoMacro()

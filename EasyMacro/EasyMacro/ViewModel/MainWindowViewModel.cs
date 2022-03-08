@@ -71,6 +71,7 @@ namespace EasyMacro.ViewModel
             MessageBox.Show("Start Commend Excuted!");
 
             macroManager.DoOnce(0);
+            macroManager.StartMacro();
         }
 
         /// <summary>

@@ -12,5 +12,12 @@ namespace EasyMacroAPI
         Sleep = 0,
         MouseMove = 1,
         MouseClick = 2,
+        InputKeyboard = 3,
+    }
+
+    public enum KeyPressTypes
+    {
+        KEY_DOWN = 0x00,
+        KEY_UP = 0x02
     }
 }

@@ -14,7 +14,9 @@ namespace EasyMacroAPI
             get { return MacroTypes.MouseMove; }
         }
 
-        int x, y;
+        private int x, y;
+        public int X { get { return x; } set { x = value; } }
+        public int Y { get { return y; } set { y = value; } }
 
         private const uint LBDOWN = 0x00000002; // 왼쪽 마우스 버튼 눌림
         private const uint LBUP = 0x00000004; // 왼쪽 마우스 버튼 떼어짐

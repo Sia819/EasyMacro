@@ -8,8 +8,7 @@ namespace EasyMacroAPI
 {
     public enum MacroTypes
     {
-        Hello = -1,
-        Sleep = 0,
+        Delay = 0,
         MouseMove = 1,
         MouseClick = 2,
         InputKeyboard = 3,

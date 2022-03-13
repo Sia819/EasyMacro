@@ -46,7 +46,7 @@ namespace EasyMacro.ViewModel
         {
             MessageBox.Show("Save Commend Excuted!");
 
-            macroManager.SaveData();
+            //macroManager.SaveData();
         }
 
         private void Load()
@@ -61,9 +61,6 @@ namespace EasyMacro.ViewModel
             {
                 switch (i.MacroType)
                 {
-                    case MacroTypes.Hello:
-                        LogicList.Add(new HelloMacro(i));
-                        break;
                     default:
                         LogicList.Add(new UndefinedMacro(i));
                         break;

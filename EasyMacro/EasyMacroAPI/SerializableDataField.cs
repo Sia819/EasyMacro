@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace EasyMacroAPI
 {
-    [Serializable]
     public class SerializableDataField
     {
-        public List<IAction> copyList;
+        
     }
 }

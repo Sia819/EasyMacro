@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
 
 namespace EasyMacroAPI
 {
@@ -12,11 +10,13 @@ namespace EasyMacroAPI
         private HotKey hotKey;
         private bool isMacroStarted;
         private Thread macroThread;
+        private IOManager ioManger;
         // TODO : 임시로 private -> public 수정 나중에 고치기
         public List<IAction> actionList;
 
         private MacroManager()
         {
+            ioManger = new IOManager();
             hotKey = new HotKey();
             actionList = new List<IAction>();
             isMacroStarted = false;
@@ -84,29 +84,14 @@ namespace EasyMacroAPI
             actionList[index].Do();
         }
 
-        public void SaveData()
+        public void SaveData(List<IAction> list)
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream fs = new FileStream("C:\\Users\\Sia819\\Desktop\\test\\macro.em", FileMode.Create);
-
-            SerializableDataField filesaver = new SerializableDataField();
-
-            filesaver.copyList = actionList;
-            bf.Serialize(fs, filesaver);
-            fs.Close();
+            ioManger.Serialization(list);
         }
 
         public void LoadData()
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream fs = new FileStream("C:\\Users\\Sia819\\Desktop\\test\\macro.em", FileMode.Open);
-
-            SerializableDataField filesaver = new SerializableDataField();
-
-            filesaver = bf.Deserialize(fs) as SerializableDataField;
-            fs.Close();
-
-            actionList = filesaver.copyList;
+            actionList = ioManger.DeSerialization<List<IAction>>();
         }
     }
 }

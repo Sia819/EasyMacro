@@ -11,12 +11,11 @@ namespace EasyMacroAPI
     {
         public MacroTypes MacroType
         {
-            get { return MacroTypes.MouseMove; }
+            get { return MacroTypes.Delay; }
         }
 
-        Timer timer;
-
-        int time;
+        private int time;
+        public int Time { get { return time; } set { time = value; } }
 
         public DelayMacro(int time)
         {

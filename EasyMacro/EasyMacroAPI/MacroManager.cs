@@ -47,15 +47,7 @@ namespace EasyMacroAPI
             isMacroStarted = false;
             deaktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             saveFileName = "test.xml";
-            serializer = new ConfigurationContainer()//.WithUnknownContent()
-                                                     //.Continue()
-                                                     //.EnableImplicitTypingFromNested<IAction>()
-                                                     //.EnableClassicSchemaTyping()
-                                                     //.EnableImplicitTyping(typeof(Delay), typeof(MouseMove))
-
-                                                     //.Type<MouseMove>().Register().Serializer().Of<MouseMoveSerializer>()
-                                                     //.CustomSerializer<MouseMove, MouseMoveSerializer>()
-                                                     .CustomSerializer<MouseMove, MouseMoveSerializer>()
+            serializer = new ConfigurationContainer().CustomSerializer<MouseMove, MouseMoveSerializer>()
                                                      .CustomSerializer<Delay, DelaySerializer>()
                                                      .Create();
         }
@@ -139,10 +131,6 @@ namespace EasyMacroAPI
             using (var reader = new StreamReader(filePath))
             {
                 var subject = new ConfigurationContainer()
-                           //.Type<MouseMove>().Register().Serializer().Of<MouseMoveSerializer>()
-                           //.Type<Delay>().Register().Serializer().Of(typeof(DelaySerializer))
-                           //.CustomSerializer<MouseMove, MouseMoveSerializer>()
-                           //.CustomSerializer<Delay, DelaySerializer>()
                            .WithUnknownContent()
                            .Continue()
                            .CustomSerializer<MouseMove>(typeof(MouseMoveSerializer))

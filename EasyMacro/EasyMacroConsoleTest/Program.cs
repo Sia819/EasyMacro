@@ -6,8 +6,6 @@ namespace EasyMacroConsoleTest
 {
     public class Program
     {
-        
-
         /// <summary>
         /// 테스트 할 코드 입니다.
         /// </summary>

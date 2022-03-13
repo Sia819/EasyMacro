@@ -25,24 +25,3 @@ namespace EasyMacroAPI.CommandSerializer
         }
     }
 }
-/*
- * 
- * public MouseMove Deserialize(XElement element)
-        {
-            XElement element_X = element.Member(nameof(MouseMove.X));
-            XElement element_Y = element.Member(nameof(MouseMove.Y));
-            if (element_X != null && element_Y != null)
-            {
-                int element1 = Convert.ToInt32(element_X.Value);
-                int element2 = Convert.ToInt32(element_Y.Value);
-                return new MouseMove(element1, element2);
-            }
-            throw new InvalidOperationException("Invalid xml for class \"" + nameof(MouseMove) + "\" with serializer");
-        }
-
-        public void Serializer(XmlWriter xmlWriter, MouseMove obj)
-        {
-            xmlWriter.WriteElementString(nameof(MouseMove.X), obj.X.ToString(CultureInfo.InvariantCulture));
-            xmlWriter.WriteElementString(nameof(MouseMove.Y), obj.Y.ToString(CultureInfo.InvariantCulture));
-        }
- */

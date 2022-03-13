@@ -18,10 +18,10 @@ namespace EasyMacroAPI
         [DllImport("user32.dll")]
         public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
-        public HotKey()
-        {
-            
-        }
+        //public HotKey()
+        //{
+        //    
+        //}
 
         const int HOTKEY_ID = 31197; //Any number to use to identify the hotkey instance
 

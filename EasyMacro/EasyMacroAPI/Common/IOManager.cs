@@ -1,11 +1,17 @@
 ﻿using System.Xml.Serialization;
 using System.IO;
 
-namespace EasyMacroAPI
+namespace EasyMacroAPI.Common
 {
-    class IOManager
+    internal class IOManager
     {
         string savepath;
+
+        public IOManager(string savePath)
+        {
+            this.savepath = savePath;
+        }
+
         public void Serialization(object obj)
         {
             // if you use Network driver location, this implementation to solve the permission problems. (backup and remove works)

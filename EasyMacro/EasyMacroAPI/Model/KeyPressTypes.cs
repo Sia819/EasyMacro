@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-namespace EasyMacroAPI
+namespace EasyMacroAPI.Model
 {
-    public class SerializableDataField
+    public enum KeyPressTypes
     {
-        
+        KEY_DOWN = 0x00,
+        KEY_UP = 0x02
     }
 }

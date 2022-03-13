@@ -26,17 +26,10 @@ namespace EasyMacro.ViewModel
 
         private Model.PropertiesModel _selectedMacro;
 
-        public PropertiesEditorViewModel(HelloPropertiesViewModel helloPropertiesViewModel,
-                                        SleepPropertiesViewModel sleepPropertiesViewModel)
+        public PropertiesEditorViewModel(SleepPropertiesViewModel sleepPropertiesViewModel)
         {
             MacroCommands = new();
 
-            MacroCommands.Add(new Model.PropertiesModel()
-            {
-                DisplayName = "Hello 매크로",
-                MacroType = Model.MacroCommand.Hello,
-                TargetViewModel = helloPropertiesViewModel
-            });
             MacroCommands.Add(new Model.PropertiesModel()
             {
                 DisplayName = "Sleep 매크로",

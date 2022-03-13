@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using EasyMacroAPI.Model;
 
-namespace EasyMacroAPI
+namespace EasyMacroAPI.Command
 {
-    public class DelayMacro : IAction
+    public class Delay : IAction
     {
         public MacroTypes MacroType
         {
@@ -17,7 +12,7 @@ namespace EasyMacroAPI
         private int time;
         public int Time { get { return time; } set { time = value; } }
 
-        public DelayMacro(int time)
+        public Delay(int time)
         {
             this.time = time;
         }

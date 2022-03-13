@@ -46,9 +46,6 @@
 
             <ContentPresenter Content="{Binding SelectedMacro.TargetViewModel}">
                 <ContentPresenter.Resources>
-                    <DataTemplate DataType="{x:Type ViewModel:HelloPropertiesViewModel}">
-                        <local:HelloProperties/>
-                    </DataTemplate>
                     <DataTemplate DataType="{x:Type ViewModel:SleepPropertiesViewModel}">
                         <local:SleepProperties/>
                     </DataTemplate>

@@ -7,6 +7,9 @@ using GalaSoft.MvvmLight.Ioc;
 
 namespace EasyMacro.Common
 {
+    /// <summary>
+    /// View의 DataContext를 ViewModel의 인스턴스에 연결하는 데 사용됩니다.
+    /// </summary>
     public class ViewModelLocator
     {
         public ViewModel.MainWindowViewModel MainViewModelLocate => 
@@ -22,7 +25,6 @@ namespace EasyMacro.Common
 
             // EditorPropertiesViewModel and sub viewmodels
             SimpleIoc.Default.Register<ViewModel.PropertiesEditorViewModel>();
-            SimpleIoc.Default.Register<ViewModel.HelloPropertiesViewModel>();
             SimpleIoc.Default.Register<ViewModel.SleepPropertiesViewModel>();
         }
     }

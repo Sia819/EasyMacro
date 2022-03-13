@@ -9,6 +9,11 @@ namespace EasyMacroAPI
 {
     public class MouseMove : IAction
     {
+        public MacroTypes MacroType
+        {
+            get { return MacroTypes.MouseMove; }
+        }
+
         int x, y;
 
         private const uint LBDOWN = 0x00000002; // 왼쪽 마우스 버튼 눌림
@@ -25,10 +30,7 @@ namespace EasyMacroAPI
         [DllImport("user32.dll")] // 커서 위치 제어
         static extern int SetCursorPos(int x, int y);
 
-        public MacroTypes MacroType
-        {
-            get { return MacroTypes.MouseMove; }
-        }
+        
 
         public MouseMove(int x, int y)
         {

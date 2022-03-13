@@ -28,8 +28,13 @@ namespace EasyMacro.ViewModel
         {
             macroManager = MacroManager.Instance;
 
-            macroManager.InsertList(new Hello());
-            macroManager.DoOnce(0);
+            //macroManager.InsertList(new Hello());
+            //macroManager.DoOnce(0);
+
+            macroManager.InsertList(new MouseMove(100, 100));
+            macroManager.InsertList(new DelayMacro(1000));
+            macroManager.InsertList(new MouseMove(1000, 1000));
+            macroManager.InsertList(new DelayMacro(1000));
         }
 
         public ICommand SaveCommand => new RelayCommand(Save);
@@ -70,7 +75,7 @@ namespace EasyMacro.ViewModel
         {
             MessageBox.Show("Start Commend Excuted!");
 
-            macroManager.DoOnce(0);
+            //macroManager.DoOnce(0);
             macroManager.StartMacro();
         }
 

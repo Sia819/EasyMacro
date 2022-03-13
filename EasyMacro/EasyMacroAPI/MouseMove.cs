@@ -30,8 +30,6 @@ namespace EasyMacroAPI
         [DllImport("user32.dll")] // 커서 위치 제어
         static extern int SetCursorPos(int x, int y);
 
-        
-
         public MouseMove(int x, int y)
         {
             this.x = x;

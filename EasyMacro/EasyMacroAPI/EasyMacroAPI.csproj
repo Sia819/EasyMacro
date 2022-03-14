@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="ExtendedXmlSerializer" Version="3.7.6" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>

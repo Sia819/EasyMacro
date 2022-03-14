@@ -117,7 +117,7 @@
 
         <!-- 왼쪽 속성 패널 -->
         <Grid Grid.Column="1" Grid.Row="0">
-            <local:PropertiesEditor/>
+            <local:PropertiesEditor MacrosList="{Binding LogicList, Mode=TwoWay}"/>
         </Grid>
 
     </Grid>

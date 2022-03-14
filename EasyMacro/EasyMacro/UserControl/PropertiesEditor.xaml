@@ -9,13 +9,15 @@
              xmlns:System="clr-namespace:System;assembly=mscorlib"
              DataContext="{Binding Source={StaticResource Locator}, Path=EditorPropertiesViewModelLocate}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="300" d:Background="White">
+             d:DesignHeight="450" 
+             d:DesignWidth="300" 
+             d:Background="White">
     <Grid>
         <DockPanel>
             <ComboBox ItemsSource="{Binding MacroCommands}"
                       SelectedItem="{Binding SelectedMacro}"
                       DockPanel.Dock="Top"
-                      Height="30" >
+                      Height="30">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding DisplayName}"/>
@@ -23,12 +25,14 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
             <Button DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModelLocate}"
-                    Command="{Binding AddCommand}" DockPanel.Dock="Bottom" 
+                    Command="{Binding AddCommand}" 
+                    DockPanel.Dock="Bottom" 
                     Content="Add Macro"
-                    Margin="5"></Button>
+                    Margin="5"/>
             <Border DockPanel.Dock="Bottom"
-                            MinHeight="100"
-                            BorderThickness="1" BorderBrush="Black">
+                    MinHeight="100"
+                    BorderThickness="1" 
+                    BorderBrush="Black">
 
                 <Grid>
                     <Grid.RowDefinitions>
@@ -49,6 +53,12 @@
                     <DataTemplate DataType="{x:Type ViewModel:SleepPropertiesViewModel}">
                         <local:SleepProperties/>
                     </DataTemplate>
+                    <!--<DataTemplate DataType="{x:Type ViewModel:SleepPropertiesViewModel}">
+                        <local:SleepProperties/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type ViewModel:SleepPropertiesViewModel}">
+                        <local:SleepProperties/>
+                    </DataTemplate>-->
                 </ContentPresenter.Resources>
             </ContentPresenter>
 

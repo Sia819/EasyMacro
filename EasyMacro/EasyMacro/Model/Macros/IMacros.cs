@@ -6,12 +6,19 @@ using System.Threading.Tasks;
 
 namespace EasyMacro.Model
 {
+    /// <summary>
+    /// 이 인터페이스를 상속받은 객체는 매크로의 동작에 해당하는 클래스들로 간주되는것을 상정하여 만들어졌습니다.
+    /// </summary>
     public interface IMacros
     {
         /// <summary>
         /// 매크로명령이 UI에 표시될 한국어 이름입니다.
         /// </summary>
         public string Text { get; }
+
+        /// <summary>
+        /// UI에서 Sleep매크로인 경우 다른 모양의 컨트롤로 설계될 예정으로 Sleep Check를 구현합니다.
+        /// </summary>
         public bool IsSleep { get; }
 
     }

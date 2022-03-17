@@ -48,11 +48,11 @@ namespace EasyMacro.View
         {
             InitializeComponent();
 
+            MacroCommands = new();
             MacroCommands.Add(new Model.PropertiesModel()
             {
                 DisplayName = "Sleep 매크로",
                 MacroType = Model.MacroCommand.Sleep,
-                TargetViewModel = sleepPropertiesViewModel
             });
 
         }

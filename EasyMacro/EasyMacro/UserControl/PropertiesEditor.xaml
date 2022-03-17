@@ -48,11 +48,16 @@
                 </Grid>
             </Border>
 
-            <ContentPresenter Content="{Binding SelectedMacro.TargetViewModel}">
+            <ContentPresenter Content="{Binding SelectedMacro.MacroCommand}">
                 <ContentPresenter.Resources>
-                    <DataTemplate DataType="{x:Type ViewModel:SleepPropertiesViewModel}">
+                    <!-- SelectedMacro의 MacroCommand속성값이 열거형인 MacroCommand.Sleep인 경우 -->
+                    <DataTemplate DataType="{x:Type Model:MacroCommand}">
                         <local:SleepProperties/>
-                    </DataTemplate>
+                    </DataTemplate >
+
+                    <!--<DataTemplate DataType="{x:Static Model:MacroCommand.Sleep}">
+                        <local:SleepProperties/>
+                    </DataTemplate>-->
                     <!--<DataTemplate DataType="{x:Type ViewModel:SleepPropertiesViewModel}">
                         <local:SleepProperties/>
                     </DataTemplate>

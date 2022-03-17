@@ -10,7 +10,6 @@ namespace EasyMacro.Model
     public class PropertiesModel
     {
         public string DisplayName { get; set; }
-        public ViewModelBase TargetViewModel { get; set; }
         public MacroCommand MacroType { get; set; }
     }
 }

@@ -35,5 +35,21 @@ namespace EasyMacroConsoleTest
             //macroManager.StartMacro();
             macroManager.DoOnce(0);
         }
+
+        public void ClickTest()
+        {
+           
+
+            MacroManager macroManager = MacroManager.Instance;
+
+            macroManager.InsertList(new MouseClick(111, 111));
+           
+
+            macroManager.SaveData();
+            macroManager.LoadData();
+
+            //macroManager.StartMacro();
+            macroManager.DoOnce(0);
+        }
     }
 }

@@ -15,8 +15,6 @@ namespace EasyMacroAPI.Command
         public int Y { get; private set; }
         public int Delay { get; private set; }
 
-
-
         public MacroTypes MacroType => MacroTypes.MouseClick;
 
         public MouseClick(int x, int y, int delay = 40)
@@ -32,7 +30,5 @@ namespace EasyMacroAPI.Command
             Thread.Sleep(Delay);
             WinAPI.mouse_event(WinAPI.LBUP, (uint)X, (uint)Y, 0, 0);
         }
-
-
     }
 }

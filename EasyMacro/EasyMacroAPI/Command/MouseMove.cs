@@ -5,14 +5,13 @@ using System.Xml.Serialization;
 
 namespace EasyMacroAPI.Command
 {
-    [Serializable]
     public class MouseMove : IAction
     {
         public int X { get; private set; }
         public int Y { get; private set; }
+
         public MacroTypes MacroType => MacroTypes.MouseMove;
 
-        
         public MouseMove(int x, int y)
         {
             this.X = x;

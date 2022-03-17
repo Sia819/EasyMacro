@@ -14,30 +14,42 @@ namespace EasyMacroAPI
 {
     public class MacroManager
     {
+        
+        // TODO : 임시로 private -> public 수정 나중에 고치기
+        public List<IAction> actionList;
+
+        #region Private Field
+
         /// <summary>
         /// 싱글톤 객체 입니다.
         /// </summary>
         private static MacroManager instance;
+
         private HotKey hotKey;
+
         private bool isMacroStarted;
+
         private Thread macroThread;
+
         private IOManager ioManger;
+
         /// <summary>
         /// 바탕화면 주소입니다.
         /// </summary>
         private string deaktopPath;
+
         /// <summary>
         /// 저장될 파일명 이름입니다.
         /// </summary>
         private string saveFileName;
+
         /// <summary>
         /// 직렬화 객체입니다. </para>
         /// https://github.com/ExtendedXmlSerializer/home 사이트 참고
         /// </summary>
         private IExtendedXmlSerializer serializer;
 
-        // TODO : 임시로 private -> public 수정 나중에 고치기
-        public List<IAction> actionList;
+        #endregion
 
         private MacroManager()
         {

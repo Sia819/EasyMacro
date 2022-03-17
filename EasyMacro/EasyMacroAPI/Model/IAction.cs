@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace EasyMacroAPI
 {
-    
     public interface IAction
     {
         public MacroTypes MacroType { get; }

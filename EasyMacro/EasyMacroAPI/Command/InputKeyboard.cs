@@ -7,25 +7,26 @@ namespace EasyMacroAPI.Command
 {
     public class InputKeyboard : IAction
     {
-        public MacroTypes MacroType { get { return MacroTypes.InputKeyboard; } }
+        #region Public Propertes
 
-        private Keys key;
-        public Keys Key { get { return key; } set { key = value; } }
+        // TODO : Windows Forms 라이브러리 키 열거형만 쓸거면 나중에, Model폴더 내 Keys 열거형을 따로 선언하는 방법이 선호됨.
+        public Keys Key { get; set; }
 
-        private KeyPressTypes keyPressTypes;
-        public KeyPressTypes KeyPressTypes { get { return keyPressTypes; } set { keyPressTypes = value; } }
+        public KeyPressTypes KeyPressTypes { get; set; }
 
-        
+        public MacroTypes MacroType => MacroTypes.InputKeyboard;
+
+        #endregion
 
         public InputKeyboard(Keys key, KeyPressTypes presstype)
         {
-            this.key = key;
-            keyPressTypes = presstype;
+            this.Key = key;
+            this.KeyPressTypes = presstype;
         }
 
         public void Do()
         {
-            WinAPI.keybd_event((byte)key, 0, (int)keyPressTypes, 0);
+            WinAPI.keybd_event((byte)Key, 0, (int)KeyPressTypes, 0);
         }
     }
 }

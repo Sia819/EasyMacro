@@ -41,7 +41,7 @@ namespace EasyMacroAPI
         {
             // 핫키 등록
             //RegisterHotKey((IntPtr)handle, HOTKEY_ID, KeyModifiers.Control | KeyModifiers.Shift, Keys.N);
-            WinAPI.RegisterHotKey(this.Handle, HOTKEY_ID, KeyModifiers.None, Keys.F9);
+            WinAPI.RegisterHotKey(this.Handle, HOTKEY_ID, Model.KeyModifiers.None, Keys.F9);
         }
 
         public void UnregisterHotKey()

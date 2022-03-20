@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,13 +16,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EasyMacro.View
+namespace EasyMacro.UC
 {
     /// <summary>
     /// Interaction logic for EditProperties.xaml
     /// </summary>
-    public partial class PropertiesEditor : UserControl
+    public partial class PropertiesEditor : UserControl, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
 
         #region Dependency Property
 
@@ -67,13 +69,13 @@ namespace EasyMacro.View
             });
             MacroCommands.Add(new Model.PropertiesModel()
             {
-                DisplayName = "Sleep 매크로",
-                MacroType = Model.MacroCommand.Sleep,
+                DisplayName = "MouseMove 매크로",
+                MacroType = Model.MacroCommand.MouseMove,
             });
             MacroCommands.Add(new Model.PropertiesModel()
             {
-                DisplayName = "Sleep 매크로",
-                MacroType = Model.MacroCommand.Sleep,
+                DisplayName = "MouseClick 매크로",
+                MacroType = Model.MacroCommand.MouseClick,
             });
         }
 

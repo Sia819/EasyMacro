@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EasyMacro.View
+namespace EasyMacro.UC
 {
     /// <summary>
     /// Interaction logic for SleepProperties.xaml

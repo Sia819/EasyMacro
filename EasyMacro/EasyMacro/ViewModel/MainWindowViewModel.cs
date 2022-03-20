@@ -18,6 +18,15 @@ namespace EasyMacro.ViewModel
 
         private MacroManager macroManager;
 
+        #region Public Command
+
+        public ICommand SaveCommand => new RelayCommand(Save);
+        public ICommand LoadCommand => new RelayCommand(Load);
+        public ICommand StartCommand => new RelayCommand(Start);
+        public ICommand AddCommand => new RelayCommand(Add);
+
+        #endregion
+
         public MainWindowViewModel()
         {
             macroManager = MacroManager.Instance;
@@ -26,9 +35,9 @@ namespace EasyMacro.ViewModel
             //macroManager.DoOnce(0);
         }
 
-        public ICommand SaveCommand => new RelayCommand(Save);
-        public ICommand LoadCommand => new RelayCommand(Load);
-        public ICommand StartCommand => new RelayCommand(Start);
+        
+
+        #region Private Command Function
 
         private void Save()
         {
@@ -56,6 +65,11 @@ namespace EasyMacro.ViewModel
             }
         }
 
+        private void Add()
+        {
+
+        }
+
         private void Start()
         {
             MessageBox.Show("Start Commend Excuted!");
@@ -63,6 +77,8 @@ namespace EasyMacro.ViewModel
             //macroManager.DoOnce(0);
             macroManager.StartMacro();
         }
+
+        #endregion
 
     }
 }

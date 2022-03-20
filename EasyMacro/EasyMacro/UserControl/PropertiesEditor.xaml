@@ -7,15 +7,14 @@
              xmlns:Model="clr-namespace:EasyMacro.Model"
              xmlns:ViewModel="clr-namespace:EasyMacro.ViewModel"
              xmlns:System="clr-namespace:System;assembly=mscorlib"
-             DataContext="{Binding Source={StaticResource Locator}, Path=EditorPropertiesViewModelLocate}"
              mc:Ignorable="d" 
              d:DesignHeight="450" 
              d:DesignWidth="300" 
              d:Background="White">
     <Grid>
         <DockPanel>
-            <ComboBox ItemsSource="{Binding MacroCommands}"
-                      SelectedItem="{Binding SelectedMacro}"
+            <ComboBox ItemsSource="{Binding MacroCommands, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
+                      SelectedItem="{Binding SelectedMacro, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
                       DockPanel.Dock="Top"
                       Height="30">
                 <ComboBox.ItemTemplate>
@@ -48,22 +47,21 @@
                 </Grid>
             </Border>
 
-            <ContentPresenter Content="{Binding SelectedMacro.MacroCommand}">
+            <!-- 선택된 콤보박스 아이템에 따라 다른 뷰를 설정합니다. -->
+            <ContentPresenter Content="{Binding SelectedMacro.MacroType, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
+                              DockPanel.Dock="Bottom">
                 <ContentPresenter.Resources>
                     <!-- SelectedMacro의 MacroCommand속성값이 열거형인 MacroCommand.Sleep인 경우 -->
-                    <DataTemplate DataType="{x:Type Model:MacroCommand}">
-                        <local:SleepProperties/>
-                    </DataTemplate >
-
-                    <!--<DataTemplate DataType="{x:Static Model:MacroCommand.Sleep}">
-                        <local:SleepProperties/>
-                    </DataTemplate>-->
-                    <!--<DataTemplate DataType="{x:Type ViewModel:SleepPropertiesViewModel}">
+                    <DataTemplate DataType="{x:Static Model:MacroCommand.Sleep}" x:Key="1">
                         <local:SleepProperties/>
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type ViewModel:SleepPropertiesViewModel}">
+                    <DataTemplate DataType="{x:Static Model:MacroCommand.MouseMove}" x:Key="2">
                         <local:SleepProperties/>
-                    </DataTemplate>-->
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Static Model:MacroCommand.MouseClick}" x:Key="3">
+                        <local:SleepProperties/>
+                    </DataTemplate>
+                    
                 </ContentPresenter.Resources>
             </ContentPresenter>
 

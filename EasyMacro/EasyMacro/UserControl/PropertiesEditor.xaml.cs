@@ -22,11 +22,11 @@ namespace EasyMacro.View
     /// </summary>
     public partial class PropertiesEditor : UserControl
     {
-        #region Public Dependency Properties
+
+        #region Dependency Property
 
         public static readonly DependencyProperty MacrosListProperty
             = DependencyProperty.Register("MacrosList", typeof(ObservableCollection<Model.IMacros>), typeof(PropertiesEditor));
-
         public ObservableCollection<Model.IMacros> MacrosList
         {
             get => (ObservableCollection<Model.IMacros>)GetValue(MacrosListProperty);
@@ -35,14 +35,25 @@ namespace EasyMacro.View
 
         #endregion
 
+        //##################################################
+
         #region Public Properties
 
         /// <summary>
-        /// ComboBox에 표시되는 ItemsSource, 추가할 수 있는 매크로들의 목록입니다.
+        /// 매크로 속성들의 집합입니다, ComboBox에 표시되는 ItemsSource, 추가할 수 있는 매크로들의 목록입니다.
         /// </summary>
         public ObservableCollection<Model.PropertiesModel> MacroCommands { get; set; }
 
+        /// <summary>
+        /// ComboBox에서 
+        /// </summary>
+        public Model.PropertiesModel SelectedMacro { get; set; }
+
         #endregion
+
+        //##################################################
+
+        #region Constructor
 
         public PropertiesEditor()
         {
@@ -54,7 +65,18 @@ namespace EasyMacro.View
                 DisplayName = "Sleep 매크로",
                 MacroType = Model.MacroCommand.Sleep,
             });
-
+            MacroCommands.Add(new Model.PropertiesModel()
+            {
+                DisplayName = "Sleep 매크로",
+                MacroType = Model.MacroCommand.Sleep,
+            });
+            MacroCommands.Add(new Model.PropertiesModel()
+            {
+                DisplayName = "Sleep 매크로",
+                MacroType = Model.MacroCommand.Sleep,
+            });
         }
+
+        #endregion
     }
 }

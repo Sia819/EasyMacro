@@ -54,7 +54,7 @@ namespace EasyMacroAPI
         private MacroManager()
         {
             ioManger = new IOManager(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "macro.em");
-            //hotKey = new HotKey();
+            hotKey = new HotKey();
             actionList = new List<IAction>();
             isMacroStarted = false;
             deaktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);

@@ -8,7 +8,6 @@ namespace EasyMacro.Model
 {
     public enum MacroCommand
     {
-        Hello,
         Sleep,
         MouseMove,
         MouseClick,

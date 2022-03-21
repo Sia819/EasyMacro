@@ -52,18 +52,28 @@ namespace EasyMacroAPI
         /// </summary>
         private IExtendedXmlSerializer serializer;
 
+        /// <summary>
+        /// 커스텀 직렬화 객체입니다.
+        /// </summary>
+        private MacroCustomSerializer customSerializer;
+
         #endregion
 
         private MacroManager()
         {
             ioManger = new IOManager(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "macro.em");
-            hotKey = new HotKey(); // TODO : Console실행시 Error발생
+            //hotKey = new HotKey(); // TODO : Console실행시 Error발생
             actionList = new List<IAction>();
             isMacroStarted = false;
             deaktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             saveFileName = "test.xml";
-            serializer = new ConfigurationContainer().CustomSerializer<MouseMove, MouseMoveSerializer>()
-                                                     .CustomSerializer<Delay, DelaySerializer>()
+
+            // 시리얼라이저 객체 초기화 부분 입니다.
+            this.customSerializer = new MacroCustomSerializer();
+            customSerializer.Register<Delay>(new DelaySerializer())
+                            .Register<MouseMove>(new MouseMoveSerializer());
+            serializer = new ConfigurationContainer().Type<IAction>().CustomSerializer(customSerializer)
+                                                     //.CustomSerializer<Delay, DelaySerializer>()
                                                      .Create();
         }
 
@@ -145,9 +155,7 @@ namespace EasyMacroAPI
             actionList.Clear();
             using (var reader = new StreamReader(filePath))
             {
-                MacroCustomSerializer customSerializer = new MacroCustomSerializer();
-                customSerializer.Register<Delay>(new DelaySerializer());
-                customSerializer.Register<MouseMove>(new MouseMoveSerializer());
+                
 
                 var subject = new ConfigurationContainer()
                            .WithUnknownContent()

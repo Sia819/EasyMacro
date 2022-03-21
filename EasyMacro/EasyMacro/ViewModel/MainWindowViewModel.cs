@@ -4,8 +4,10 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using EasyMacro.Model;
+using EasyMacro.Common;
 using EasyMacroAPI;
 using EasyMacroAPI.Command;
+using Microsoft.Win32;
 
 namespace EasyMacro.ViewModel
 {
@@ -20,10 +22,10 @@ namespace EasyMacro.ViewModel
 
         #region Public Command
 
-        public ICommand SaveCommand => new RelayCommand(Save);
-        public ICommand LoadCommand => new RelayCommand(Load);
-        public ICommand StartCommand => new RelayCommand(Start);
-        public ICommand AddCommand => new RelayCommand(Add);
+        public RelayCommand SaveCommand => new(Save);
+        public RelayCommand LoadCommand => new(Load);
+        public RelayCommand StartCommand => new(Start);
+        public RelayCommand<EasyMacroAPI.Model.IAction> AddCommand => new(Add);
 
         #endregion
 
@@ -35,7 +37,7 @@ namespace EasyMacro.ViewModel
             //macroManager.DoOnce(0);
         }
 
-        
+
 
         #region Private Command Function
 
@@ -46,15 +48,33 @@ namespace EasyMacro.ViewModel
             macroManager.SaveData();
         }
 
+        /// <summary>
+        /// 매크로 라이브러리에서 
+        /// </summary>
         private void Load()
         {
-            MessageBox.Show("Load Commend Excuted!");
-            // Call load function from library
-            macroManager.LoadData();
+            string macroPath = null;
+            if (!Common.DebugState.IsDebugStart)
+            {
+                OpenFileDialog dlgOpenFile = new OpenFileDialog()
+                {
+                    Filter = "Image Files (*.xml, *.em) | *.xml; *.em; | All files (*.*) | *.*",
+                };
+                if (dlgOpenFile.ShowDialog().ToString() == "OK")
+                {
+                    macroPath = dlgOpenFile.FileName;
+                }
+                else
+                {
+                    MessageBox.Show("파일 열기 작업이 취소되었습니다.");
+                }
+            }
+
+            macroManager.LoadData(macroPath);
             LogicList.Clear();
 
             // 아래는 public 가정입니다.
-            foreach (IAction i in macroManager.actionList)
+            foreach (EasyMacroAPI.Model.IAction i in macroManager.actionList)
             {
                 switch (i.MacroType)
                 {
@@ -65,7 +85,7 @@ namespace EasyMacro.ViewModel
             }
         }
 
-        private void Add()
+        private void Add(EasyMacroAPI.Model.IAction action)
         {
 
         }

@@ -7,8 +7,11 @@ using System.Xml;
 using EasyMacroAPI.Command;
 using EasyMacroAPI.CommandSerializer;
 using EasyMacroAPI.Common;
+using EasyMacroAPI.Model;
 using ExtendedXmlSerializer;
+using ExtendedXmlSerializer.ExtensionModel;
 using ExtendedXmlSerializer.Configuration;
+using ExtendedXmlSerializer.ExtensionModel.Xml;
 
 namespace EasyMacroAPI
 {
@@ -54,7 +57,7 @@ namespace EasyMacroAPI
         private MacroManager()
         {
             ioManger = new IOManager(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "macro.em");
-            hotKey = new HotKey();
+            hotKey = new HotKey(); // TODO : Console실행시 Error발생
             actionList = new List<IAction>();
             isMacroStarted = false;
             deaktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -142,13 +145,30 @@ namespace EasyMacroAPI
             actionList.Clear();
             using (var reader = new StreamReader(filePath))
             {
+                MacroCustomSerializer customSerializer = new MacroCustomSerializer();
+                customSerializer.Register<Delay>(new DelaySerializer());
+                customSerializer.Register<MouseMove>(new MouseMoveSerializer());
+
                 var subject = new ConfigurationContainer()
                            .WithUnknownContent()
                            .Continue()
-                           .CustomSerializer<MouseMove>(typeof(MouseMoveSerializer))
+                           .Type<IAction>().CustomSerializer(customSerializer)
+
                            .Create();
                 actionList = subject.Deserialize<List<IAction>>(reader);
             }
         }
     }
 }
+
+
+/*  아래 의 Deserializer 구현은 하나의 타입으로만 디시리얼라이즈합니다.
+ *  여러가지의 타입을 등록시, 가장 마지막으로 등록된 CustomSerializer만 작동하여 오작동을 일으킵니다.
+ *  var subject = new ConfigurationContainer()
+                           .WithUnknownContent()
+                           .Continue()
+                           .Type<MouseMove>().CustomSerializer(new MouseMoveSerializer())
+                           .Type<Delay>().CustomSerializer(new DelaySerializer())
+                            // ~
+                           .Create();
+*/

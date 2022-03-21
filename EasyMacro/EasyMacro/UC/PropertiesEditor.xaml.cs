@@ -65,17 +65,17 @@ namespace EasyMacro.UC
             MacroCommands.Add(new Model.PropertiesModel()
             {
                 DisplayName = "Sleep 매크로",
-                MacroType = Model.MacroCommand.Sleep,
+                MacroType = Model.MacroDisplayType.Sleep,
             });
             MacroCommands.Add(new Model.PropertiesModel()
             {
                 DisplayName = "MouseMove 매크로",
-                MacroType = Model.MacroCommand.MouseMove,
+                MacroType = Model.MacroDisplayType.MouseMove,
             });
             MacroCommands.Add(new Model.PropertiesModel()
             {
                 DisplayName = "MouseClick 매크로",
-                MacroType = Model.MacroCommand.MouseClick,
+                MacroType = Model.MacroDisplayType.MouseClick,
             });
         }
 

@@ -12,14 +12,14 @@ namespace EasyMacro.Model
     public interface IMacros
     {
         /// <summary>
+        /// UI에 어떤 타입으로 표시될지 결정합니다.
+        /// </summary>
+        public MacroDisplayType DisplayType { get; }
+        
+        /// <summary>
         /// 매크로명령이 UI에 표시될 한국어 이름입니다.
         /// </summary>
-        public string Text { get; }
-
-        /// <summary>
-        /// UI에서 Sleep매크로인 경우 다른 모양의 컨트롤로 설계될 예정으로 Sleep Check를 구현합니다.
-        /// </summary>
-        public bool IsSleep { get; }
+        public string DisplayText { get; }
 
     }
 }

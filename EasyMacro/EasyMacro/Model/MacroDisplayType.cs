@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace EasyMacro.Model
 {
-    public enum MacroCommand
+    public enum MacroDisplayType
     {
+        Undefined,
         Sleep,
         MouseMove,
         MouseClick,

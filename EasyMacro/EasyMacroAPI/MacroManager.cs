@@ -34,8 +34,6 @@ namespace EasyMacroAPI
 
         private Thread macroThread;
 
-        private IOManager ioManger;
-
         /// <summary>
         /// 바탕화면 주소입니다.
         /// </summary>
@@ -47,7 +45,7 @@ namespace EasyMacroAPI
         private string saveFileName;
 
         /// <summary>
-        /// 직렬화 객체입니다. </para>
+        /// 직렬화 객체입니다. <para/>
         /// https://github.com/ExtendedXmlSerializer/home 사이트 참고
         /// </summary>
         private IExtendedXmlSerializer serializer;
@@ -61,7 +59,6 @@ namespace EasyMacroAPI
 
         private MacroManager()
         {
-            ioManger = new IOManager(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "macro.em");
             //hotKey = new HotKey(); // TODO : Console실행시 Error발생
             actionList = new List<IAction>();
             isMacroStarted = false;
@@ -132,8 +129,15 @@ namespace EasyMacroAPI
             actionList[index].Do();
         }
 
-        public void SaveData()
+        /// <summary>
+        /// 현재 매크로 리스트의 모든 내용을 파일로 저장합니다.
+        /// </summary>
+        public void SaveData(string filePath = null)
         {
+            if (filePath == null)
+            {
+                filePath = $"{deaktopPath}\\{saveFileName}";
+            }
             string xmlData = serializer.Serialize(actionList);
 
             using (XmlTextWriter wr = new XmlTextWriter($"{deaktopPath}\\{saveFileName}", Encoding.UTF8))
@@ -146,6 +150,10 @@ namespace EasyMacroAPI
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filePath"></param>
         public void LoadData(string filePath = null)
         {
             if (filePath == null)
@@ -155,28 +163,13 @@ namespace EasyMacroAPI
             actionList.Clear();
             using (var reader = new StreamReader(filePath))
             {
-                
-
                 var subject = new ConfigurationContainer()
                            .WithUnknownContent()
                            .Continue()
                            .Type<IAction>().CustomSerializer(customSerializer)
-
                            .Create();
                 actionList = subject.Deserialize<List<IAction>>(reader);
             }
         }
     }
 }
-
-
-/*  아래 의 Deserializer 구현은 하나의 타입으로만 디시리얼라이즈합니다.
- *  여러가지의 타입을 등록시, 가장 마지막으로 등록된 CustomSerializer만 작동하여 오작동을 일으킵니다.
- *  var subject = new ConfigurationContainer()
-                           .WithUnknownContent()
-                           .Continue()
-                           .Type<MouseMove>().CustomSerializer(new MouseMoveSerializer())
-                           .Type<Delay>().CustomSerializer(new DelaySerializer())
-                            // ~
-                           .Create();
-*/

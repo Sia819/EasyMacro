@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:EasyMacro.View"
         xmlns:uc="clr-namespace:EasyMacro.UC"
         xmlns:viewmodel="clr-namespace:EasyMacro.ViewModel"
+        xmlns:model="clr-namespace:EasyMacro.Model"
         mc:Ignorable="d"
         DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModelLocate}"
         Title="MainWindow" Height="450" Width="700">
@@ -16,7 +17,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Theme/CircleButton.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-        
+
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -66,43 +67,90 @@
 
             <!-- 매크로가 보이는 패널 -->
             <ListBox Grid.Column="0" Grid.Row="1" 
-                     ItemsSource="{Binding LogicList}">
+                     ItemsSource="{Binding LogicList}"
+                     d:ItemsSource="{Binding DesignerList}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <!--<TextBlock Text="{Binding Name}"></TextBlock>-->
                         <ContentControl>
                             <ContentControl.Style>
                                 <Style TargetType="{x:Type ContentControl}">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsSleep}" Value="false">
+                                        <DataTrigger Binding="{Binding DisplayType}" Value="{x:Static model:MacroDisplayType.Undefined}">
                                             <Setter Property="Template">
                                                 <Setter.Value>
                                                     <ControlTemplate>
+
                                                         <!-- 1 -->
                                                         <Border BorderBrush="Black" 
                                                                 BorderThickness="1"
-                                                                Margin="0">
+                                                                Margin="0 -1 0 0">
                                                             <Grid Margin="10">
-                                                                <TextBlock Text="{Binding Text}"/>
+                                                                <TextBlock Text="{Binding DisplayText}"/>
                                                             </Grid>
                                                         </Border>
+
                                                     </ControlTemplate>
                                                 </Setter.Value>
                                             </Setter>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding IsSleep}" Value="true">
+                                        <DataTrigger Binding="{Binding DisplayType}" Value="{x:Static model:MacroDisplayType.Sleep}">
                                             <Setter Property="Template">
                                                 <Setter.Value>
                                                     <ControlTemplate>
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <Grid Margin="0 -20" MinHeight="0">
-                                                                <Ellipse x:Name="Border" 
-                                                                         Stroke="#FF393785" 
-                                                                         StrokeThickness="2" 
-                                                                         Fill="Transparent"/>
-                                                                <DockPanel LastChildFill="True" Margin="10 18 10 23"/>
+
+                                                        <Border BorderBrush="Black" 
+                                                                BorderThickness="1"
+                                                                Margin="0 0 0 -1">
+                                                            <Grid Margin="10">
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <TextBlock Text="{Binding DisplayText}" Margin="5 0"/>
+                                                                    <TextBlock Text="{Binding Millisecond}" Margin="5 0"/>
+                                                                </StackPanel>
                                                             </Grid>
-                                                        </StackPanel>
+                                                        </Border>
+
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding DisplayType}" Value="{x:Static model:MacroDisplayType.MouseMove}">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate>
+
+                                                        <Border BorderBrush="Black" 
+                                                                BorderThickness="1"
+                                                                Margin="0 0 0 -1">
+                                                            <Grid Margin="10">
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <TextBlock Text="{Binding DisplayText}" Margin="5 0" />
+                                                                    <TextBlock Text="{Binding X}" Margin="5 0" />
+                                                                    <TextBlock Text="{Binding Y}" Margin="5 0" />
+                                                                </StackPanel>
+                                                            </Grid>
+                                                        </Border>
+
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding DisplayType}" Value="{x:Static model:MacroDisplayType.MouseClick}">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate>
+
+                                                        <Border BorderBrush="Black" 
+                                                                BorderThickness="1"
+                                                                Margin="0 0 0 -1">
+                                                            <Grid Margin="10">
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <TextBlock Text="{Binding DisplayText}" Margin="5 0" />
+                                                                    <TextBlock Text="{Binding X}" Margin="5 0" />
+                                                                    <TextBlock Text="{Binding Y}" Margin="5 0" />
+                                                                </StackPanel>
+                                                            </Grid>
+                                                        </Border>
+
                                                     </ControlTemplate>
                                                 </Setter.Value>
                                             </Setter>

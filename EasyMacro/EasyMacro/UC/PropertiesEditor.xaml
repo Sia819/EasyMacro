@@ -58,7 +58,7 @@
                     <Style TargetType="{x:Type ContentControl}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding SelectedMacro.MacroType, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
-                                         Value="{x:Static Model:MacroCommand.Sleep}">
+                                         Value="{x:Static Model:MacroDisplayType.Sleep}">
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate>
@@ -69,7 +69,7 @@
                                 </Setter>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding SelectedMacro.MacroType, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
-                                         Value="{x:Static Model:MacroCommand.MouseMove}">
+                                         Value="{x:Static Model:MacroDisplayType.MouseMove}">
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate>
@@ -80,7 +80,7 @@
                                 </Setter>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding SelectedMacro.MacroType, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
-                                         Value="{x:Static Model:MacroCommand.MouseClick}">
+                                         Value="{x:Static Model:MacroDisplayType.MouseClick}">
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate>

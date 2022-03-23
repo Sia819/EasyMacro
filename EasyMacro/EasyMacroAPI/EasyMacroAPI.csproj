@@ -8,7 +8,8 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>C:\Users\Sia819\Desktop\EasyMacro\EasyMacro\EasyMacroAPI\EasyMacroAPI.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\\net5.0-windows\EasyMacroAPI.xml</DocumentationFile>
+    <OutputPath>bin\Debug\net5.0-windows\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

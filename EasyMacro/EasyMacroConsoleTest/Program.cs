@@ -14,7 +14,6 @@ namespace EasyMacroConsoleTest
             Console.WriteLine("EasyMacroConsoleTest 프로젝트의 Main에 진입했습니다.");
             Program program = new();
 
-
             program.SaveTest();
         }
 
@@ -38,12 +37,9 @@ namespace EasyMacroConsoleTest
 
         public void ClickTest()
         {
-           
-
             MacroManager macroManager = MacroManager.Instance;
 
             macroManager.InsertList(new MouseClick(111, 111));
-           
 
             macroManager.SaveData();
             macroManager.LoadData();

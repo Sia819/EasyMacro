@@ -7,8 +7,11 @@ using System.Xml;
 using EasyMacroAPI.Command;
 using EasyMacroAPI.CommandSerializer;
 using EasyMacroAPI.Common;
+using EasyMacroAPI.Model;
 using ExtendedXmlSerializer;
+using ExtendedXmlSerializer.ExtensionModel;
 using ExtendedXmlSerializer.Configuration;
+using ExtendedXmlSerializer.ExtensionModel.Xml;
 
 namespace EasyMacroAPI
 {
@@ -31,8 +34,6 @@ namespace EasyMacroAPI
 
         private Thread macroThread;
 
-        private IOManager ioManger;
-
         /// <summary>
         /// 바탕화면 주소입니다.
         /// </summary>
@@ -44,23 +45,32 @@ namespace EasyMacroAPI
         private string saveFileName;
 
         /// <summary>
-        /// 직렬화 객체입니다. </para>
+        /// 직렬화 객체입니다. <para/>
         /// https://github.com/ExtendedXmlSerializer/home 사이트 참고
         /// </summary>
         private IExtendedXmlSerializer serializer;
+
+        /// <summary>
+        /// 커스텀 직렬화 객체입니다.
+        /// </summary>
+        private MacroCustomSerializer customSerializer;
 
         #endregion
 
         private MacroManager()
         {
-            ioManger = new IOManager(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "macro.em");
-            //hotKey = new HotKey();
+            //hotKey = new HotKey(); // TODO : Console실행시 Error발생
             actionList = new List<IAction>();
             isMacroStarted = false;
             deaktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             saveFileName = "test.xml";
-            serializer = new ConfigurationContainer().CustomSerializer<MouseMove, MouseMoveSerializer>()
-                                                     .CustomSerializer<Delay, DelaySerializer>()
+
+            // 시리얼라이저 객체 초기화 부분 입니다.
+            this.customSerializer = new MacroCustomSerializer();
+            customSerializer.Register<Delay>(new DelaySerializer())
+                            .Register<MouseMove>(new MouseMoveSerializer());
+            serializer = new ConfigurationContainer().Type<IAction>().CustomSerializer(customSerializer)
+                                                     //.CustomSerializer<Delay, DelaySerializer>()
                                                      .Create();
         }
 
@@ -119,8 +129,15 @@ namespace EasyMacroAPI
             actionList[index].Do();
         }
 
-        public void SaveData()
+        /// <summary>
+        /// 현재 매크로 리스트의 모든 내용을 파일로 저장합니다.
+        /// </summary>
+        public void SaveData(string filePath = null)
         {
+            if (filePath == null)
+            {
+                filePath = $"{deaktopPath}\\{saveFileName}";
+            }
             string xmlData = serializer.Serialize(actionList);
 
             using (XmlTextWriter wr = new XmlTextWriter($"{deaktopPath}\\{saveFileName}", Encoding.UTF8))
@@ -133,6 +150,10 @@ namespace EasyMacroAPI
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filePath"></param>
         public void LoadData(string filePath = null)
         {
             if (filePath == null)
@@ -145,7 +166,7 @@ namespace EasyMacroAPI
                 var subject = new ConfigurationContainer()
                            .WithUnknownContent()
                            .Continue()
-                           .CustomSerializer<MouseMove>(typeof(MouseMoveSerializer))
+                           .Type<IAction>().CustomSerializer(customSerializer)
                            .Create();
                 actionList = subject.Deserialize<List<IAction>>(reader);
             }

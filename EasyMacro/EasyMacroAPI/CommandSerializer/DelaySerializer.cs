@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using EasyMacroAPI.Command;
@@ -12,17 +8,23 @@ using ExtendedXmlSerializer.ExtensionModel.Xml;
 
 namespace EasyMacroAPI.CommandSerializer
 {
-    internal class DelaySerializer : IExtendedXmlCustomSerializer<Delay>
+    internal class DelaySerializer : IExtendedXmlCustomSerializer
     {
-        public Delay Deserialize(XElement element)
+        public void Serializer(XmlWriter xmlWriter, object instance)
         {
-            object obj = Deserializer.Deserialize(element);
-            return obj as Delay;
+            Delay obj = instance as Delay;
+            xmlWriter.WriteElementString(nameof(Delay.Time), obj.Time.ToString(CultureInfo.InvariantCulture));
         }
 
-        public void Serializer(XmlWriter xmlWriter, Delay obj)
+        object IExtendedXmlCustomSerializer.Deserialize(XElement xElement)
         {
-            xmlWriter.WriteElementString(nameof(Delay.Time), obj.Time.ToString(CultureInfo.InvariantCulture));
+            XElement element_Time = xElement.Member(nameof(Delay.Time));
+            if (element_Time != null)
+            {
+                int element1 = Convert.ToInt32(element_Time.Value);
+                return new Delay(element1);
+            }
+            throw new InvalidOperationException("Invalid of xml input, class \"" + xElement.Name.LocalName + "\" is not compatible of \"" + nameof(Delay) + "\" with this Deserializer");
         }
     }
 }

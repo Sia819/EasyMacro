@@ -23,6 +23,4 @@ namespace EasyMacroAPI.Command
             WinAPI.SetCursorPos(X, Y);
         }
     }
-
-
 }

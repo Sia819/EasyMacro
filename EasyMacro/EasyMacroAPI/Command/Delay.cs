@@ -4,22 +4,28 @@ namespace EasyMacroAPI.Command
 {
     public class Delay : IAction
     {
-        public MacroTypes MacroType
-        {
-            get { return MacroTypes.Delay; }
-        }
+        /// <summary>
+        /// 현재 매크로의 타입
+        /// </summary>
+        public MacroTypes MacroType => MacroTypes.Delay;
 
-        private int time;
-        public int Time { get { return time; } set { time = value; } }
+        /// <summary>
+        /// 대기할 시간
+        /// </summary>
+        public int Time { get; set; }
 
+        /// <summary>
+        /// 생성자
+        /// </summary>
+        /// <param name="time"></param>
         public Delay(int time)
         {
-            this.time = time;
+            this.Time = time;
         }
 
         public void Do()
         {
-            MacroManager.Instance.DelayMacro(time);
+            MacroManager.Instance.DelayMacro(Time);
         }
     }
 }

@@ -7,6 +7,10 @@
     <StartupObject />
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Users\Sia819\Desktop\EasyMacro\EasyMacro\EasyMacroAPI\EasyMacroAPI.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="ExtendedXmlSerializer" Version="3.7.6" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />

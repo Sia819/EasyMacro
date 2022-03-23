@@ -16,5 +16,6 @@ namespace EasyMacroAPI.Model
         MouseMove = 1,
         MouseClick = 2,
         InputKeyboard = 3,
+        InputMouse = 4,
     }
 }

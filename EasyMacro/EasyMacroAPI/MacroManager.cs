@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml;
 using EasyMacroAPI.Command;
 using EasyMacroAPI.CommandSerializer;
@@ -12,6 +13,7 @@ using ExtendedXmlSerializer;
 using ExtendedXmlSerializer.ExtensionModel;
 using ExtendedXmlSerializer.Configuration;
 using ExtendedXmlSerializer.ExtensionModel.Xml;
+using System.Windows.Forms;
 
 namespace EasyMacroAPI
 {
@@ -56,10 +58,11 @@ namespace EasyMacroAPI
         private MacroCustomSerializer customSerializer;
 
         #endregion
-
+        
         private MacroManager()
         {
-            //hotKey = new HotKey(); // TODO : Console실행시 Error발생
+            //Application.Run(new HotKey());
+            //hotKey = ; // TODO : Console실행시 Error발생
             actionList = new List<IAction>();
             isMacroStarted = false;
             deaktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);

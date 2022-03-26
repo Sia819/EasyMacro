@@ -9,7 +9,10 @@ using EasyMacroAPI;
 using EasyMacroAPI.Command;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Win32;
-
+using EasyMacroAPI.Command;
+using GalaSoft.MvvmLight.Command;
+using Microsoft.Win32;
+using System.Threading;
 
 namespace EasyMacro.ViewModel
 {
@@ -35,13 +38,14 @@ namespace EasyMacro.ViewModel
         public RelayCommand LoadCommand => new(Load);
         public RelayCommand StartCommand => new(Start);
         public RelayCommand<EasyMacroAPI.Model.IAction> AddCommand => new(Add);
+        public RelayCommand TestCommand => new(Test);
+
 
         #endregion
 
         public MainWindowViewModel()
         {
             macroManager = MacroManager.Instance;
-
             DesignerList = new ObservableCollection<IMacros>()
             {
                 new SleepMacro(new EasyMacroAPI.Command.Delay(251)),
@@ -53,6 +57,15 @@ namespace EasyMacro.ViewModel
 
 
         #region Private Command Function
+
+        private void Test()
+        {
+            MacroManager macroManager = MacroManager.Instance;
+            Thread.Sleep(2000);
+
+            macroManager.InsertList(new InputString("Hello Word"));
+            macroManager.DoOnce(0);
+        }
 
         private void Save()
         {

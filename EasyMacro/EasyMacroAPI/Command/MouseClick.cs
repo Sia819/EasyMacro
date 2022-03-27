@@ -26,9 +26,10 @@ namespace EasyMacroAPI.Command
 
         public void Do()
         {
-            WinAPI.mouse_event(WinAPI.LBDOWN,(uint)X,(uint)Y, 0, 0);
+            WinAPI.SetCursorPos(X, Y);
+            WinAPI.mouse_event((uint)MouseClickTypes.LBDOWN, (uint)0, (uint)0, 0, 0);
             Thread.Sleep(Delay);
-            WinAPI.mouse_event(WinAPI.LBUP, (uint)X, (uint)Y, 0, 0);
+            WinAPI.mouse_event((uint)MouseClickTypes.LBUP, (uint)0, (uint)0, 0, 0);
         }
     }
 }

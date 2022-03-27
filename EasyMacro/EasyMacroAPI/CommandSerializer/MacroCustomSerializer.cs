@@ -1,14 +1,11 @@
-﻿using EasyMacroAPI.Command;
+﻿using System;
+using System.Collections.Generic;
+using System.Xml;
+using System.Xml.Linq;
+using EasyMacroAPI.Command;
 using EasyMacroAPI.Model;
 using ExtendedXmlSerializer;
 using ExtendedXmlSerializer.ExtensionModel.Xml;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Linq;
 
 namespace EasyMacroAPI.CommandSerializer
 {

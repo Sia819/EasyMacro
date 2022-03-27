@@ -25,7 +25,7 @@ namespace EasyMacroAPI.Command
 
         public void Do()
         {
-            MacroManager.Instance.DelayMacro(Time);
+            System.Threading.Thread.Sleep(Time);
         }
     }
 }

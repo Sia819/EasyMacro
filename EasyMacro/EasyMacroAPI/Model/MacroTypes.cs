@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EasyMacroAPI.Model
+﻿namespace EasyMacroAPI.Model
 {
     /// <summary>
     /// 매크로의 타입을 나타냅니다.<para/>

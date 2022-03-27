@@ -1,11 +1,4 @@
-﻿using EasyMacroAPI.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EasyMacroAPI.Model
+﻿namespace EasyMacroAPI.Model
 {
     public interface IAction
     {

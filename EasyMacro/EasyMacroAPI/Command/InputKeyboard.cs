@@ -1,5 +1,4 @@
 ﻿using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using EasyMacroAPI.Common;
 using EasyMacroAPI.Model;
 

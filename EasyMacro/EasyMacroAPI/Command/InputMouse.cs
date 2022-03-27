@@ -7,19 +7,19 @@ namespace EasyMacroAPI.Command
 {
     public class InputMouse : IAction
     {
-
         public int X { get; private set; }
+
         public int Y { get; private set; }
+
         public MouseClickTypes MouseClickTypes { get; set; }
 
         public MacroTypes MacroType => MacroTypes.MouseClick;
 
-        public InputMouse(MouseClickTypes presstype,int x, int y)
+        public InputMouse(MouseClickTypes presstype, int x, int y)
         {
             this.X = x;
             this.Y = y;
             this.MouseClickTypes = presstype;
-
         }
 
         public void Do()

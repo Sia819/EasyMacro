@@ -1,5 +1,4 @@
 ﻿using System.Threading;
-using System.Windows.Forms;
 using EasyMacroAPI.Model;
 
 namespace EasyMacroAPI.Command
@@ -17,8 +16,7 @@ namespace EasyMacroAPI.Command
         }
         private void Change(string data)
         {
-            Thread.Sleep(2000);
-            SendKeys.SendWait("123");
+            System.Windows.Forms.SendKeys.SendWait(data);
         }
 
         public void Do()

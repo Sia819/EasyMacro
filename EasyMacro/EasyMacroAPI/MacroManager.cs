@@ -19,7 +19,6 @@ namespace EasyMacroAPI
 {
     public class MacroManager
     {
-        
         // TODO : 임시로 private -> public 수정 나중에 고치기
         public List<IAction> actionList;
 
@@ -61,8 +60,7 @@ namespace EasyMacroAPI
         
         private MacroManager()
         {
-            //Application.Run(new HotKey());
-            //hotKey = ; // TODO : Console실행시 Error발생
+            hotKey = new HotKey(); // TODO : Console실행시 Error발생
             actionList = new List<IAction>();
             isMacroStarted = false;
             deaktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);

@@ -4,11 +4,7 @@ using System.ComponentModel;
 using System.Collections.ObjectModel;
 using EasyMacro.Model;
 using EasyMacro.Model.DisplayMacro;
-using EasyMacro.Common;
 using EasyMacroAPI;
-using EasyMacroAPI.Command;
-using GalaSoft.MvvmLight.Command;
-using Microsoft.Win32;
 using EasyMacroAPI.Command;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Win32;
@@ -53,8 +49,6 @@ namespace EasyMacro.ViewModel
                 new MouseMacro(new EasyMacroAPI.Command.MouseClick(200, 230)),
             };
         }
-        
-
 
         #region Private Command Function
 

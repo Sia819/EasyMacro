@@ -1,11 +1,6 @@
-﻿using EasyMacroAPI.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading;
 using System.Windows.Forms;
-
+using EasyMacroAPI.Model;
 
 namespace EasyMacroAPI.Command
 {
@@ -22,7 +17,8 @@ namespace EasyMacroAPI.Command
         }
         private void Change(string data)
         {
-            SendKeys.Send("123");
+            Thread.Sleep(2000);
+            SendKeys.SendWait("123");
         }
 
         public void Do()

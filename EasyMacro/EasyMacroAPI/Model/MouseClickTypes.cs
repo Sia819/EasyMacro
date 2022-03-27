@@ -13,7 +13,6 @@ namespace EasyMacroAPI.Model
             LBUP = 0x00000004,
             RBDOWN = 0x00000008,
             RBUP = 0x000000010
-
     }
     
 }

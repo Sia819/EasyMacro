@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections.Generic;
 using System.Xml;
 using EasyMacroAPI.Command;
 using EasyMacroAPI.CommandSerializer;
@@ -12,8 +11,6 @@ using EasyMacroAPI.Model;
 using ExtendedXmlSerializer;
 using ExtendedXmlSerializer.ExtensionModel;
 using ExtendedXmlSerializer.Configuration;
-using ExtendedXmlSerializer.ExtensionModel.Xml;
-using System.Windows.Forms;
 
 namespace EasyMacroAPI
 {
@@ -29,7 +26,7 @@ namespace EasyMacroAPI
         /// </summary>
         private static MacroManager instance;
 
-        private HotKey hotKey;
+        private MessageReceiver hotKey;
 
         private bool isMacroStarted;
 
@@ -60,7 +57,20 @@ namespace EasyMacroAPI
         
         private MacroManager()
         {
-            hotKey = new HotKey(); // TODO : Console실행시 Error발생
+            
+            new Thread(new ThreadStart(() =>
+            {
+                // Thread do
+                hotKey = new MessageReceiver(); // TODO : Console실행시 Error발생
+                hotKey.Run();
+
+            }))
+            {
+                // Thread Properties
+                IsBackground = true
+            }
+            .Start();
+
             actionList = new List<IAction>();
             isMacroStarted = false;
             deaktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -92,19 +102,15 @@ namespace EasyMacroAPI
             macroThread = new Thread(DoMacro);
             macroThread.IsBackground = true;
             isMacroStarted = true;
-            hotKey.RegisterHotKey();
+            hotKey.AddHotkey(Keys.F9, KeyModifiers.None, StopMacro);
             macroThread.Start();
-        }
-
-        public void DelayMacro(int time)
-        {
-            Thread.Sleep(time);
         }
 
         public void StopMacro()
         {
             isMacroStarted = false;
-            hotKey.UnregisterHotKey();
+            hotKey.RemoveHotkey(Keys.F9, KeyModifiers.None);
+            Console.WriteLine("Stopped");
         }
 
         private void DoMacro()

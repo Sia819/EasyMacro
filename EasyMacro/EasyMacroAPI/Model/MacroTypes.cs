@@ -12,5 +12,6 @@
         InputKeyboard = 3,
         InputMouse = 4,
         InputString = 5,
+        ImgSearch = 6,
     }
 }

@@ -55,9 +55,8 @@ namespace EasyMacro.ViewModel
         private void Test()
         {
             MacroManager macroManager = MacroManager.Instance;
-            Thread.Sleep(2000);
-
-            macroManager.InsertList(new InputString("Hello Word"));
+            //파일명 넣을것
+            macroManager.InsertList(new EasyMacroAPI.CaptureManager(@"C:\"));
             macroManager.DoOnce(0);
         }
 

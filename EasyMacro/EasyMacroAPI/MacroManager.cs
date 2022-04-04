@@ -11,6 +11,7 @@ using EasyMacroAPI.Model;
 using ExtendedXmlSerializer;
 using ExtendedXmlSerializer.ExtensionModel;
 using ExtendedXmlSerializer.Configuration;
+using System.Drawing;
 
 namespace EasyMacroAPI
 {
@@ -53,8 +54,11 @@ namespace EasyMacroAPI
         /// </summary>
         private MacroCustomSerializer customSerializer;
 
+
+        public Point tempPoint;
+
         #endregion
-        
+
         private MacroManager()
         {
             

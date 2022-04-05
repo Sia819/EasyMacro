@@ -24,7 +24,8 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
             <Button DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModelLocate}"
-                    Command="{Binding AddCommand}" 
+                    Command="{Binding AddCommand}"
+                    CommandParameter="{Binding SelectedMacro.MacroType, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
                     DockPanel.Dock="Bottom" 
                     Content="Add Macro"
                     Margin="5"/>
@@ -52,8 +53,8 @@
             </Border>
 
             <!-- 선택된 콤보박스 아이템에 따라 다른 뷰를 설정합니다. -->
-            
-            <ContentControl>
+
+            <ContentControl x:Name="PropertiesPanel">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
                         <Style.Triggers>

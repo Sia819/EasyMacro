@@ -19,12 +19,12 @@ namespace EasyMacro.ViewModel
         /// <summary>
         /// 매크로 흐름에 대한 정보입니다.
         /// </summary>
-        public ObservableCollection<Model.IMacros> LogicList { get; set; } = new();
+        public ObservableCollection<Model.IMacro> LogicList { get; set; } = new();
         
         /// <summary>
         /// 디자이너에서만 보여질 리스트이며, 디자인 전용으로 만들어졌습니다.
         /// </summary>
-        public ObservableCollection<Model.IMacros> DesignerList { get; set; }
+        public ObservableCollection<Model.IMacro> DesignerList { get; set; }
 
         private MacroManager macroManager;
 
@@ -33,7 +33,7 @@ namespace EasyMacro.ViewModel
         public RelayCommand SaveCommand => new(Save);
         public RelayCommand LoadCommand => new(Load);
         public RelayCommand StartCommand => new(Start);
-        public RelayCommand<EasyMacroAPI.Model.IAction> AddCommand => new(Add);
+        public RelayCommand<Model.IMacro> AddCommand => new(Add);
         public RelayCommand TestCommand => new(Test);
 
 
@@ -42,7 +42,7 @@ namespace EasyMacro.ViewModel
         public MainWindowViewModel()
         {
             macroManager = MacroManager.Instance;
-            DesignerList = new ObservableCollection<IMacros>()
+            DesignerList = new ObservableCollection<IMacro>()
             {
                 new SleepMacro(new EasyMacroAPI.Command.Delay(251)),
                 new MouseMacro(new EasyMacroAPI.Command.MouseMove(200, 230)),
@@ -114,10 +114,12 @@ namespace EasyMacro.ViewModel
         /// <summary>
         /// 매크로 편집기에서 새로운 매크로를 추가합니다.
         /// </summary>
-        /// <param name="action"></param>
-        private void Add(EasyMacroAPI.Model.IAction action)
+        /// <param name="macro"></param>
+        private void Add(Model.IMacro macro)
         {
-
+            MessageBox.Show("Add Enterd");
+            
+            Console.WriteLine(macro.DisplayType);
         }
 
         /// <summary>

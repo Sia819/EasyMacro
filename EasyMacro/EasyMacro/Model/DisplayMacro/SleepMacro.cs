@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EasyMacro.Model.DisplayMacro
 {
-    public class SleepMacro : IMacros
+    public class SleepMacro : IMacro
     {
 
         public MacroDisplayType DisplayType => MacroDisplayType.Sleep;

@@ -1,20 +1,9 @@
-﻿using GalaSoft.MvvmLight;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace EasyMacro.UC
 {
@@ -28,10 +17,10 @@ namespace EasyMacro.UC
         #region Dependency Property
 
         public static readonly DependencyProperty MacrosListProperty
-            = DependencyProperty.Register("MacrosList", typeof(ObservableCollection<Model.IMacros>), typeof(PropertiesEditor));
-        public ObservableCollection<Model.IMacros> MacrosList
+            = DependencyProperty.Register("MacrosList", typeof(ObservableCollection<Model.IMacro>), typeof(PropertiesEditor));
+        public ObservableCollection<Model.IMacro> MacrosList
         {
-            get => (ObservableCollection<Model.IMacros>)GetValue(MacrosListProperty);
+            get => (ObservableCollection<Model.IMacro>)GetValue(MacrosListProperty);
             set => SetValue(MacrosListProperty, value);
         }
 
@@ -50,6 +39,8 @@ namespace EasyMacro.UC
         /// ComboBox에서 
         /// </summary>
         public Model.PropertiesModel SelectedMacro { get; set; }
+        
+        public Model.IMacro EditingMacro { get; set; }
 
         #endregion
 
@@ -66,6 +57,7 @@ namespace EasyMacro.UC
             {
                 DisplayName = "Sleep 매크로",
                 MacroType = Model.MacroDisplayType.Sleep,
+
             });
             MacroCommands.Add(new Model.PropertiesModel()
             {

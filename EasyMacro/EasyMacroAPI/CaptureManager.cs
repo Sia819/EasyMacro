@@ -17,7 +17,7 @@ namespace EasyMacroAPI
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         internal static extern bool PrintWindow(IntPtr hWnd, IntPtr hdcBlt, int nFlags);
 
-        public Bitmap FindWindowCapture(string windowName)
+        public Bitmap WindowCapture(string windowName)
         {
             IntPtr findwindow = FindWindow(null, windowName);
             if (findwindow != IntPtr.Zero)

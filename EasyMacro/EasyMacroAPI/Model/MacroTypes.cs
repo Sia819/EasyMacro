@@ -14,6 +14,6 @@
         InputString = 5,
         TempletMatch = 6,
         ScreenCapture = 7,
-        FindWindowCapture = 8,
+        WindowCapture = 8,
     }
 }

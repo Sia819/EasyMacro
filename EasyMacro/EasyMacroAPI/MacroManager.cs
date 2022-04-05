@@ -20,6 +20,8 @@ namespace EasyMacroAPI
         // TODO : 임시로 private -> public 수정 나중에 고치기
         public List<IAction> actionList;
 
+        public List<IAction> findActionList;
+
         #region Private Field
 
         /// <summary>
@@ -32,6 +34,8 @@ namespace EasyMacroAPI
         private bool isMacroStarted;
 
         private Thread macroThread;
+
+        private Thread findThread;
 
         /// <summary>
         /// 바탕화면 주소입니다.
@@ -54,10 +58,9 @@ namespace EasyMacroAPI
         /// </summary>
         private MacroCustomSerializer customSerializer;
 
-
         public Point tempPoint;
         public Bitmap screenImg;
-        public Bitmap windowImg;
+        public IDictionary<string, Bitmap> windowImg;
 
         #endregion
 
@@ -78,9 +81,15 @@ namespace EasyMacroAPI
             .Start();
 
             actionList = new List<IAction>();
+            windowImg = new Dictionary<string, Bitmap>();
             isMacroStarted = false;
             deaktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             saveFileName = "test.xml";
+
+            macroThread = new Thread(DoMacro);
+            macroThread.IsBackground = true;
+            findThread = new Thread(findMacro);
+            findThread.IsBackground = true;
 
             // 시리얼라이저 객체 초기화 부분 입니다.
             this.customSerializer = new MacroCustomSerializer();
@@ -105,8 +114,6 @@ namespace EasyMacroAPI
 
         public void StartMacro()
         {
-            macroThread = new Thread(DoMacro);
-            macroThread.IsBackground = true;
             isMacroStarted = true;
             hotKey.AddHotkey(Keys.F9, KeyModifiers.None, StopMacro);
             macroThread.Start();
@@ -123,10 +130,28 @@ namespace EasyMacroAPI
         {
             while (true)
             {
+                if (findActionList.Count >= 1)
+                {
+                    findThread.Start();
+                }
                 for (int i = 0; i < actionList.Count; i++)
                 {
                     if (isMacroStarted)
                         actionList[i].Do();
+                    else
+                        return;
+                }
+            }
+        }
+
+        private void findMacro()
+        {
+            while (true)
+            {
+                for (int i = 0; i < findActionList.Count; i++)
+                {
+                    if (isMacroStarted)
+                        findActionList[i].Do();
                     else
                         return;
                 }

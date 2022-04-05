@@ -12,28 +12,40 @@ namespace EasyMacroAPI.Command
 
         private MacroManager macroManager = MacroManager.Instance;
 
-        private bool isMatchWithScreen;
+        private string windowName;
         private Bitmap targetImg;
         private Point point;
 
-        public TempletMatch(string targetDir, bool isMatchWithScreen)
+        public TempletMatch(string targetDir, string windowName)
         {
             targetImg = new Bitmap(targetDir);
-            this.isMatchWithScreen = isMatchWithScreen;
+            this.windowName = windowName;
         }
 
-        public TempletMatch(Bitmap targetImg, bool isMatchWithScreen)
+        public TempletMatch(Bitmap targetImg, string windowName)
         {
             this.targetImg = targetImg;
-            this.isMatchWithScreen = isMatchWithScreen;
+            this.windowName = windowName;
         }
 
         public void Do()
         {
-            if(isMatchWithScreen)
+            if(windowName == "")
+            {
                 point = CaptureManager.Instance.TempletMatch(macroManager.screenImg, targetImg);
+            }
             else
-                point = CaptureManager.Instance.TempletMatch(macroManager.windowImg, targetImg);
+            {
+                if (macroManager.windowImg.ContainsKey(windowName))
+                {
+                    point = CaptureManager.Instance.TempletMatch(macroManager.windowImg[windowName], targetImg);
+                }
+                else
+                {
+                    // 딕셔너리에서 윈도우 캡쳐 비트맵이 제거된 경우(더 이상 그 윈도우 캡쳐를 원하지 않는 경우)
+                }
+            }
+                
 
             if (point != Point.Empty)
             {

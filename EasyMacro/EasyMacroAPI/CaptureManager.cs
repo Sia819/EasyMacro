@@ -2,31 +2,22 @@
 using System;
 using System.Drawing;
 using System.Runtime.Versioning;
-using EasyMacroAPI.Model;
 
 namespace EasyMacroAPI
 {
     [SupportedOSPlatform("Windows")]
-    public class CaptureManager : IAction
+    public class CaptureManager
     {
-        public MacroTypes MacroType => MacroTypes.ImgSearch;
+        public static CaptureManager instance;
+
+        public static CaptureManager Instance => instance ??= new CaptureManager();
 
         [System.Runtime.InteropServices.DllImport("User32", EntryPoint = "FindWindow")]
         private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         internal static extern bool PrintWindow(IntPtr hWnd, IntPtr hdcBlt, int nFlags);
 
-        string windowName = "";
-        Bitmap targetImg = null;
-        Bitmap screenImg = null;
-
-        public CaptureManager(string targetDir)
-        {
-            //this.windowName = windowName;
-            this.targetImg = new Bitmap(targetDir);
-        }
-
-        public void FindWindow()
+        public Bitmap WindowCapture(string windowName)
         {
             IntPtr findwindow = FindWindow(null, windowName);
             if (findwindow != IntPtr.Zero)
@@ -48,16 +39,16 @@ namespace EasyMacroAPI
                     PrintWindow(findwindow, hdc, 0x2);
                     g.ReleaseHdc(hdc);
                 }
-                screenImg = bmp;
+                return bmp;
             }
             else
             {
                 //플레이어를 못찾을경우
-                
+                return null;
             }
         }
 
-        public void ScreenCapture()
+        public Bitmap ScreenCapture()
         {
             Bitmap bmp = new Bitmap(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width,
                                     System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height,
@@ -66,10 +57,10 @@ namespace EasyMacroAPI
 
             gr.CopyFromScreen(0, 0, 0, 0, bmp.Size);
 
-            screenImg = bmp;
+            return bmp;
         }
 
-        public void TempletMatch()
+        public System.Drawing.Point TempletMatch(Bitmap screenImg, Bitmap targetImg)
         {
             // 원본 이미지
             using (Mat ScreenMat = OpenCvSharp.Extensions.BitmapConverter.ToMat(screenImg))
@@ -84,15 +75,11 @@ namespace EasyMacroAPI
 
                 if(maxval >= 0.8)
                 {
-                    new Command.MouseMove(maxloc.X, maxloc.Y).Do();
+                    //new Command.MouseMove(maxloc.X, maxloc.Y).Do();
+                    return new System.Drawing.Point(maxloc.X, maxloc.Y);
                 }
+                return System.Drawing.Point.Empty;
             }
-        }
-
-        public void Do()
-        {
-            ScreenCapture();
-            TempletMatch();
         }
     }
 }

@@ -12,6 +12,8 @@
         InputKeyboard = 3,
         InputMouse = 4,
         InputString = 5,
-        ImgSearch = 6,
+        TempletMatch = 6,
+        ScreenCapture = 7,
+        WindowCapture = 8,
     }
 }

@@ -10,27 +10,34 @@ namespace EasyMacroAPI.Command
     {
         public MacroTypes MacroType => MacroTypes.TempletMatch;
 
+        private MacroManager macroManager = MacroManager.Instance;
+
+        private bool isMatchWithScreen;
         private Bitmap targetImg;
-        private Bitmap screenImg;
         private Point point;
 
-        public TempletMatch(string targetDir)
+        public TempletMatch(string targetDir, bool isMatchWithScreen)
         {
             targetImg = new Bitmap(targetDir);
+            this.isMatchWithScreen = isMatchWithScreen;
         }
 
-        public TempletMatch(Bitmap targetImg)
+        public TempletMatch(Bitmap targetImg, bool isMatchWithScreen)
         {
             this.targetImg = targetImg;
+            this.isMatchWithScreen = isMatchWithScreen;
         }
 
         public void Do()
         {
-            screenImg = CaptureManager.Instance.ScreenCapture();
-            point = CaptureManager.Instance.TempletMatch(screenImg, targetImg);
-            if(point != Point.Empty)
+            if(isMatchWithScreen)
+                point = CaptureManager.Instance.TempletMatch(macroManager.screenImg, targetImg);
+            else
+                point = CaptureManager.Instance.TempletMatch(macroManager.windowImg, targetImg);
+
+            if (point != Point.Empty)
             {
-                MacroManager.Instance.tempPoint = point;
+                macroManager.tempPoint = point;
             }
         }
     }

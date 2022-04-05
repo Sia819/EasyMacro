@@ -56,6 +56,8 @@ namespace EasyMacroAPI
 
 
         public Point tempPoint;
+        public Bitmap screenImg;
+        public Bitmap windowImg;
 
         #endregion
 

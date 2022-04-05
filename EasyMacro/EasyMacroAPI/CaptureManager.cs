@@ -10,11 +10,6 @@ namespace EasyMacroAPI
     {
         public static CaptureManager instance;
 
-        private CaptureManager()
-        {
-
-        }
-
         public static CaptureManager Instance => instance ??= new CaptureManager();
 
         [System.Runtime.InteropServices.DllImport("User32", EntryPoint = "FindWindow")]

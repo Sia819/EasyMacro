@@ -17,10 +17,15 @@ namespace EasyMacroAPI
 {
     public class MacroManager
     {
-        // TODO : 임시로 private -> public 수정 나중에 고치기
-        public List<IAction> actionList;
+        /// <summary>
+        /// 일반적으로 수행되는 매크로
+        /// </summary>
+        public List<IAction> ActionList { get; private set; }
 
-        public List<IAction> findActionList;
+        /// <summary>
+        /// 항상 찾아야되는 템플릿 매치 리스트
+        /// </summary>
+        public List<IAction> FindActionList { get; private set; }
 
         #region Private Field
 
@@ -59,8 +64,6 @@ namespace EasyMacroAPI
         private MacroCustomSerializer customSerializer;
 
         public Point tempPoint;
-        public Bitmap screenImg;
-        public IDictionary<string, Bitmap> windowImg;
 
         #endregion
 
@@ -79,15 +82,17 @@ namespace EasyMacroAPI
                 IsBackground = true
             }
             .Start();
+            
+            ActionList = new List<IAction>();
+            FindActionList = new List<IAction>();
 
-            actionList = new List<IAction>();
-            windowImg = new Dictionary<string, Bitmap>();
             isMacroStarted = false;
             deaktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             saveFileName = "test.xml";
 
             macroThread = new Thread(DoMacro);
             macroThread.IsBackground = true;
+            
             findThread = new Thread(findMacro);
             findThread.IsBackground = true;
 
@@ -96,7 +101,6 @@ namespace EasyMacroAPI
             customSerializer.Register<Delay>(new DelaySerializer())
                             .Register<MouseMove>(new MouseMoveSerializer());
             serializer = new ConfigurationContainer().Type<IAction>().CustomSerializer(customSerializer)
-                                                     //.CustomSerializer<Delay, DelaySerializer>()
                                                      .Create();
         }
 
@@ -104,12 +108,12 @@ namespace EasyMacroAPI
 
         public void InsertList(IAction insertAction)
         {
-            actionList.Add(insertAction);
+            ActionList.Add(insertAction);
         }
         
         public void DeleteList(int index)
         {
-            actionList.RemoveAt(index);
+            ActionList.RemoveAt(index);
         }
 
         public void StartMacro()
@@ -121,23 +125,25 @@ namespace EasyMacroAPI
 
         public void StopMacro()
         {
-            isMacroStarted = false;
+            isMacroStarted = false; // 항상 찾아야되는 템플릿 매치와, 기본적이 매크로 스레드 모두 정지.
             hotKey.RemoveHotkey(Keys.F9, KeyModifiers.None);
             Console.WriteLine("Stopped");
         }
 
         private void DoMacro()
         {
+            if (FindActionList.Count >= 1)
+            {
+                findThread.Start();
+            }
+
             while (true)
             {
-                if (findActionList.Count >= 1)
-                {
-                    findThread.Start();
-                }
-                for (int i = 0; i < actionList.Count; i++)
+                
+                for (int i = 0; i < ActionList.Count; i++)
                 {
                     if (isMacroStarted)
-                        actionList[i].Do();
+                        ActionList[i].Do();
                     else
                         return;
                 }
@@ -148,10 +154,10 @@ namespace EasyMacroAPI
         {
             while (true)
             {
-                for (int i = 0; i < findActionList.Count; i++)
+                for (int i = 0; i < FindActionList.Count; i++)
                 {
                     if (isMacroStarted)
-                        findActionList[i].Do();
+                        FindActionList[i].Do();
                     else
                         return;
                 }
@@ -164,7 +170,7 @@ namespace EasyMacroAPI
         /// <param name="index">실행할 리스트의 인덱스 입니다.</param>
         public void DoOnce(int index)
         {
-            actionList[index].Do();
+            ActionList[index].Do();
         }
 
         /// <summary>
@@ -176,7 +182,7 @@ namespace EasyMacroAPI
             {
                 filePath = $"{deaktopPath}\\{saveFileName}";
             }
-            string xmlData = serializer.Serialize(actionList);
+            string xmlData = serializer.Serialize(ActionList);
 
             using (XmlTextWriter wr = new XmlTextWriter($"{deaktopPath}\\{saveFileName}", Encoding.UTF8))
             {
@@ -198,7 +204,7 @@ namespace EasyMacroAPI
             {
                 filePath = $"{deaktopPath}\\{saveFileName}";
             }
-            actionList.Clear();
+            ActionList.Clear();
             using (var reader = new StreamReader(filePath))
             {
                 var subject = new ConfigurationContainer()
@@ -206,7 +212,7 @@ namespace EasyMacroAPI
                            .Continue()
                            .Type<IAction>().CustomSerializer(customSerializer)
                            .Create();
-                actionList = subject.Deserialize<List<IAction>>(reader);
+                ActionList = subject.Deserialize<List<IAction>>(reader);
             }
         }
     }

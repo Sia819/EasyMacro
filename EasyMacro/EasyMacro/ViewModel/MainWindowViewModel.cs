@@ -73,11 +73,11 @@ namespace EasyMacro.ViewModel
         private void Load()
         {
             string macroPath = null;
-            if (!Common.DebugState.IsDebugStart)
+            //if (!Common.DebugState.IsDebugStart)
             {
                 OpenFileDialog dlgOpenFile = new OpenFileDialog();
                 dlgOpenFile.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);        // OpenFileDialog에서 열리는 첫 페이지는 바탕화면입니다.
-                dlgOpenFile.InitialDirectory = "MacroFiles (*.xml, *.em) | *.xml; *.em; | All files (*.*) | *.*";
+                dlgOpenFile.Filter = "MacroFiles (*.xml, *.em) | *.xml; *.em; | All files (*.*) | *.*";
 
                 if (dlgOpenFile.ShowDialog() == true)
                 {// OpenFileDialog에서 경로가 지정 됨.
@@ -94,15 +94,18 @@ namespace EasyMacro.ViewModel
 
             // 아래는 macroManager의 public가정으로 만들어진 코드 입니다.
             // 로드된 매크로를 UI에 바인딩된 리스트에 등록시킵니다.
-            foreach (EasyMacroAPI.Model.IAction i in macroManager.actionList)
+            foreach (EasyMacroAPI.Model.IAction i in macroManager.ActionList)
             {
                 switch (i.MacroType)
                 {
                     case EasyMacroAPI.Model.MacroTypes.Delay:
+                        LogicList.Add(new SleepMacro(i));
                         break;
                     case EasyMacroAPI.Model.MacroTypes.MouseMove:
+                        LogicList.Add(new MouseMacro(i)); // 마우스 매크로는 어떤 종류의 마우스매크로인지 따로 체킹한다.
                         break;
                     case EasyMacroAPI.Model.MacroTypes.MouseClick:
+                        LogicList.Add(new MouseMacro(i));
                         break;
                     default:
                         LogicList.Add(new UndefinedMacro(i));

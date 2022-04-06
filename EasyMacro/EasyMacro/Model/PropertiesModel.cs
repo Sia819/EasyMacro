@@ -11,5 +11,6 @@ namespace EasyMacro.Model
     {
         public string DisplayName { get; set; }
         public MacroDisplayType MacroType { get; set; }
+        
     }
 }

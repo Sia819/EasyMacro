@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EasyMacro.Model.DisplayMacro
 {
-    public class MouseMacro : IMacros
+    public class MouseMacro : IMacro
     {
         public MacroDisplayType DisplayType { get; }
 

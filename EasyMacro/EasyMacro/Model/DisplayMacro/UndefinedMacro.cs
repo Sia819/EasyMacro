@@ -9,7 +9,7 @@ using EasyMacroAPI.Model;
 namespace EasyMacro.Model.DisplayMacro
 {
 
-    public class UndefinedMacro : IMacros
+    public class UndefinedMacro : IMacro
     {
         #region Public Properties
 

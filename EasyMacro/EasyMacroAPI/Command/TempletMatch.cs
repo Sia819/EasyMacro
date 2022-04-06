@@ -16,6 +16,16 @@ namespace EasyMacroAPI.Command
         private Bitmap targetImg;
         private Point point;
 
+        public TempletMatch(string targetDir)
+        {
+            targetImg = new Bitmap(targetDir);
+        }
+
+        public TempletMatch(Bitmap targetImg)
+        {
+            this.targetImg = targetImg;
+        }
+
         public TempletMatch(string targetDir, string windowName)
         {
             targetImg = new Bitmap(targetDir);

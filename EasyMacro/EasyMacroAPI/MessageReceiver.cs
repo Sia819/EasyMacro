@@ -42,6 +42,16 @@ namespace EasyMacroAPI
             public Keys keys;
             public KeyModifiers keyModifiers;
         }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MSLLHOOKSTRUCT
+        {
+            public POINT pt;
+            public int mouseData; // be careful, this must be ints, not uints (was wrong before I changed it...). regards, cmew.
+            public int flags;
+            public int time;
+            public UIntPtr dwExtraInfo;
+        }
         #endregion
 
         #region Private Constant
@@ -127,6 +137,10 @@ namespace EasyMacroAPI
         {
             PostMessage(this.Handle, (int)MACRO_UNREG, 0, MAKELPARAM((int)keyModifiers, (int)key));
         }
+        //TODO : 아래 함수는 메인함수에서 실행되어야 함.
+        //SafeHookHandle mouseHook = SetWindowsHookEx(WH_MOUSE_LL, mouseHookProc, hInstance, 0);
+        //TODO : 녹화 매크로 함수 구현
+
         #endregion
 
         #region Private Method
@@ -200,6 +214,18 @@ namespace EasyMacroAPI
                 default:
                     return DefWindowProc(hWnd, msg, (IntPtr)wParam, (IntPtr)lParam);
             }
+        }
+
+        int mouseHookProc(int nCode, IntPtr wParam, IntPtr lParam)
+        {
+            MSLLHOOKSTRUCT p = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
+
+            POINT position;
+            position.x = p.pt.x;
+            position.y = p.pt.y;
+            Console.WriteLine(position.x + ", " + position.y);
+
+            return CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
         }
 
         private static unsafe char* ToCharPointer(string value)

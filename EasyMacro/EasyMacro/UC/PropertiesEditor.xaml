@@ -23,9 +23,7 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <Button DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModelLocate}"
-                    Command="{Binding AddCommand}"
-                    CommandParameter="{Binding SelectedMacro.MacroType, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
+            <!--<Button DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModelLocate}"
                     DockPanel.Dock="Bottom" 
                     Content="Add Macro"
                     Margin="5"/>
@@ -50,7 +48,7 @@
                                    Text="{Binding SelectedMacro, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}, TargetNullValue=null}"/>
                     </StackPanel>
                 </Grid>
-            </Border>
+            </Border>-->
 
             <!-- 선택된 콤보박스 아이템에 따라 다른 뷰를 설정합니다. -->
 

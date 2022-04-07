@@ -2,6 +2,6 @@
 {
     public static class DebugState
     {
-        public static bool IsDebugStart => (System.Diagnostics.Debugger.IsAttached) ? true : false;
+        public static bool IsDebugMode => System.Diagnostics.Debugger.IsAttached;
     }
 }

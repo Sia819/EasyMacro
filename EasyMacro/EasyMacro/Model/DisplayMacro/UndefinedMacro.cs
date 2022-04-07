@@ -13,15 +13,29 @@ namespace EasyMacro.Model.DisplayMacro
     {
         #region Public Properties
 
-        public string DisplayText => "지정되지 않은 매크로";
+        public string DisplayText
+        {
+            get => _displayText; 
+            set => _displayText = value; 
+        }
+        
         public bool IsSleep => false;
         public MacroDisplayType DisplayType => MacroDisplayType.Undefined;
 
         #endregion
 
+        #region Private Member
+        private string _displayText;
+        #endregion
+
         public UndefinedMacro(IAction action)
         {
             this.action = action;
+            DisplayText = "지정되지 않은 매크로";
+        }
+        public UndefinedMacro()
+        {
+
         }
 
         private IAction action;

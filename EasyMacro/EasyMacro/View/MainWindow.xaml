@@ -7,6 +7,7 @@
         xmlns:uc="clr-namespace:EasyMacro.UC"
         xmlns:viewmodel="clr-namespace:EasyMacro.ViewModel"
         xmlns:model="clr-namespace:EasyMacro.Model"
+        xmlns:converter="clr-namespace:EasyMacro.Converter"
         mc:Ignorable="d"
         DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModelLocate}"
         Title="MainWindow" Height="450" Width="700">
@@ -15,10 +16,13 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Theme/ListBoxNoPadding.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Theme/CircleButton.xaml"/>
+
             </ResourceDictionary.MergedDictionaries>
+            <converter:WidthAndHeightDivider x:Key="WidthAndHeightDivider"/>
         </ResourceDictionary>
 
     </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -41,7 +45,8 @@
                         Margin="3"
                         BorderThickness="1" BorderBrush="Black"
                         DockPanel.Dock="Left">
-                    <TextBlock Text="Macro State"/>
+                    <!--<TextBlock Text="Macro State"/>-->
+                    <TextBlock Text="{Binding SelectedMacro}"/>
                 </Border>
 
                 <Button Content="Save"
@@ -70,104 +75,259 @@
                         DockPanel.Dock="Right"/>
                 <Border/>
             </DockPanel>
+            <Border Grid.Column="0" Grid.Row="1"
+                    BorderBrush="WhiteSmoke" BorderThickness="1">
+                <Grid>
+                    <!-- 매크로가 보이는 패널 -->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <ListBox ItemsSource="{Binding LogicList}"
+                         d:ItemsSource="{Binding DesignerList}"
+                         BorderBrush="Transparent"
+                         Height="auto"
+                         ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <ContentControl>
+                                    <ContentControl.Style>
+                                        <Style TargetType="{x:Type ContentControl}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding DisplayType}" Value="{x:Static model:MacroDisplayType.Undefined}">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate>
 
-            <!-- 매크로가 보이는 패널 -->
-            <ListBox Grid.Column="0" Grid.Row="1" 
-                     ItemsSource="{Binding LogicList}"
-                     d:ItemsSource="{Binding DesignerList}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <ContentControl>
-                            <ContentControl.Style>
-                                <Style TargetType="{x:Type ContentControl}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding DisplayType}" Value="{x:Static model:MacroDisplayType.Undefined}">
-                                            <Setter Property="Template">
-                                                <Setter.Value>
-                                                    <ControlTemplate>
+                                                                <!-- 지정되지 않은 매크로 -->
+                                                                <Grid>
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="36"/>
+                                                                        <ColumnDefinition />
+                                                                        <ColumnDefinition Width="36"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Grid>
+                                                                        <Path Stroke="Black" StrokeThickness="1">
+                                                                            <Path.Data>
+                                                                                <PathGeometry>
+                                                                                    <!-- Your path geomrtry -->
+                                                                                    M21,10H3V9h18V10z M21,14H3v1h18V14z
+                                                                                </PathGeometry>
+                                                                            </Path.Data>
+                                                                            <Path.RenderTransform>
+                                                                                <TranslateTransform X="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}, Path=ActualWidth, Converter={StaticResource WidthAndHeightDivider}}"
+                                                                                                Y="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}, Path=ActualHeight, Converter={StaticResource WidthAndHeightDivider}}" />
+                                                                            </Path.RenderTransform>
+                                                                        </Path>
+                                                                    </Grid>
+                                                                    <Grid Grid.Column="1">
+                                                                        <Grid  Margin="10">
+                                                                            <TextBlock Text="{Binding DisplayText}"/>
+                                                                        </Grid>
+                                                                        <Border BorderBrush="LightGray" BorderThickness="1"
+                                                                            Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorLevel=1, AncestorType={x:Type Grid}}}" Height="1" 
+                                                                            VerticalAlignment="Bottom"></Border>
+                                                                    </Grid>
 
-                                                        <!-- 1 -->
-                                                        <Border BorderBrush="Black" 
-                                                                BorderThickness="1"
-                                                                Margin="0 -1 0 0">
-                                                            <Grid Margin="10">
-                                                                <TextBlock Text="{Binding DisplayText}"/>
-                                                            </Grid>
-                                                        </Border>
+                                                                </Grid>
 
-                                                    </ControlTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding DisplayType}" Value="{x:Static model:MacroDisplayType.Sleep}">
-                                            <Setter Property="Template">
-                                                <Setter.Value>
-                                                    <ControlTemplate>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding DisplayType}" Value="{x:Static model:MacroDisplayType.Sleep}">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate>
 
-                                                        <Border BorderBrush="Black" 
-                                                                BorderThickness="1"
-                                                                Margin="0 0 0 -1">
-                                                            <Grid Margin="10">
-                                                                <StackPanel Orientation="Horizontal">
-                                                                    <TextBlock Text="{Binding DisplayText}" Margin="5 0"/>
-                                                                    <TextBlock Text="{Binding Millisecond}" Margin="5 0"/>
-                                                                </StackPanel>
-                                                            </Grid>
-                                                        </Border>
+                                                                <!-- 딜레이 매크로 -->
+                                                                <Grid>
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="36"/>
+                                                                        <ColumnDefinition />
+                                                                        <ColumnDefinition Width="36"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Grid>
+                                                                        <Path Stroke="Black" StrokeThickness="1">
+                                                                            <Path.Data>
+                                                                                <PathGeometry>
+                                                                                    <!-- Your path geomrtry -->
+                                                                                    M21,10H3V9h18V10z M21,14H3v1h18V14z
+                                                                                </PathGeometry>
+                                                                            </Path.Data>
+                                                                            <Path.RenderTransform>
+                                                                                <TranslateTransform X="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}, Path=ActualWidth, Converter={StaticResource WidthAndHeightDivider}}"
+                                                                                                Y="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}, Path=ActualHeight, Converter={StaticResource WidthAndHeightDivider}}" />
+                                                                            </Path.RenderTransform>
+                                                                        </Path>
+                                                                    </Grid>
+                                                                    <Grid Grid.Column="1">
+                                                                        <Grid  Margin="10">
+                                                                            <StackPanel Orientation="Horizontal">
+                                                                                <TextBlock Text="{Binding DisplayText}" Margin="5 0"/>
+                                                                                <TextBlock Text="{Binding Millisecond}" Margin="5 0"/>
+                                                                            </StackPanel>
+                                                                        </Grid>
+                                                                        <Border BorderBrush="LightGray" BorderThickness="1"
+                                                                            Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorLevel=1, AncestorType={x:Type Grid}}}" Height="1" 
+                                                                            VerticalAlignment="Bottom"></Border>
+                                                                    </Grid>
 
-                                                    </ControlTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding DisplayType}" Value="{x:Static model:MacroDisplayType.MouseMove}">
-                                            <Setter Property="Template">
-                                                <Setter.Value>
-                                                    <ControlTemplate>
+                                                                </Grid>
 
-                                                        <Border BorderBrush="Black" 
-                                                                BorderThickness="1"
-                                                                Margin="0 0 0 -1">
-                                                            <Grid Margin="10">
-                                                                <StackPanel Orientation="Horizontal">
-                                                                    <TextBlock Text="{Binding DisplayText}" Margin="5 0" />
-                                                                    <TextBlock Text="{Binding X}" Margin="5 0" />
-                                                                    <TextBlock Text="{Binding Y}" Margin="5 0" />
-                                                                </StackPanel>
-                                                            </Grid>
-                                                        </Border>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding DisplayType}" Value="{x:Static model:MacroDisplayType.MouseMove}">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate>
 
-                                                    </ControlTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding DisplayType}" Value="{x:Static model:MacroDisplayType.MouseClick}">
-                                            <Setter Property="Template">
-                                                <Setter.Value>
-                                                    <ControlTemplate>
+                                                                <!-- 마우스 이동 매크로 -->
+                                                                <Grid>
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="36"/>
+                                                                        <ColumnDefinition />
+                                                                        <ColumnDefinition Width="36"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Grid>
+                                                                        <Path Stroke="Black" StrokeThickness="1">
+                                                                            <Path.Data>
+                                                                                <PathGeometry>
+                                                                                    <!-- Your path geomrtry -->
+                                                                                    M21,10H3V9h18V10z M21,14H3v1h18V14z
+                                                                                </PathGeometry>
+                                                                            </Path.Data>
+                                                                            <Path.RenderTransform>
+                                                                                <TranslateTransform X="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}, Path=ActualWidth, Converter={StaticResource WidthAndHeightDivider}}"
+                                                                                                Y="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}, Path=ActualHeight, Converter={StaticResource WidthAndHeightDivider}}" />
+                                                                            </Path.RenderTransform>
+                                                                        </Path>
+                                                                    </Grid>
 
-                                                        <Border BorderBrush="Black" 
-                                                                BorderThickness="1"
-                                                                Margin="0 0 0 -1">
-                                                            <Grid Margin="10">
-                                                                <StackPanel Orientation="Horizontal">
-                                                                    <TextBlock Text="{Binding DisplayText}" Margin="5 0" />
-                                                                    <TextBlock Text="{Binding X}" Margin="5 0" />
-                                                                    <TextBlock Text="{Binding Y}" Margin="5 0" />
-                                                                </StackPanel>
-                                                            </Grid>
-                                                        </Border>
+                                                                    <Grid Name="a" Grid.Column="1" >
+                                                                        <Grid  Margin="10" >
+                                                                            <StackPanel Orientation="Horizontal">
+                                                                                <TextBlock Text="{Binding DisplayText}" Margin="5 0" />
+                                                                                <TextBlock Text="{Binding X}" Margin="5 0" />
+                                                                                <TextBlock Text="{Binding Y}" Margin="5 0" />
+                                                                            </StackPanel>
+                                                                        </Grid>
+                                                                        <Border BorderBrush="LightGray" BorderThickness="1"
+                                                                            Width="{Binding ActualWidth , ElementName=a}" Height="1" 
+                                                                            VerticalAlignment="Bottom"></Border>
+                                                                    </Grid>
+                                                                </Grid>
 
-                                                    </ControlTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </DataTrigger>
-                                    </Style.Triggers>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding DisplayType}" Value="{x:Static model:MacroDisplayType.MouseClick}">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate>
+
+                                                                <!-- 마우스 클릭 매크로 -->
+                                                                <Grid>
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="36"/>
+                                                                        <ColumnDefinition />
+                                                                        <ColumnDefinition Width="36"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Grid>
+                                                                        <Path Stroke="Black" StrokeThickness="1">
+                                                                            <Path.Data>
+                                                                                <PathGeometry>
+                                                                                    <!-- Your path geomrtry -->
+                                                                                    M21,10H3V9h18V10z M21,14H3v1h18V14z
+                                                                                </PathGeometry>
+                                                                            </Path.Data>
+                                                                            <Path.RenderTransform>
+                                                                                <TranslateTransform X="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}, Path=ActualWidth, Converter={StaticResource WidthAndHeightDivider}}"
+                                                                                                Y="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}, Path=ActualHeight, Converter={StaticResource WidthAndHeightDivider}}" />
+                                                                            </Path.RenderTransform>
+                                                                        </Path>
+                                                                    </Grid>
+                                                                    <Grid Grid.Column="1">
+                                                                        <Grid Margin="10">
+                                                                            <StackPanel Orientation="Horizontal">
+                                                                                <TextBlock Text="{Binding DisplayText}" Margin="5 0" />
+                                                                                <TextBlock Text="{Binding X}" Margin="5 0" />
+                                                                                <TextBlock Text="{Binding Y}" Margin="5 0" />
+                                                                            </StackPanel>
+                                                                        </Grid>
+                                                                        <Border BorderBrush="LightGray" BorderThickness="1"
+                                                                            Width="{Binding ActualWidth , ElementName=a}" Height="1" 
+                                                                            VerticalAlignment="Bottom"></Border>
+                                                                    </Grid>
+                                                                </Grid>
+
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ContentControl.Style>
+                                </ContentControl>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <Grid Grid.Row="1" Height="40" VerticalAlignment="Top">
+                        <Button HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                                Background="Transparent"
+                                BorderBrush="Transparent"
+                                Command="{Binding AddCommand}">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <ContentPresenter />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
                                 </Style>
-                            </ContentControl.Style>
-                        </ContentControl>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                            </Button.Style>
+                            <Button.ContentTemplate>
+                                <DataTemplate>
+                                    <Border BorderThickness="2" CornerRadius="3" Margin="3">
+                                        <Border.BorderBrush>
+                                            <DrawingBrush Viewport="0,0,8,8" ViewportUnits="Absolute" TileMode="Tile">
+                                                <DrawingBrush.Drawing>
+                                                    <DrawingGroup>
+                                                        <GeometryDrawing Brush="Aquamarine">
+                                                            <GeometryDrawing.Geometry>
+                                                                <GeometryGroup>
+                                                                    <RectangleGeometry Rect="0,0,50,50" />
+                                                                    <RectangleGeometry Rect="50,50,50,50" />
+                                                                </GeometryGroup>
+                                                            </GeometryDrawing.Geometry>
+                                                        </GeometryDrawing>
+                                                    </DrawingGroup>
+                                                </DrawingBrush.Drawing>
+                                            </DrawingBrush>
+                                        </Border.BorderBrush>
+
+                                        
+                                            <TextBlock Text="Add" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"
+                                                       Padding="9"/>
+                                        
+
+
+                                    </Border>
+                                </DataTemplate>
+                            </Button.ContentTemplate>
+
+                        </Button>
+
+                    </Grid>
+
+                </Grid>
+            </Border>
         </Grid>
 
         <!-- 왼쪽 속성 패널 -->

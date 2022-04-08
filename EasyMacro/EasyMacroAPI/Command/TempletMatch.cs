@@ -7,11 +7,9 @@ using EasyMacroAPI.Model;
 namespace EasyMacroAPI.Command
 {
     [SupportedOSPlatform("Windows")]
-    class TempletMatch : IAction
+    public class TempletMatch : IAction
     {
         public MacroTypes MacroType => MacroTypes.TempletMatch;
-
-        private MacroManager macroManager = MacroManager.Instance;
 
         private Bitmap targetImg;
         private ScreenCapture screenCapture;
@@ -52,12 +50,12 @@ namespace EasyMacroAPI.Command
 
                 if (point != Point.Empty)
                 {
-                    macroManager.tempPoint = point;
+                    MacroManager.Instance.tempPoint = point;
                 }
             }
             else
             {// 창을 찾지 못한 경우
-
+                
             }
             
         }

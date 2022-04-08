@@ -2,6 +2,7 @@
 using EasyMacroAPI.Model;
 using EasyMacroAPI.Common;
 using System.Xml.Serialization;
+using System.Drawing;
 
 namespace EasyMacroAPI.Command
 {
@@ -16,6 +17,12 @@ namespace EasyMacroAPI.Command
         {
             this.X = x;
             this.Y = y;
+        }
+
+        public MouseMove(Point point)
+        {
+            X = point.X;
+            Y = point.Y;
         }
 
         public void Do()

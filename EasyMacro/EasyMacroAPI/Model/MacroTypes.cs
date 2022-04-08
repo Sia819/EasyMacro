@@ -15,5 +15,7 @@
         TempletMatch = 6,
         ScreenCapture = 7,
         WindowCapture = 8,
+
+        Folder = 99,
     }
 }

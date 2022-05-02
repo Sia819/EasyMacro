@@ -53,6 +53,11 @@ namespace EasyMacroAPI.Command
             folderB = new Folder();
         }
 
+        public void SetDelayTime(int time)
+        {
+            delay.Time = time;
+        }
+
         public void Do()
         {
             do

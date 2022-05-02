@@ -63,8 +63,6 @@ namespace EasyMacroAPI
         /// </summary>
         private MacroCustomSerializer customSerializer;
 
-        public Point tempPoint;
-
         #endregion
 
         private MacroManager()

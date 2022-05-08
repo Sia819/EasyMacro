@@ -11,17 +11,29 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ReactiveUI;
+using EasyMacro.ViewModel;
 
 namespace EasyMacro.View
 {
     /// <summary>
     /// DebugWindow.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class DebugWindow : Window
+    public partial class DebugWindow : Window, IViewFor<MainViewModel>
     {
         public DebugWindow()
         {
             InitializeComponent();
+
+            this.WhenActivated(d =>
+            {
+                this.OneWayBind(this.DataContext as MainWindowViewModel, 
+                                vm => vm.ListViewModel, 
+                                v => v.nodeList.ViewModel
+                                ).DisposeWith(d);
+                //this.OneWayBind(this.DataContext as MainWindowViewModel, vm => vm.NetworkViewModel, v => v.viewHost.ViewModel).DisposeWith(d);
+                //this.OneWayBind(this.DataContext as MainWindowViewModel, vm => vm.ValueLabel, v => v.valueLabel.Content).DisposeWith(d);
+            });
         }
     }
 }

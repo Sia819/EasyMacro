@@ -4,15 +4,34 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EasyMacro.View"
+        xmlns:reactiveUi="http://reactiveui.net"
+        xmlns:nodeList="clr-namespace:NodeNetwork.Toolkit.NodeList;assembly=NodeNetworkToolkit"
         mc:Ignorable="d"
         Title="DebugWindow" Height="450" Width="800">
     <Grid>
-        <Border BorderBrush="Black" BorderThickness="1" Width=" 50" Height="50">
-            <Path Data="M21,10H3V9h18V10z M21,14H3v1h18V14z"
-                  Stroke="Black"
-                  StrokeThickness="1"
-                  VerticalAlignment="Center"
-                  HorizontalAlignment="Center"/>
-        </Border>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <!-- 도구상자 -->
+        <nodeList:NodeListView Grid.Column="0" x:Name="nodeList" HorizontalAlignment="Stretch"/>
+        <!-- 스플리터 -->
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="5"/>
+
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <!-- 그래프 -->
+            <!-- <reactiveUi:ViewModelViewHost Grid.Row="0" x:Name="viewHost" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+            -->
+            <!-- 출력패널 -->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
+                <Label Content="Current value:" FontSize="16"/>
+                <Label x:Name="valueLabel" FontSize="16"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

@@ -11,43 +11,43 @@ namespace EasyMacroAPI.Command
     {
         public MacroTypes MacroType => MacroTypes.Folder;
 
-        public string folderName;
-        public List<IAction> actionList;
-        public IAction parent;
+        public string FolderName { get; set; }
+        public List<IAction> ActionList { get; set; }
+        public IAction Parent { get; set; }
 
         public Folder(string folderName = "new Folder")
         {
-            this.folderName = folderName;
-            actionList = new List<IAction>();
+            this.FolderName = folderName;
+            ActionList = new List<IAction>();
         }
 
         public Folder(IAction parent, string folderName = "new Folder")
         {
-            this.parent = parent;
-            this.folderName = folderName;
-            actionList = new List<IAction>();
+            this.Parent = parent;
+            this.FolderName = folderName;
+            ActionList = new List<IAction>();
         }
 
         public void InsertList(IAction insertAction)
         {
-            actionList.Add(insertAction);
+            ActionList.Add(insertAction);
         }
 
         public void DeleteList(int index)
         {
-            actionList.RemoveAt(index);
+            ActionList.RemoveAt(index);
         }
 
         public void DoOnce(int index)
         {
-            actionList[index].Do();
+            ActionList[index].Do();
         }
 
         public void Do()
         {
-            for(int i = 0; i < actionList.Count; i++)
+            for(int i = 0; i < ActionList.Count; i++)
             {
-                actionList[i].Do();
+                ActionList[i].Do();
             }
         }
     }

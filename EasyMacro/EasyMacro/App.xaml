@@ -4,7 +4,12 @@
              xmlns:local="clr-namespace:EasyMacro"
              xmlns:common="clr-namespace:EasyMacro.Common"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
-             StartupUri="View/MainWindow.xaml">
+             StartupUri="View/DebugWindow.xaml" 
+             >
+    <!-- 
+    StartupUri="View/DebugWindow.xaml" 
+    StartupUri="View/MainWindow.xaml"
+    -->
     <Application.Resources>
         <ResourceDictionary>
             <common:ViewModelLocator x:Key="Locator"/>

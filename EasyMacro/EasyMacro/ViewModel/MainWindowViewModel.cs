@@ -35,6 +35,7 @@ namespace EasyMacro.ViewModel
         /// Properties Editor에서 선택된 매크로 타입
         /// </summary>
         public Model.MacroDisplayType SelectedMacro { get; set; }
+        public bool ToggleState { get; set; }
         #endregion
 
 

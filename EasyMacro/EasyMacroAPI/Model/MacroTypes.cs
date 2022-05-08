@@ -10,11 +10,12 @@
         MouseMove = 1,
         MouseClick = 2,
         InputKeyboard = 3,
-        InputMouse = 4,
-        InputString = 5,
-        TempletMatch = 6,
-        ScreenCapture = 7,
-        WindowCapture = 8,
+        CombInputKeyboard = 4,
+        InputMouse = 5,
+        InputString = 6,
+        TempletMatch = 7,
+        ScreenCapture = 8,
+        WindowCapture = 9,
 
         Folder = 99,
     }

@@ -15,7 +15,8 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <!-- 도구상자 -->
-        <nodeList:NodeListView Grid.Column="0" x:Name="nodeList" HorizontalAlignment="Stretch"/>
+        <Border Background="AntiqueWhite"/>
+        <!-- <nodeList:NodeListView Grid.Column="0" x:Name="nodeList" HorizontalAlignment="Stretch"/>  -->
         <!-- 스플리터 -->
         <GridSplitter Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="5"/>
 
@@ -25,7 +26,9 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <!-- 그래프 -->
-            <!-- <reactiveUi:ViewModelViewHost Grid.Row="0" x:Name="viewHost" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+            <Border Background="AliceBlue"/>
+            <!-- 
+                <reactiveUi:ViewModelViewHost Grid.Row="0" x:Name="viewHost" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
             -->
             <!-- 출력패널 -->
             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">

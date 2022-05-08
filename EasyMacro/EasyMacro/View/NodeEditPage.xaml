@@ -42,7 +42,8 @@
             </Grid.ColumnDefinitions>
             <!-- 도구상자 -->
             <Grid Grid.Column="0">
-                <nodeList:NodeListView Grid.Column="0" x:Name="toolBox" HorizontalAlignment="Stretch"/>
+                <Border Background="Beige"/>
+                <!-- <nodeList:NodeListView Grid.Column="0" x:Name="toolBox" HorizontalAlignment="Stretch"/> -->
             </Grid>
             <!-- 그래프 패널 -->
             <Grid Grid.Column="1">

@@ -19,11 +19,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Resource/ListBoxNoPadding.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Resource/CircleButton.xaml"/>
-
             </ResourceDictionary.MergedDictionaries>
             <converter:WidthAndHeightDivider x:Key="WidthAndHeightDivider"/>
         </ResourceDictionary>
-
     </Page.Resources>
 
     <Grid>

@@ -8,33 +8,84 @@
         xmlns:nodeList="clr-namespace:NodeNetwork.Toolkit.NodeList;assembly=NodeNetworkToolkit"
         mc:Ignorable="d"
         Title="DebugWindow" Height="450" Width="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300"/>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <!-- 도구상자 -->
-        <Border Background="AntiqueWhite"/>
-        <!-- <nodeList:NodeListView Grid.Column="0" x:Name="nodeList" HorizontalAlignment="Stretch"/>  -->
-        <!-- 스플리터 -->
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="5"/>
+    <Window.Resources>
+        <ResourceDictionary>
 
-        <Grid Grid.Column="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <!-- 그래프 -->
-            <Border Background="AliceBlue"/>
-            <!-- 
-                <reactiveUi:ViewModelViewHost Grid.Row="0" x:Name="viewHost" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
-            -->
-            <!-- 출력패널 -->
-            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
-                <Label Content="Current value:" FontSize="16"/>
-                <Label x:Name="valueLabel" FontSize="16"/>
-            </StackPanel>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Resource/DefaultTitlePath.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Resource/DefaultTitleButton.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Resource/TitleButton.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Resource/CloseButton.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <!-- Icon -->
+                <ColumnDefinition Width="20"/>
+                <!-- Title -->
+                <ColumnDefinition Width="*"/>
+
+                <!-- Toggle Button -->
+                <ColumnDefinition Width="200"/>
+
+                <!--  -->
+                <ColumnDefinition Width="46"/>
+                <ColumnDefinition Width="46"/>
+                <ColumnDefinition Width="46"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Title Text -->
+            <TextBlock Grid.Column="1" 
+                       VerticalAlignment="Center"
+                       Margin="10 0"
+                       Text="{Binding Title, ElementName=mainWindow}"/>
+
+            <!-- Toggle Button -->
+
+            <!--<CheckBox IsChecked="{Binding ToggleState}" 
+                      Grid.Column="2" Grid.Row="0" 
+                      Checked="CheckBox_CheckedChange"
+                      Unchecked="CheckBox_CheckedChange"
+                      Loaded="CheckBox_CheckedChange"
+                      VerticalAlignment="Bottom"
+                      Content="토글버튼"/>-->
+
+            <!-- Minimize Button -->
+            <Button Grid.Column="3" 
+                    Name="MinimizeButton"
+                    Style="{DynamicResource TitleButton_Style}"
+                    Click="MinimizeButton_Click">
+                <Path Style="{StaticResource Minimize_Path_Style}"
+                      Margin="18 14 0 0"/>
+            </Button>
+            <!-- Maximize Button -->
+            <Button Grid.Column="4"
+                    Name="MaximizeButton"
+                    Style="{DynamicResource TitleButton_Style}"
+                    Click="MaximizeButton_Click">
+                <Path x:Name="MaximizeButtonPath" Style="{DynamicResource Maximize_Path_Style}"
+                      Margin="17 9 0 0"/>
+            </Button>
+            <!-- Close Button -->
+            <Button Grid.Column="5" 
+                    Name="CloseButton"
+                    Style="{DynamicResource CloseButton_Style}"
+                    Click="CloseButton_Click">
+                <Path Style="{StaticResource Close_Path_Style}" 
+                      Margin="17 9 0 0"
+                      Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" />
+                <!--  Fill Binding is CloseButton mouseover path color inversion -->
+            </Button>
         </Grid>
     </Grid>
 </Window>

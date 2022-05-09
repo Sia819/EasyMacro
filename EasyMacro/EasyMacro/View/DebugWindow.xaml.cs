@@ -20,36 +20,30 @@ namespace EasyMacro.View
     /// <summary>
     /// DebugWindow.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class DebugWindow : Window, IViewFor<DebugWindowViewModel>
+    public partial class DebugWindow : Window
     {
         public DebugWindow()
         {
             InitializeComponent();
-            /*
-            this.WhenActivated(d =>
-            {
-                //this.OneWayBind(this.DataContext as DebugWindowViewModel,
-                //                vm => vm.ListViewModel,
-                //                v => v.nodeList.ViewModel
-                //                ).DisposeWith(d);
-                //this.OneWayBind(this.DataContext as MainWindowViewModel, vm => vm.NetworkViewModel, v => v.viewHost.ViewModel).DisposeWith(d);
-                //this.OneWayBind(this.DataContext as MainWindowViewModel, vm => vm.ValueLabel, v => v.valueLabel.Content).DisposeWith(d);
-            });
-            */
         }
 
-        public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(nameof(ViewModel),
-            typeof(DebugWindowViewModel), typeof(MainWindow), new PropertyMetadata(null));
-
-        public DebugWindowViewModel ViewModel
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
-            get => (DebugWindowViewModel)GetValue(ViewModelProperty);
-            set => SetValue(ViewModelProperty, value);
+            // TODO : 애니메이션 안보임
+            Window.GetWindow(this).WindowState = WindowState.Minimized;
         }
-        object IViewFor.ViewModel
+
+        private void MaximizeButton_Click(object sender, RoutedEventArgs e)
         {
-            get => ViewModel;
-            set => ViewModel = (DebugWindowViewModel)value;
+            Window targetWindow = Window.GetWindow(this);
+            _ = targetWindow.WindowState == WindowState.Normal ?
+                targetWindow.WindowState = WindowState.Maximized :
+                targetWindow.WindowState = WindowState.Normal;
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Window.GetWindow(this).Close();
         }
     }
 }

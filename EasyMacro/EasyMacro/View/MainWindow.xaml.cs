@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MahApps.Metro.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,13 +19,11 @@ namespace EasyMacro.View
     /// <summary>
     /// MainWindow.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
         public MainWindow()
         {
             InitializeComponent();
-            //this.mainFrame.Source = new Uri("pack://application:,,,/View/NodeEditPage.xaml");
-            this.mainFrame.Source = new Uri("pack://application:,,,/View/ListEditPage.xaml", UriKind.Absolute);
         }
 
         private void mainFrame_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -45,16 +44,24 @@ namespace EasyMacro.View
             content.DataContext = (sender as Frame).DataContext;
         }
 
-        private void CheckBox_CheckedChange(object sender, RoutedEventArgs e)
+        private void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
         {
-            if ((sender as CheckBox).IsChecked == true)
+            ToggleSwitch toggleSwitch = sender as ToggleSwitch;
+
+            if (toggleSwitch != null)
             {
-                this.mainFrame.Source = new Uri("pack://application:,,,/View/ListEditPage.xaml", UriKind.Absolute);
+                if (toggleSwitch.IsOn == true)
+                {
+                    this.mainFrame.Source = new Uri("pack://application:,,,/View/ListEditPage.xaml", UriKind.Absolute);
+                }
+                else
+                {
+                    this.mainFrame.Source = new Uri("pack://application:,,,/View/NodeEditPage.xaml", UriKind.Absolute);
+                }
             }
-            else
-            {
-                this.mainFrame.Source = new Uri("pack://application:,,,/View/NodeEditPage.xaml", UriKind.Absolute);
-            }
+            
         }
+
+        
     }
 }

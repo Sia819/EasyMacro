@@ -27,7 +27,7 @@ namespace EasyMacro.ViewModel
         static MainWindowViewModel()
         {
             // View Model Locator
-            Splat.Locator.CurrentMutable.Register(() => new EasyMacro.View.MainWindow(), typeof(ReactiveUI.IViewFor<DebugWindowViewModel>));
+            Splat.Locator.CurrentMutable.Register(() => new EasyMacro.View.MainWindow(), typeof(ReactiveUI.IViewFor<>));
         }
 
         #region Property Changed

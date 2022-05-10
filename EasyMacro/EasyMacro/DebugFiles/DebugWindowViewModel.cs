@@ -8,20 +8,13 @@ using NodeNetwork.ViewModels;
 using EasyMacro.View;
 using ReactiveUI;
 
-namespace EasyMacro.ViewModel
+namespace EasyMacro.Debug
 {
     public class DebugWindowViewModel
     {
-        
-
-        
-
-        public string ValueLabel { get; set; } //* fody라서 구현할 필요없음
-
         public DebugWindowViewModel()
         {
             
         }
-
     }
 }

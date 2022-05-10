@@ -15,7 +15,7 @@ using ReactiveUI;
 using EasyMacro.ViewModel;
 using System.Reactive.Disposables;
 
-namespace EasyMacro.View
+namespace EasyMacro.Debug
 {
     /// <summary>
     /// DebugWindow.xaml에 대한 상호 작용 논리

@@ -1,14 +1,10 @@
-﻿using NodeNetwork.Toolkit.ValueNode;
+﻿using EasyMacro.ViewModel.Node.Editors;
+using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
 using NodeNetwork.Views;
 using ReactiveUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EasyMacro.ViewModel.Node
+namespace EasyMacro.ViewModel.Node.NodeObject
 {
     public class SleepNodeViewModel : NodeViewModel
     {

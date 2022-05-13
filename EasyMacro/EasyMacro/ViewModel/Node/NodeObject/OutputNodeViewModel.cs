@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DynamicData;
+using EasyMacro.ViewModel.Node.Editors;
 using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
 using NodeNetwork.Views;
 using ReactiveUI;
 
-namespace EasyMacro.ViewModel.Node
+namespace EasyMacro.ViewModel.Node.NodeObject
 {
     public class OutputNodeViewModel : NodeViewModel
     {

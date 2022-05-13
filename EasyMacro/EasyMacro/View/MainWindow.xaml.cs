@@ -26,6 +26,7 @@ namespace EasyMacro.View
             InitializeComponent();
         }
 
+        /*
         private void mainFrame_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             UpdateFrameDataContext(sender, null);
@@ -43,6 +44,7 @@ namespace EasyMacro.View
                 return;
             content.DataContext = (sender as Frame).DataContext;
         }
+        */
 
         private void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
         {

@@ -2,23 +2,25 @@
 using System.Windows;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Reactive.Linq;
+
 using EasyMacro.Model;
 using EasyMacro.Model.DisplayMacro;
+using EasyMacro.ViewModel.Node.NodeObject;
+using static EasyMacro.Common.DebugState;
 using EasyMacroAPI;
-using EasyMacroAPI.Command;
+
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Win32;
-using static EasyMacro.Common.DebugState;
-using System.Threading;
+using DynamicData;
 using NodeNetwork.Toolkit.NodeList;
 using NodeNetwork.ViewModels;
 using NodeNetwork.Toolkit;
 using NodeNetwork;
-using EasyMacro.ViewModel.Node;
-using DynamicData;
-using System.Linq;
-using System.Reactive.Linq;
+
 using ReactiveUI;
+
 
 namespace EasyMacro.ViewModel
 {

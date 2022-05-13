@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using EasyMacro.ViewModel.Node;
+using EasyMacro.ViewModel.Node.Editors;
 using ReactiveUI;
 
 namespace EasyMacro.View.Node

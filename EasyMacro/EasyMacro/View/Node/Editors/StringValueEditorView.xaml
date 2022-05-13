@@ -1,12 +1,10 @@
-﻿<UserControl x:Class="EasyMacro.View.Node.IntegerValueEditorView"
+﻿<UserControl x:Class="EasyMacro.View.Node.Editors.StringValueEditorView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:EasyMacro.View.Node"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:local="clr-namespace:EasyMacro.View.Node.Editors"
              mc:Ignorable="d" 
-             d:DesignHeight="20" d:DesignWidth="100">
-    
-    <xctk:IntegerUpDown Name="valueUpDown"/>
+             d:DesignHeight="300" d:DesignWidth="300">
+    <TextBox x:Name="TextBox" MinWidth="100"/>
 </UserControl>

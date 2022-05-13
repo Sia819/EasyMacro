@@ -12,6 +12,8 @@ using System.Threading;
 
 namespace EasyMacroAPI
 {
+    /*
+
     /// <summary>
     /// C++ Invoked Windows Desktop Application
     /// </summary>
@@ -241,6 +243,7 @@ namespace EasyMacroAPI
         }
         #endregion
     }
+    */
 }
 
 

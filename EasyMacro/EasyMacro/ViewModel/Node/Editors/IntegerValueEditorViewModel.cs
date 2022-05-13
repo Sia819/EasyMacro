@@ -2,7 +2,8 @@
 using NodeNetwork.Toolkit.ValueNode;
 using ReactiveUI;
 
-namespace EasyMacro.ViewModel.Node
+namespace EasyMacro.ViewModel.Node.Editors
+
 {
     public class IntegerValueEditorViewModel : ValueEditorViewModel<int?>
     {

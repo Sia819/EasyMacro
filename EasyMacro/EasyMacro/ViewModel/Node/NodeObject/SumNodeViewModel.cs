@@ -1,31 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive.Linq;
-using DynamicData;
-using NodeNetwork.Toolkit.ValueNode;
+﻿using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
 using NodeNetwork.Views;
 using ReactiveUI;
+using System.Linq;
+using System.Reactive.Linq;
+using DynamicData;
+using EasyMacro.ViewModel.Node.Editors;
 
-namespace EasyMacro.ViewModel.Node
+namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class DivisionNodeViewModel : NodeViewModel
+    public class SumNodeViewModel : NodeViewModel
     {
-        static DivisionNodeViewModel()
+        static SumNodeViewModel()
         {
-            Splat.Locator.CurrentMutable.Register(() => new NodeView(), typeof(IViewFor<DivisionNodeViewModel>));
+            Splat.Locator.CurrentMutable.Register(() => new NodeView(), typeof(IViewFor<SumNodeViewModel>));
         }
 
         public ValueNodeInputViewModel<int?> Input1 { get; }
         public ValueNodeInputViewModel<int?> Input2 { get; }
         public ValueNodeOutputViewModel<int?> Output { get; }
 
-        public DivisionNodeViewModel()
+        public SumNodeViewModel()
         {
-            Name = "Divide";
+            Name = "Sum";
 
             Input1 = new ValueNodeInputViewModel<int?>
             {
@@ -41,15 +38,16 @@ namespace EasyMacro.ViewModel.Node
             };
             Inputs.Add(Input2);
 
-            var divide = this.WhenAnyValue(vm => vm.Input1.Value, vm => vm.Input2.Value)
-                .Select(_ => Input1.Value != null && Input2.Value != null && Input2.Value != 0 ? Input1.Value / Input2.Value : null);
+            var sum = this.WhenAnyValue(vm => vm.Input1.Value, vm => vm.Input2.Value)
+                .Select(_ => Input1.Value != null && Input2.Value != null ? Input1.Value + Input2.Value : null);
 
             Output = new ValueNodeOutputViewModel<int?>
             {
-                Name = "A / B",
-                Value = divide
+                Name = "A + B",
+                Value = sum
             };
             Outputs.Add(Output);
         }
+
     }
 }

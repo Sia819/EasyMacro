@@ -10,7 +10,7 @@
                  mc:Ignorable="d"
                  Title="MainWindow" Height="650" Width="900"
                  Name="mainWindow"
-                 DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModelLocate}"
+                 DataContext="{Binding Path=MainViewModelLocate, Source={StaticResource Locator}}"
                  TitleBarHeight="23">
 
     <Window.Resources>
@@ -44,9 +44,9 @@
     <!-- 내용 -->
     <Frame Grid.Row="1"
                x:Name="mainFrame"
-               LoadCompleted="frame_LoadCompleted"
-               DataContextChanged="mainFrame_DataContextChanged"
                NavigationUIVisibility="Hidden">
     </Frame>
+    <!--LoadCompleted="mainFrame_LoadCompleted"
+    DataContextChanged="mainFrame_DataContextChanged"-->
     
 </mah:MetroWindow>

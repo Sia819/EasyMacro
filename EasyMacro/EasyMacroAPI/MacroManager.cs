@@ -17,6 +17,14 @@ namespace EasyMacroAPI
 {
     public class MacroManager
     {
+        public static MacroManager Instance => instance ??= new MacroManager();
+
+        /// <summary>
+        /// 싱글톤 객체 입니다.
+        /// </summary>
+        private static MacroManager instance;
+
+
         /// <summary>
         /// 일반적으로 수행되는 매크로
         /// </summary>
@@ -29,12 +37,7 @@ namespace EasyMacroAPI
 
         #region Private Field
 
-        /// <summary>
-        /// 싱글톤 객체 입니다.
-        /// </summary>
-        private static MacroManager instance;
-
-        private MessageReceiver hotKey;
+        private IMessageReceiver hotKey;
 
         private bool isMacroStarted;
 
@@ -64,23 +67,10 @@ namespace EasyMacroAPI
         private MacroCustomSerializer customSerializer;
 
         #endregion
+        
 
         private MacroManager()
         {
-            
-            new Thread(new ThreadStart(() =>
-            {
-                // Thread do
-                hotKey = new MessageReceiver(); // TODO : Console실행시 Error발생
-                hotKey.Run();
-
-            }))
-            {
-                // Thread Properties
-                IsBackground = true
-            }
-            .Start();
-            
             ActionList = new List<IAction>();
             FindActionList = new List<IAction>();
 
@@ -102,7 +92,7 @@ namespace EasyMacroAPI
                                                      .Create();
         }
 
-        public static MacroManager Instance => instance ??= new MacroManager();
+        
 
         public void InsertList(IAction insertAction)
         {
@@ -117,6 +107,8 @@ namespace EasyMacroAPI
         public void StartMacro()
         {
             isMacroStarted = true;
+            if (hotKey.IsConfigured == false)
+                throw new Exception("매크로 리시버가 구성되지 않았습니다. WinProc구현 클래스에 인터페이스를 상속하여 IMessageReceiver 프로퍼티에 등록하여주세요.");
             hotKey.AddHotkey(Keys.F9, KeyModifiers.None, StopMacro);
             macroThread.Start();
         }

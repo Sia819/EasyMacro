@@ -1,31 +1,28 @@
-﻿using NodeNetwork.Toolkit.ValueNode;
+﻿using System.Linq;
+using System.Reactive.Linq;
+using DynamicData;
+using EasyMacro.ViewModel.Node.Editors;
+using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
 using NodeNetwork.Views;
 using ReactiveUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive.Linq;
-using DynamicData;
 
-namespace EasyMacro.ViewModel.Node
+namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class SumNodeViewModel : NodeViewModel
+    public class DivisionNodeViewModel : NodeViewModel
     {
-        static SumNodeViewModel()
+        static DivisionNodeViewModel()
         {
-            Splat.Locator.CurrentMutable.Register(() => new NodeView(), typeof(IViewFor<SumNodeViewModel>));
+            Splat.Locator.CurrentMutable.Register(() => new NodeView(), typeof(IViewFor<DivisionNodeViewModel>));
         }
 
         public ValueNodeInputViewModel<int?> Input1 { get; }
         public ValueNodeInputViewModel<int?> Input2 { get; }
         public ValueNodeOutputViewModel<int?> Output { get; }
 
-        public SumNodeViewModel()
+        public DivisionNodeViewModel()
         {
-            Name = "Sum";
+            Name = "Divide";
 
             Input1 = new ValueNodeInputViewModel<int?>
             {
@@ -41,16 +38,15 @@ namespace EasyMacro.ViewModel.Node
             };
             Inputs.Add(Input2);
 
-            var sum = this.WhenAnyValue(vm => vm.Input1.Value, vm => vm.Input2.Value)
-                .Select(_ => Input1.Value != null && Input2.Value != null ? Input1.Value + Input2.Value : null);
+            var divide = this.WhenAnyValue(vm => vm.Input1.Value, vm => vm.Input2.Value)
+                .Select(_ => Input1.Value != null && Input2.Value != null && Input2.Value != 0 ? Input1.Value / Input2.Value : null);
 
             Output = new ValueNodeOutputViewModel<int?>
             {
-                Name = "A + B",
-                Value = sum
+                Name = "A / B",
+                Value = divide
             };
             Outputs.Add(Output);
         }
-
     }
 }

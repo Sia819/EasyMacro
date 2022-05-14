@@ -7,22 +7,22 @@ using ReactiveUI;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class ButtonEventNode : CodeGenNodeViewModel
+    public class StartNodeViewModel : CodeGenNodeViewModel
     {
-        static ButtonEventNode()
+        static StartNodeViewModel()
         {
-            Splat.Locator.CurrentMutable.Register(() => new CodeGenNodeView(), typeof(IViewFor<ButtonEventNode>));
+            Splat.Locator.CurrentMutable.Register(() => new CodeGenNodeView(), typeof(IViewFor<StartNodeViewModel>));
         }
 
         public ValueListNodeInputViewModel<IStatement> OnClickFlow { get; }
 
-        public ButtonEventNode() : base(NodeType.EventNode)
+        public StartNodeViewModel() : base(NodeType.EventNode)
         {
-            this.Name = "Button Events";
+            this.Name = "Start";
 
             OnClickFlow = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
             {
-                Name = "On Click"
+                Name = "Start"
             };
 
             this.Inputs.Add(OnClickFlow);

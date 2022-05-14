@@ -4,15 +4,17 @@ using DynamicData;
 using EasyMacro.Model.Node;
 using EasyMacro.Model.Node.Compiler;
 using NodeNetwork.Toolkit.ValueNode;
+using EasyMacro.View.Node;
+using ReactiveUI;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
     public class PrintNode : CodeGenNodeViewModel
     {
-        //static PrintNode()
-        //{
-        //    Splat.Locator.CurrentMutable.Register(() => new CodeGenNodeView(), typeof(IViewFor<PrintNode>));
-        //}
+        static PrintNode()
+        {
+            Splat.Locator.CurrentMutable.Register(() => new CodeGenNodeView(), typeof(IViewFor<PrintNode>));
+        }
 
         public ValueNodeInputViewModel<ITypedExpression<string>> Text { get; }
 

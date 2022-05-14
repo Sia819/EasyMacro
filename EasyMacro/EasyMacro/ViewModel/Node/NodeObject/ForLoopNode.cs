@@ -6,15 +6,17 @@ using EasyMacro.Model.Node.Compiler;
 using DynamicData;
 using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
+using EasyMacro.View.Node;
+using ReactiveUI;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
     public class ForLoopNode : CodeGenNodeViewModel
     {
-        //static ForLoopNode()
-        //{
-        //    Splat.Locator.CurrentMutable.Register(() => new CodeGenNodeView(), typeof(IViewFor<ForLoopNode>));
-        //}
+        static ForLoopNode()
+        {
+            Splat.Locator.CurrentMutable.Register(() => new CodeGenNodeView(), typeof(IViewFor<ForLoopNode>));
+        }
 
         public ValueNodeOutputViewModel<IStatement> FlowIn { get; }
 

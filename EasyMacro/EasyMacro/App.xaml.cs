@@ -20,6 +20,4 @@ namespace EasyMacro
             NNViewRegistrar.RegisterSplat();
         }
     }
-
-    
 }

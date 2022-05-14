@@ -2,15 +2,17 @@
 using EasyMacro.Model.Node;
 using NodeNetwork.Toolkit.Group.AddEndpointDropPanel;
 using NodeNetwork.ViewModels;
+using EasyMacro.View.Node;
+using ReactiveUI;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
     public class GroupSubnetIONodeViewModel : CodeGenNodeViewModel
     {
-        //static GroupSubnetIONodeViewModel()
-        //{
-        //    Splat.Locator.CurrentMutable.Register(() => new GroupSubnetIONodeView(), typeof(IViewFor<GroupSubnetIONodeViewModel>));
-        //}
+        static GroupSubnetIONodeViewModel()
+        {
+            Splat.Locator.CurrentMutable.Register(() => new GroupSubnetIONodeView(), typeof(IViewFor<GroupSubnetIONodeViewModel>));
+        }
 
         public NetworkViewModel Subnet { get; }
 

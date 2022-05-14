@@ -9,14 +9,18 @@
       xmlns:viewNode="clr-namespace:EasyMacro.View.Node"
       xmlns:viewLib="clr-namespace:NodeNetwork.Views;assembly=NodeNetwork"
       xmlns:viewEditor="clr-namespace:NodeNetwork.Views;assembly=NodeNetwork"
+      xmlns:viewModel="clr-namespace:EasyMacro.ViewModel"
       xmlns:nodeList="clr-namespace:NodeNetwork.Toolkit.NodeList;assembly=NodeNetworkToolkit"
       xmlns:breadcrumbBar="clr-namespace:NodeNetwork.Toolkit.BreadcrumbBar;assembly=NodeNetworkToolkit"
       xmlns:reactiveUi="http://reactiveui.net"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="NodeEditPage"
-      DataContext="{Binding Path=PageViewModelLocate, Source={StaticResource Locator}}"
+      
       d:Background="White">
+    <!--<Page.DataContext>
+        <viewModel:PageViewModel/>
+    </Page.DataContext>-->
     <Page.Resources>
         <converters:TypeVisibilityCheck x:Key="TypeCheckToVisibility"/>
         <ContextMenu x:Key="nodeMenu" x:Shared="True">
@@ -41,7 +45,10 @@
         <breadcrumbBar:BreadcrumbBarView x:Name="breadcrumbBar" Grid.Row="0" Grid.ColumnSpan="5" MinHeight="30"/>
         <Button Name="debug" Content="debug" Click="debug_Click"/>
         <Grid Grid.Row="1" Grid.Column="0">
-            <nodeList:NodeListView x:Name="nodeList" Margin="0,0,0,36"/>
+            <nodeList:NodeListView x:Name="nodeList"
+                                   
+                                   Margin="0,0,0,36"/>
+            <!--ViewModel="{Binding NodeList}"-->
             <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="10, 0, 10, 8">
                 <Button Name="autoLayoutButton">Auto-layout</Button>
                 <Button Name="startAutoLayoutLiveButton" Margin="0, 5, 0, 0">Start live auto-layout</Button>

@@ -5,15 +5,17 @@ using EasyMacro.Model.Node;
 using EasyMacro.Model.Node.Compiler;
 using EasyMacro.ViewModel.Node.Editors;
 using NodeNetwork.Toolkit.ValueNode;
+using EasyMacro.View.Node;
+using ReactiveUI;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
     public class TextLiteralNode : CodeGenNodeViewModel
     {
-        //static TextLiteralNode()
-        //{
-        //    Splat.Locator.CurrentMutable.Register(() => new CodeGenNodeView(), typeof(IViewFor<TextLiteralNode>));
-        //}
+        static TextLiteralNode()
+        {
+            Splat.Locator.CurrentMutable.Register(() => new CodeGenNodeView(), typeof(IViewFor<TextLiteralNode>));
+        }
 
         public StringValueEditorViewModel ValueEditor { get; } = new StringValueEditorViewModel();
 

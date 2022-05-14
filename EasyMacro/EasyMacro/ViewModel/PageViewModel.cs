@@ -19,7 +19,6 @@ using ReactiveUI;
 
 namespace EasyMacro.ViewModel
 {
-
     class NetworkBreadcrumb : BreadcrumbViewModel
     {
         #region Network
@@ -121,6 +120,7 @@ namespace EasyMacro.ViewModel
                 });
             }, isGroupNodeSelected);
         }
+
     }
 
 }

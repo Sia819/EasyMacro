@@ -26,25 +26,27 @@ namespace EasyMacro.View
             InitializeComponent();
         }
 
-        /*
+        
         private void mainFrame_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             UpdateFrameDataContext(sender, null);
         }
 
-        private void frame_LoadCompleted(object sender, NavigationEventArgs e)
+        private void mainFrame_LoadCompleted(object sender, NavigationEventArgs e)
         {
             UpdateFrameDataContext(sender, e);
         }
 
         private void UpdateFrameDataContext(object sender, NavigationEventArgs e)
         {
+            
             var content = (sender as Frame).Content as FrameworkElement;
             if (content == null)
                 return;
             content.DataContext = (sender as Frame).DataContext;
+            
         }
-        */
+        
 
         private void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
         {

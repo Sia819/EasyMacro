@@ -5,10 +5,10 @@ namespace EasyMacro.ViewModel.Node
 {
     public class CodeGenPortViewModel : PortViewModel
     {
-        //static CodeGenPortViewModel()
-        //{
-        //    Splat.Locator.CurrentMutable.Register(() => new Views.CodeGenPortView(), typeof(IViewFor<CodeGenPortViewModel>));
-        //}
+        static CodeGenPortViewModel()
+        {
+            Splat.Locator.CurrentMutable.Register(() => new EasyMacro.View.Node.CodeGenPortView(), typeof(IViewFor<CodeGenPortViewModel>));
+        }
 
         private EasyMacro.Model.Node.PortType _portType;
 

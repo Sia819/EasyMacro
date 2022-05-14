@@ -8,10 +8,10 @@ namespace EasyMacro.ViewModel.Node
 {
     public class CodeGenInputViewModel<T> : ValueNodeInputViewModel<T>
     {
-        //static CodeGenInputViewModel()
-        //{
-        //    Splat.Locator.CurrentMutable.Register(() => new NodeInputView(), typeof(IViewFor<CodeGenInputViewModel<T>>));
-        //}
+        static CodeGenInputViewModel()
+        {
+            Splat.Locator.CurrentMutable.Register(() => new NodeInputView(), typeof(IViewFor<CodeGenInputViewModel<T>>));
+        }
 
         public CodeGenInputViewModel(PortType type)
         {

@@ -8,5 +8,5 @@
              xmlns:views="clr-namespace:NodeNetwork.Views;assembly=NodeNetwork"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <views:NodeView x:Name="NodeView"/>
+    <views:ConnectionView x:Name="ConnectionView"/>
 </UserControl>

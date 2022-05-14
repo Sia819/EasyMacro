@@ -1,15 +1,17 @@
 ﻿using EasyMacro.Model.Node;
 using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
+using NodeNetwork.Views;
+using ReactiveUI;
 
 namespace EasyMacro.ViewModel.Node
 {
     public class CodeGenListInputViewModel<T> : ValueListNodeInputViewModel<T>
     {
-        //static CodeGenListInputViewModel()
-        //{
-        //    Splat.Locator.CurrentMutable.Register(() => new NodeInputView(), typeof(IViewFor<CodeGenListInputViewModel<T>>));
-        //}
+        static CodeGenListInputViewModel()
+        {
+            Splat.Locator.CurrentMutable.Register(() => new NodeInputView(), typeof(IViewFor<CodeGenListInputViewModel<T>>));
+        }
 
         public CodeGenListInputViewModel(PortType type)
         {

@@ -2,15 +2,16 @@
 using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
 using NodeNetwork.Views;
+using ReactiveUI;
 
 namespace EasyMacro.ViewModel.Node
 {
     public class CodeGenOutputViewModel<T> : ValueNodeOutputViewModel<T>
     {
-        //static CodeGenOutputViewModel()
-        //{
-        //    Splat.Locator.CurrentMutable.Register(() => new NodeOutputView(), typeof(IViewFor<CodeGenOutputViewModel<T>>));
-        //}
+        static CodeGenOutputViewModel()
+        {
+            Splat.Locator.CurrentMutable.Register(() => new NodeOutputView(), typeof(IViewFor<CodeGenOutputViewModel<T>>));
+        }
 
         public CodeGenOutputViewModel(PortType type)
         {

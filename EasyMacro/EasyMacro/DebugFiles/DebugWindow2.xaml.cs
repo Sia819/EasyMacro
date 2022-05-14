@@ -6,16 +6,16 @@ using System.Windows.Controls;
 using EasyMacro.ViewModel;
 using ReactiveUI;
 
-namespace EasyMacro.View
+namespace EasyMacro.DebugFiles
 {
     /// <summary>
-    /// NodeEditPage.xaml에 대한 상호 작용 논리
+    /// DebugWindow2.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class NodeEditPage : Page, IViewFor<PageViewModel>
+    public partial class DebugWindow2 : Window, IViewFor<PageViewModel>
     {
         public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(nameof(ViewModel),
-            typeof(PageViewModel), typeof(NodeEditPage), new PropertyMetadata(null));
-        
+            typeof(PageViewModel), typeof(DebugWindow2), new PropertyMetadata(null));
+
         public PageViewModel ViewModel
         {
             get => (PageViewModel)GetValue(ViewModelProperty);
@@ -32,7 +32,7 @@ namespace EasyMacro.View
         private readonly MenuItem ungroupNodesButton;
         private readonly MenuItem openGroupButton;
 
-        public NodeEditPage()
+        public DebugWindow2()
         {
             InitializeComponent();
 
@@ -67,11 +67,6 @@ namespace EasyMacro.View
             });
 
             this.ViewModel = new PageViewModel();
-        }
-
-        private void debug_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

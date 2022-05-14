@@ -8,7 +8,8 @@
              >
     <!-- 
     StartupUri="View/MainWindow.xaml"
-    StartupUri="View/DebugWindow.xaml" 
+    StartupUri="DebugFiles/DebugWindow.xaml"
+    StartupUri="DebugFiles/DebugWindow2.xaml"
     -->
     <Application.Resources>
         <ResourceDictionary>

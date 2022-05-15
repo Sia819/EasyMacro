@@ -8,7 +8,7 @@ namespace EasyMacroAPI.Model
 {
     public interface IMessageReceiver
     {
-        public bool IsConfigured { get; set; }
+        public bool IsConfigured { get; }
 
         public delegate void HotkeyDelegate();
 

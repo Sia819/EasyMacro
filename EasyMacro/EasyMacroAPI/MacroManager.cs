@@ -24,7 +24,6 @@ namespace EasyMacroAPI
         /// </summary>
         private static MacroManager instance;
 
-
         /// <summary>
         /// 일반적으로 수행되는 매크로
         /// </summary>
@@ -35,6 +34,14 @@ namespace EasyMacroAPI
         /// </summary>
         public List<IAction> FindActionList { get; private set; }
 
+        public void RegisterMessageReceiver(IMessageReceiver messageReceiver)
+        {
+            if (messageReceiver == null)
+                throw new ArgumentNullException(nameof(messageReceiver));
+
+            this.hotKey = messageReceiver;
+        }
+        
         #region Private Field
 
         private IMessageReceiver hotKey;

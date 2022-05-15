@@ -43,7 +43,6 @@
         </Grid.ColumnDefinitions>
         
         <breadcrumbBar:BreadcrumbBarView x:Name="breadcrumbBar" Grid.Row="0" Grid.ColumnSpan="5" MinHeight="30"/>
-        <Button Name="debug" Content="debug" Click="debug_Click"/>
         <Grid Grid.Row="1" Grid.Column="0">
             <nodeList:NodeListView x:Name="nodeList"
                                    

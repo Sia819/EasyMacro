@@ -62,14 +62,21 @@ namespace EasyMacro.ViewModel
                 Network = new NetworkViewModel()
             });
 
-            ButtonEventNode eventNode = new ButtonEventNode { CanBeRemovedByUser = false };
+            StartNodeViewModel eventNode = new StartNodeViewModel { CanBeRemovedByUser = false };
             Network.Nodes.Add(eventNode);
 
-            //NodeList.AddNodeType(() => new ButtonEventNode());
+            NodeList.AddNodeType(() => new StartNodeViewModel());
             NodeList.AddNodeType(() => new ForLoopNode());
             NodeList.AddNodeType(() => new IntLiteralNode());
             NodeList.AddNodeType(() => new PrintNode());
             NodeList.AddNodeType(() => new TextLiteralNode());
+            NodeList.AddNodeType(() => new DelayNodeViewModel());
+            NodeList.AddNodeType(() => new InputKeyboardNodeViewModel());
+            NodeList.AddNodeType(() => new InputMouseNodeViewModel());
+            NodeList.AddNodeType(() => new InputStringNodeViewModel());
+            NodeList.AddNodeType(() => new MouseClickNodeViewModel());
+            NodeList.AddNodeType(() => new MouseMoveNodeViewModel());
+            NodeList.AddNodeType(() => new TempletMatchNodeViewModel());
 
             var codeObservable = eventNode.OnClickFlow.Values.Connect().Select(_ => new StatementSequence(eventNode.OnClickFlow.Values.Items));
             codeObservable.BindTo(this, vm => vm.CodePreview.Code);

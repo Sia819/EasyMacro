@@ -29,11 +29,12 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         public DelayNodeViewModel() : base(NodeType.Function)
         {
             base.Name = "Sleep";
-//TODO : 나머지 구현
+            //TODO : 나머지 구현
             Input = new ValueNodeInputViewModel<int?>()
             {
                 Name = "Delay Time",
-                Editor = new IntegerValueEditorViewModel()
+                Editor = new IntegerValueEditorViewModel(),
+                Port = null,
             };
             this.Inputs.Add(Input);
 

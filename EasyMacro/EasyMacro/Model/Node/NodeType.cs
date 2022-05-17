@@ -10,8 +10,9 @@ namespace EasyMacro.Model.Node
     {
         EventNode, 
         Function, 
-        FlowControl, 
+        FlowControl,
+        Group,
         Literal, 
-        Group
+        Macro
     }
 }

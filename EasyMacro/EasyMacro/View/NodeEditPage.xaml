@@ -75,13 +75,6 @@
         </viewLib:NetworkView>
         <GridSplitter Grid.Row="1" Grid.Column="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
         <Grid Grid.Row="1" Grid.Column="4">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="5"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <viewNode:CodePreviewView Grid.Row="0" x:Name="codePreviewView"/>
-            <GridSplitter Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
             <viewNode:CodeSimView Grid.Row="2" x:Name="codeSimView"/>
         </Grid>
     </Grid>

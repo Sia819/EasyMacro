@@ -35,10 +35,11 @@ namespace EasyMacro.ViewModel.Node
         {
             RunScript = ReactiveCommand.Create(() =>
             {
-                Script script = new Script();
-                script.Globals["print"] = (Action<string>)Print;
-                string source = Code.Compile(new CompilerContext());
-                //script.DoString(source); // Run Panel 에 나오는 값, MouseMove시 오류발생
+                // Script script = new Script();
+                // script.Globals["print"] = (Action<string>)Print;
+                // string source = Code.Compile(new CompilerContext());
+                // script.DoString(source); // Run Panel 에 나오는 값, MouseMove시 오류발생
+                Print(Code.Compile(new CompilerContext()));
             },
                 this.WhenAnyValue(vm => vm.Code).Select(code => code != null));
 

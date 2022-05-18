@@ -100,7 +100,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             FlowIn = new CodeGenOutputViewModel<IStatement>(PortType.Execution)
             {
                 Name = "",
-                Value = this.X.ValueChanged.Select(stringExpr => new NodeCompile(Func()))
+                Value = this.RunButton.ValueChanged.Select(stringExpr => new NodeCompile(Func()))
             };
             this.Outputs.Add(FlowIn);
 
@@ -117,16 +117,10 @@ namespace EasyMacro.ViewModel.Node.NodeObject
     {
         public Action MyAction;
 
-        // : INodeFlow 일 때 이 함수 구현
-        // public void Excute()
-        // {
-        //     MyAction.Invoke();
-        // }
-
         public string Compile(CompilerContext context)
         {
             MyAction.Invoke();
-            return "NodeCompile를 실행했습니다.";
+            return "NodeCompile를 실행했습니다.";// new StringLiteral { Value = "NodeCompile를 실행했습니다." } 
         }
 
         public NodeCompile(Action action)

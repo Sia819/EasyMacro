@@ -36,19 +36,20 @@ namespace EasyMacro.ViewModel.Node
             this.WhenAnyValue(vm => vm.Code).Where(c => c != null)
                 .Select(c =>
                 {
-                    CompilerError = "";
-                    CompilerContext ctx = new CompilerContext();
-
-                    try
-                    {
-                        return c.Compile(ctx);
-                    }
-                    catch (CompilerException e)
-                    {
-                        string trace = string.Join("\n", ctx.VariablesScopesStack.Select(s => s.Identifier));
-                        CompilerError = e.Message + "\nProblem is near:\n" + trace;
-                        return "";
-                    }
+                    //CompilerError = "";
+                    //CompilerContext ctx = new CompilerContext();
+                    //
+                    //try
+                    //{
+                    //    return c.Compile(ctx);
+                    //}
+                    //catch (CompilerException e)
+                    //{
+                    //    string trace = string.Join("\n", ctx.VariablesScopesStack.Select(s => s.Identifier));
+                    //    CompilerError = e.Message + "\nProblem is near:\n" + trace;
+                    //    return "";
+                    //}
+                    return "";
                 })
                 .ToProperty(this, vm => vm.CompiledCode, out _compiledCode);
         }

@@ -23,8 +23,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         }
 
         static MouseMove _mouseMove;
-        MouseMove mouseMove 
-        { 
+        MouseMove mouseMove
+        {
             get
             {
                 if (_mouseMove is null)
@@ -32,7 +32,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 return _mouseMove;
             }
         }
-            
 
         /// <summary>
         /// Delay Time
@@ -49,6 +48,22 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public bool IsCanExcute { get; set; } = true;
 
+        Action Func()
+        {
+            Action action = () =>
+            {
+                mouseMove.X = (int)X.Value;
+                mouseMove.Y = (int)Y.Value;
+                mouseMove.Do();
+
+                foreach (var a in FlowOut.Values.Items)
+                {
+                    a.Compile(new CompilerContext());
+                }
+            };
+            return action;
+        }
+
         public MouseMoveNodeViewModel() : base(NodeType.Function)
         {
             this.RunButton = new ValueNodeInputViewModel<int?>()
@@ -59,12 +74,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 {
                     RunScript = ReactiveCommand.Create
                     (
-                        () =>
-                        {
-                            mouseMove.X = (int)X.Value;
-                            mouseMove.Y = (int)Y.Value;
-                            mouseMove.Do();
-                        },
+                        Func(),
                         this.WhenAnyValue(vm => vm.IsCanExcute)
                     )
                 }
@@ -87,22 +97,41 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             };
             this.Inputs.Add(Y);
 
-            // Append Flow
             FlowIn = new CodeGenOutputViewModel<IStatement>(PortType.Execution)
             {
-                Name = "Append",
+                Name = "",
+                Value = this.X.ValueChanged.Select(stringExpr => new NodeCompile(Func()))
             };
             this.Outputs.Add(FlowIn);
 
-            // Send Flow
+            // Send Flow, 현재 노드에서 내보낼 (매크로의 실행이 끝났다는) 신호
             FlowOut = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
             {
                 Name = "Send",
             };
             this.Inputs.Add(FlowOut);
+        }
+    }
 
+    public class NodeCompile : IStatement// : INodeFlow
+    {
+        public Action MyAction;
 
-            
+        // : INodeFlow 일 때 이 함수 구현
+        // public void Excute()
+        // {
+        //     MyAction.Invoke();
+        // }
+
+        public string Compile(CompilerContext context)
+        {
+            MyAction.Invoke();
+            return "NodeCompile를 실행했습니다.";
+        }
+
+        public NodeCompile(Action action)
+        {
+            this.MyAction = action;
         }
     }
 }

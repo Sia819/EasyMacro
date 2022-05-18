@@ -38,7 +38,7 @@ namespace EasyMacro.ViewModel.Node
                 Script script = new Script();
                 script.Globals["print"] = (Action<string>)Print;
                 string source = Code.Compile(new CompilerContext());
-                script.DoString(source);
+                //script.DoString(source); // Run Panel 에 나오는 값, MouseMove시 오류발생
             },
                 this.WhenAnyValue(vm => vm.Code).Select(code => code != null));
 

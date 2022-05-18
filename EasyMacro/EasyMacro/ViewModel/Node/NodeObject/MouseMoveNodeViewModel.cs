@@ -4,13 +4,9 @@ using EasyMacro.Model.Node.Compiler;
 using EasyMacro.View.Node;
 using EasyMacro.ViewModel.Node.Editors;
 using EasyMacroAPI.Command;
-using MoonSharp.Interpreter;
 using NodeNetwork.Toolkit.ValueNode;
-using NodeNetwork.ViewModels;
-using NodeNetwork.Views;
 using ReactiveUI;
 using System;
-using System.Reactive;
 using System.Reactive.Linq;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
@@ -22,8 +18,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             Splat.Locator.CurrentMutable.Register(() => new CodeGenNodeView(), typeof(IViewFor<MouseMoveNodeViewModel>));
         }
 
-        static MouseMove _mouseMove;
-        MouseMove mouseMove
+        private static MouseMove _mouseMove;
+        private MouseMove mouseMove
         {
             get
             {
@@ -100,7 +96,11 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             FlowIn = new CodeGenOutputViewModel<IStatement>(PortType.Execution)
             {
                 Name = "",
-                Value = this.RunButton.ValueChanged.Select(stringExpr => new NodeCompile(Func()))
+                Value = this.RunButton.ValueChanged.Select(_ => new NodeCompile(this.Func())
+                {
+                    Log = Observable.Merge(X.ValueChanged.Select(x => $"MouseMove - ({x.Value}, {this.Y.Value})"),
+                                            Y.ValueChanged.Select(y => $"MouseMove - ({this.X.Value}, {y.Value})"))// 
+                })
             };
             this.Outputs.Add(FlowIn);
 
@@ -110,22 +110,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Name = "Send",
             };
             this.Inputs.Add(FlowOut);
-        }
-    }
-
-    public class NodeCompile : IStatement// : INodeFlow
-    {
-        public Action MyAction;
-
-        public string Compile(CompilerContext context)
-        {
-            MyAction.Invoke();
-            return "NodeCompile를 실행했습니다.";// new StringLiteral { Value = "NodeCompile를 실행했습니다." } 
-        }
-
-        public NodeCompile(Action action)
-        {
-            this.MyAction = action;
         }
     }
 }

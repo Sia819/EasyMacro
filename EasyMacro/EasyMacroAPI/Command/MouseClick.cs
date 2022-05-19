@@ -11,9 +11,9 @@ namespace EasyMacroAPI.Command
 {
     public class MouseClick : IAction
     {
-        public int X { get; private set; }
-        public int Y { get; private set; }
-        public int Delay { get; private set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Delay { get; set; }
 
         public MacroTypes MacroType => MacroTypes.MouseClick;
 

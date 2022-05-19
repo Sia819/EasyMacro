@@ -62,6 +62,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public MouseMoveNodeViewModel() : base(NodeType.Function)
         {
+            base.Name = "MouseMove";
+
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {
                 Port = null,
@@ -76,9 +78,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 }
             };
             this.Inputs.Add(this.RunButton);
-
-            base.Name = "MouseMove";
-            //TODO : 나머지 구현
+            
             X = new ValueNodeInputViewModel<int?>()
             {
                 Name = "X",

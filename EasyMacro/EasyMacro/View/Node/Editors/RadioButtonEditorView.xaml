@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="EasyMacro.View.Node.Editors.RadioButtonEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EasyMacro.View.Node.Editors"
+             mc:Ignorable="d" 
+             d:DesignHeight="150" d:DesignWidth="100">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Resource/ListBoxNoSelectionStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <ListBox Name="radioList" Background="Transparent" BorderThickness="0"  ItemContainerStyle="{StaticResource ListBoxNoSelectionStyle}">
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <ContentControl>
+                    <RadioButton Name="radioListRadioButton" 
+                                 IsChecked="{Binding IsChecked}" 
+                                 Content="{Binding ClickType}"
+                                 GroupName="{Binding GroupHash}"
+                                 Foreground="white"/>
+                </ContentControl>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+
+    </ListBox>
+</UserControl>

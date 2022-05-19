@@ -48,6 +48,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             Action action = () =>
             {
+                CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
+
                 inputString.Text = Input.Value;
                 inputString.Do();
 

@@ -48,6 +48,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             Action action = () =>
             {
+                CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
+
                 delay.Time = (int)Input.Value;
                 delay.Do();
 
@@ -69,6 +71,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 {
                     RunScript = ReactiveCommand.Create
                     (
+                        
                         Func(),
                         this.WhenAnyValue(vm => vm.IsCanExcute)
                     )

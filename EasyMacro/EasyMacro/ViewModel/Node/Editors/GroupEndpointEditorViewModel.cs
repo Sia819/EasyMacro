@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using EasyMacro.View.Node.Editors;
 //using MoreLinq.Extensions;
 using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
@@ -24,10 +25,10 @@ namespace EasyMacro.ViewModel.Node.Editors
 
     public class GroupEndpointEditorViewModel<T> : ValueEditorViewModel<T>, IGroupEndpointEditorViewModel
     {
-        //static GroupEndpointEditorViewModel()
-        //{
-        //    Splat.Locator.CurrentMutable.Register(() => new GroupEndpointEditorView(), typeof(IViewFor<GroupEndpointEditorViewModel<T>>));
-        //}
+        static GroupEndpointEditorViewModel()
+        {
+            Splat.Locator.CurrentMutable.Register(() => new GroupEndpointEditorView(), typeof(IViewFor<GroupEndpointEditorViewModel<T>>));
+        }
 
         public Endpoint Endpoint => Parent;
         public ReactiveCommand<Unit, Unit> MoveUp { get; }

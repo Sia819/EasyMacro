@@ -7,11 +7,11 @@ namespace EasyMacroAPI.Command
 {
     public class InputMouse : IAction
     {
-        public int X { get; private set; }
+        public int X { get; set; }
 
-        public int Y { get; private set; }
+        public int Y { get; set; }
 
-        public MouseClickTypes MouseClickTypes { get; set; }
+        public MouseClickTypes MouseClickType { get; set; }
 
         public MacroTypes MacroType => MacroTypes.MouseClick;
 
@@ -19,12 +19,13 @@ namespace EasyMacroAPI.Command
         {
             this.X = x;
             this.Y = y;
-            this.MouseClickTypes = presstype;
+            this.MouseClickType = presstype;
         }
 
         public void Do()
         {
-            WinAPI.mouse_event((uint)MouseClickTypes, (uint)X, (uint)Y, 0, 0);
+            //WinAPI.mouse_event((uint)MouseClickTypes.MOUSEEVENTF_MOVE, (uint)X, (uint)Y, 0, 0);
+            WinAPI.mouse_event((uint)MouseClickType, (uint)X, (uint)Y, 0, 0);
         }
     }
 }

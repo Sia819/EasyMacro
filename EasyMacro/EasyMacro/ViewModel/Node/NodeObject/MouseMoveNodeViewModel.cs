@@ -48,6 +48,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             Action action = () =>
             {
+                CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
+
                 mouseMove.X = (int)X.Value;
                 mouseMove.Y = (int)Y.Value;
                 mouseMove.Do();

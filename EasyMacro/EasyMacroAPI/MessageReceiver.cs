@@ -141,9 +141,7 @@ namespace EasyMacroAPI
         {
             PostMessage(this.Handle, (int)MACRO_UNREG, 0, MAKELPARAM((int)keyModifiers, (int)key));
         }
-        //TODO : 아래 함수는 메인함수에서 실행되어야 함.
         //SafeHookHandle mouseHook = SetWindowsHookEx(WH_MOUSE_LL, mouseHookProc, hInstance, 0);
-        //TODO : 녹화 매크로 함수 구현
 
         #endregion
 

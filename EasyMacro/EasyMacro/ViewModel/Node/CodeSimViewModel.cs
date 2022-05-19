@@ -31,7 +31,7 @@ namespace EasyMacro.ViewModel.Node
         public ReactiveCommand<Unit, Unit> RunScript { get; }
         public ReactiveCommand<Unit, Unit> ClearOutput { get; }
 
-        public CodeSimViewModel()
+        private CodeSimViewModel()
         {
             RunScript = ReactiveCommand.Create(() =>
             {
@@ -39,7 +39,7 @@ namespace EasyMacro.ViewModel.Node
                 // script.Globals["print"] = (Action<string>)Print;
                 // string source = Code.Compile(new CompilerContext());
                 // script.DoString(source); // Run Panel 에 나오는 값, MouseMove시 오류발생
-                Print(Code.Compile(new CompilerContext()));
+                Code.Compile(new CompilerContext());
             },
                 this.WhenAnyValue(vm => vm.Code).Select(code => code != null));
 
@@ -50,5 +50,8 @@ namespace EasyMacro.ViewModel.Node
         {
             Output += msg + "\n";
         }
+
+        private static CodeSimViewModel instance;
+        public static CodeSimViewModel Instance => instance ??= new CodeSimViewModel();
     }
 }

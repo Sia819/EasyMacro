@@ -41,7 +41,7 @@ namespace EasyMacro.ViewModel
         public BreadcrumbBarViewModel NetworkBreadcrumbBar { get; } = new BreadcrumbBarViewModel();
         public NodeListViewModel NodeList { get; } = new NodeListViewModel();
         public CodePreviewViewModel CodePreview { get; } = new CodePreviewViewModel();
-        public CodeSimViewModel CodeSim { get; } = new CodeSimViewModel();
+        public CodeSimViewModel CodeSim { get; } = CodeSimViewModel.Instance;
 
         public ReactiveCommand<Unit, Unit> AutoLayout { get; }
         public ReactiveCommand<Unit, Unit> StartAutoLayoutLive { get; }

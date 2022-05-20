@@ -143,9 +143,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Name = "",
             };
             this.Inputs.Add(FlowOut);
-            
-            
-            
         }
     }
 }

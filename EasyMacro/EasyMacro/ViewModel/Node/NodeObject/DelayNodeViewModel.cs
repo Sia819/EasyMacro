@@ -50,7 +50,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             {
                 CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
 
-                delay.Time = (int)Input.Value;
+                delay.Time = (int)Input.Value < 0 ? 0 : (int)Input.Value;
                 delay.Do();
 
                 foreach (var a in FlowOut.Values.Items)
@@ -84,7 +84,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             Input = new ValueNodeInputViewModel<int?>()
             {
                 Name = "Delay Time",
-                Editor = new IntegerValueEditorViewModel(),
+                Editor = new IntegerValueEditorViewModel(0),
                 Port = null,
             };
             this.Inputs.Add(Input);
@@ -94,7 +94,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Name = "",
                 Value = this.RunButton.ValueChanged.Select(_ => new NodeCompile(this.Func())
                 {
-                    Log = Input.ValueChanged.Select(input => $"Sleep - {input.Value}")
+                    Log = Input.ValueChanged.Select(input => $"Sleep - {input ?? 0}")
                 })
             };
             this.Outputs.Add(FlowIn);

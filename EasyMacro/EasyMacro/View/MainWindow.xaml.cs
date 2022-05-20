@@ -129,11 +129,14 @@ namespace HookLib
                 case KeyModifiers.None:
                     return Keys.None;
                 case KeyModifiers.Alt:
-                    return Keys.LeftAlt;
+                    //return Keys.LeftAlt;
+                    return Keys.Alt;
                 case KeyModifiers.Control:
-                    return Keys.LeftCtrl;
+                    //return Keys.LeftCtrl;
+                    return Keys.Alt;
                 case KeyModifiers.Shift:
-                    return Keys.LeftShift;
+                    //return Keys.LeftShift;
+                    return Keys.Shift;
                 case KeyModifiers.Windows:
                     return Keys.LWin;
 
@@ -192,7 +195,9 @@ namespace HookLib
 
                 if (keyboardInput != null)
                 {
-                    Keys key = (Keys)((int)KeyInterop.KeyFromVirtualKey(keyboardInput.vkCode)); // System.Windows.Input.Key 에서 EasyMacroAPI.Model.Keys로 변환
+                    
+                    Keys key = (Keys)keyboardInput.vkCode;
+
                     bool push = ((int)wParam == WM_KEYDOWN || (int)wParam == WM_SYSKEYDOWN) ? true : false;
 
                     if (keyStatus[key] != push) keyStatus[key] = push;  // 사전 설정

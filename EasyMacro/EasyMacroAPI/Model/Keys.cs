@@ -10,8 +10,10 @@ namespace EasyMacroAPI.Model
     //     Specifies the possible key values on a keyboard.
     // [TypeConverter(typeof(KeyConverter))]
     // [ValueSerializer(typeof(KeyValueSerializer))]
+    /*
     public enum Keys
     {
+        
         //
         // 요약:
         //     No key pressed.
@@ -822,12 +824,14 @@ namespace EasyMacroAPI.Model
         //     The key is used with another key to create a single combined character.
         DeadCharProcessed = 172
     }
+    */
 
-    /*
+
+    
     //
     // 요약:
     //     Specifies key codes and modifiers.
-    [Flags]
+    //[Flags]
     public enum Keys
     {
         //
@@ -1609,7 +1613,7 @@ namespace EasyMacroAPI.Model
         Alt = 262144
     }
 
-    */
+    
 }
 
 

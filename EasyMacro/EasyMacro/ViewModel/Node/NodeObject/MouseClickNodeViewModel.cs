@@ -105,7 +105,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             Delay = new ValueNodeInputViewModel<int?>()
             {
                 Name = "Delay",
-                Editor = new IntegerValueEditorViewModel() { Value = 40 },
+                Editor = new IntegerValueEditorViewModel(0) { Value = 40 },
                 Port = null,
             };
             this.Inputs.Add(Delay);
@@ -117,7 +117,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 {
                     Log = Observable.Merge(X.ValueChanged.Select(x => $"MouseMove - ({x.Value}, {this.Y.Value}, {this.Delay.Value})"),
                                             Y.ValueChanged.Select(y => $"MouseMove - ({this.X.Value}, {y.Value}, , {this.Delay.Value})"),
-                                            Delay.ValueChanged.Select(delay => $"MouseMove - ({this.X.Value}, {this.Y.Value}, , {delay.Value})"))
+                                            Delay.ValueChanged.Select(delay => $"MouseMove - ({this.X.Value}, {this.Y.Value}, , {delay ?? 0})"))
                 })
             };
             this.Outputs.Add(FlowIn);

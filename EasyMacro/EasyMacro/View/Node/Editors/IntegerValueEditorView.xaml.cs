@@ -38,10 +38,13 @@ namespace EasyMacro.View.Node
         {
             InitializeComponent();
 
-            this.WhenActivated(d => d(
-                this.Bind(ViewModel, vm => vm.Value, v => v.valueUpDown.Value)
-            ));
-        }
+            this.WhenActivated(d =>
+            {
+                this.Bind(ViewModel, vm => vm.Value, v => v.valueUpDown.Value);
+                this.Bind(ViewModel, vm => vm.MinValue, v => v.valueUpDown.Minimum);
+                this.Bind(ViewModel, vm => vm.MaxValue, v => v.valueUpDown.Maximum);
+            });
 
+        }
     }
 }

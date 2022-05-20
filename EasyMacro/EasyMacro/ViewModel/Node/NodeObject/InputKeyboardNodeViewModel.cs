@@ -54,7 +54,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
                 //TODO : 키 지정방식 수정 필요, 작동 안됨
                 
-                inputKeyboard.Key = (Keys)Enum.Parse(typeof(Keys),PressKey.Value);
+                inputKeyboard.Key = (Keys)Enum.Parse(typeof(Keys), PressKey.Value);
 
                 // RadioButtoKeyboardPressTypen Index to MouseClickTypes Convert
                 switch ((this.KeyboardPressType.Editor as RadioButtonEditorViewModel).GetRadioSelectedIndex)

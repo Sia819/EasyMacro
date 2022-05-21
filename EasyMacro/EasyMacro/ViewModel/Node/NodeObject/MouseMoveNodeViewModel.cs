@@ -65,21 +65,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         public MouseMoveNodeViewModel() : base(NodeType.Function)
         {
             base.Name = "MouseMove";
-
-            this.RunButton = new ValueNodeInputViewModel<int?>()
-            {
-                Port = null,
-                Name = "Run",
-                Editor = new RunButtonViewModel()
-                {
-                    RunScript = ReactiveCommand.Create
-                    (
-                        Func(),
-                        this.WhenAnyValue(vm => vm.IsCanExcute)
-                    )
-                }
-            };
-            this.Inputs.Add(this.RunButton);
             
             X = new ValueNodeInputViewModel<int?>()
             {
@@ -94,6 +79,21 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Editor = new IntegerValueEditorViewModel(),
             };
             this.Inputs.Add(Y);
+
+            this.RunButton = new ValueNodeInputViewModel<int?>()
+            {
+                Port = null,
+                Name = "Run",
+                Editor = new RunButtonViewModel()
+                {
+                    RunScript = ReactiveCommand.Create
+        (
+            Func(),
+            this.WhenAnyValue(vm => vm.IsCanExcute)
+        )
+                }
+            };
+            this.Inputs.Add(this.RunButton);
 
             FlowIn = new CodeGenOutputViewModel<IStatement>(PortType.Execution)
             {

@@ -94,21 +94,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             temp.MyList.Add(new MyListItem(false, "RBUP", temp.RadioGroupInstanceHash));
             this.Inputs.Add(MouseClickType);
 
-            this.RunButton = new ValueNodeInputViewModel<int?>()
-            {
-                Port = null,
-                Name = "Run",
-                Editor = new RunButtonViewModel()
-                {
-                    RunScript = ReactiveCommand.Create
-                    (
-                        Func(),
-                        this.WhenAnyValue(vm => vm.IsCanExcute)
-                    )
-                }
-            };
-            this.Inputs.Add(this.RunButton);
-
             base.Name = "InputMouse";
 
             X = new ValueNodeInputViewModel<int?>()
@@ -124,6 +109,21 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Editor = new IntegerValueEditorViewModel()
             };
             this.Inputs.Add(Y);
+
+            this.RunButton = new ValueNodeInputViewModel<int?>()
+            {
+                Port = null,
+                Name = "Run",
+                Editor = new RunButtonViewModel()
+                {
+                    RunScript = ReactiveCommand.Create
+                    (
+                        Func(),
+                        this.WhenAnyValue(vm => vm.IsCanExcute)
+                    )
+                }
+            };
+            this.Inputs.Add(this.RunButton);
 
             FlowIn = new CodeGenOutputViewModel<IStatement>(PortType.Execution)
             {

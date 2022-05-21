@@ -66,21 +66,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             base.Name = "InputString";
             //TODO : 나머지 구현
 
-            this.RunButton = new ValueNodeInputViewModel<int?>()
-            {
-                Port = null,
-                Name = "Run",
-                Editor = new RunButtonViewModel()
-                {
-                    RunScript = ReactiveCommand.Create
-                    (
-                        Func(),
-                        this.WhenAnyValue(vm => vm.IsCanExcute)
-                    )
-                }
-            };
-            this.Inputs.Add(this.RunButton);
-
             Input = new ValueNodeInputViewModel<string>()
             {
                 Name = "입력할 문자열",
@@ -88,6 +73,21 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Port = null
             };
             this.Inputs.Add(Input);
+
+            this.RunButton = new ValueNodeInputViewModel<int?>()
+            {
+                Port = null,
+                Name = "Run",
+                Editor = new RunButtonViewModel()
+                {
+                    RunScript = ReactiveCommand.Create
+        (
+            Func(),
+            this.WhenAnyValue(vm => vm.IsCanExcute)
+        )
+                }
+            };
+            this.Inputs.Add(this.RunButton);
 
             FlowIn = new CodeGenOutputViewModel<IStatement>(PortType.Execution)
             {

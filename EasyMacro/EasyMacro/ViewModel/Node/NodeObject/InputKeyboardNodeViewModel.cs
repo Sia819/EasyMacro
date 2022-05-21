@@ -88,6 +88,16 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             temp.MyList.Add(new MyListItem(false, "KEY_UP", temp.RadioGroupInstanceHash));
             this.Inputs.Add(KeyboardPressType);
 
+            base.Name = "InputKeyboard";
+//TODO : 나머지 구현
+            PressKey = new ValueNodeInputViewModel<string>()
+            {
+                Name = "PressKey",
+                Editor = new StringValueEditorViewModel(),
+                Port = null
+            };
+            this.Inputs.Add(PressKey);
+
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {
                 Port = null,
@@ -102,16 +112,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 }
             };
             this.Inputs.Add(this.RunButton);
-
-            base.Name = "InputKeyboard";
-//TODO : 나머지 구현
-            PressKey = new ValueNodeInputViewModel<string>()
-            {
-                Name = "PressKey",
-                Editor = new StringValueEditorViewModel(),
-                Port = null
-            };
-            this.Inputs.Add(PressKey);
 
             FlowIn = new CodeGenOutputViewModel<IStatement>(PortType.Execution)
             {

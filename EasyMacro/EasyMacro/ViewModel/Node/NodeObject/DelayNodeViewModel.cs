@@ -63,22 +63,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public DelayNodeViewModel() : base(NodeType.Function)
         {
-            this.RunButton = new ValueNodeInputViewModel<int?>()
-            {
-                Port = null,
-                Name = "Run",
-                Editor = new RunButtonViewModel()
-                {
-                    RunScript = ReactiveCommand.Create
-                    (
-                        
-                        Func(),
-                        this.WhenAnyValue(vm => vm.IsCanExcute)
-                    )
-                }
-            };
-            this.Inputs.Add(this.RunButton);
-
             base.Name = "Sleep";
             //TODO : 나머지 구현
             Input = new ValueNodeInputViewModel<int?>()
@@ -88,6 +72,22 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Port = null,
             };
             this.Inputs.Add(Input);
+
+            this.RunButton = new ValueNodeInputViewModel<int?>()
+            {
+                Port = null,
+                Name = "Run",
+                Editor = new RunButtonViewModel()
+                {
+                    RunScript = ReactiveCommand.Create
+                    (
+
+                        Func(),
+                        this.WhenAnyValue(vm => vm.IsCanExcute)
+                    )
+                }
+            };
+            this.Inputs.Add(this.RunButton);
 
             FlowIn = new CodeGenOutputViewModel<IStatement>(PortType.Execution)
             {

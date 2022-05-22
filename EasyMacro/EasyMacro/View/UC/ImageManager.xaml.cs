@@ -1,6 +1,8 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
@@ -15,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static EasyMacro.ViewModel.ImageManagerViewModel;
 
 namespace EasyMacro.View.UC
 {
@@ -27,9 +30,17 @@ namespace EasyMacro.View.UC
         {
             InitializeComponent();
 
+            //ImageSource a = new ImageSource();
 
+            PreviewImages = new ObservableCollection<ImageList>();
+            PreviewImages.Add(new ImageList { FilePath = "preview/myFilePath/1.png", Name = "ImageName1" });
+            PreviewImages.Add(new ImageList { FilePath = "preview/myFilePath/2.png", Name = "ImageName2" });
+            PreviewImages.Add(new ImageList { FilePath = "preview/myFilePath/3.png", Name = "ImageName3" });
         }
 
+        public ObservableCollection<ImageList> PreviewImages { get; set; }
+
+        
         
     }
 }

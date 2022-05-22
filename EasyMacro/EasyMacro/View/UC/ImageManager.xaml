@@ -41,7 +41,25 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-        
-        <Button Grid.Column="1" Content="+" Click="Button_Click"/>    
+
+        <Button Command="{Binding ImageFilePath}"
+                Grid.Column="1" Content="+"/>
+
+        <ListBox Grid.Row="1" Grid.ColumnSpan="2" d:ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ImageManager}}, Path=PreviewImages}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Image Source="{Binding PreviewImage}" />
+                        <Grid />
+
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+
+        </ListBox>
     </Grid>
 </UserControl>

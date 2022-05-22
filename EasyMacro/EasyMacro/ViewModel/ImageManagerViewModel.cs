@@ -7,12 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace EasyMacro.ViewModel
 {
     public partial class ImageManagerViewModel
     {
         public string ImageFilePath { get; set; }
+
+
+        public class ImageList
+        {
+            public string Name { get; set; }
+            public string FilePath { get; set; }
+            public ImageSource PreviewImage { get; set; }
+        }
 
     }
 

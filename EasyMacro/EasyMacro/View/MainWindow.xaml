@@ -8,7 +8,7 @@
                  xmlns:b="clr-namespace:EasyMacro.Behavior"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  mc:Ignorable="d"
-                 Title="MainWindow" Height="650" Width="900"
+                 Title="MainWindow" Height="850" Width="1200"
                  Name="mainWindow"
                  DataContext="{Binding Path=PageViewModelLocate, Source={StaticResource Locator}}"
                  TitleBarHeight="23">
@@ -20,9 +20,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
         </ResourceDictionary>
-
     </Window.Resources>
 
     <mah:MetroWindow.RightWindowCommands>

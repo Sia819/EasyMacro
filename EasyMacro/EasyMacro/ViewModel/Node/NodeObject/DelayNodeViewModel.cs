@@ -63,7 +63,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public DelayNodeViewModel() : base(NodeType.Function)
         {
-            base.Name = "Sleep";
+            base.Name = "Delay";
             //TODO : 나머지 구현
             Input = new ValueNodeInputViewModel<int?>()
             {
@@ -94,7 +94,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Name = "",
                 Value = this.RunButton.ValueChanged.Select(_ => new NodeCompile(this.Func())
                 {
-                    Log = Input.ValueChanged.Select(input => $"Sleep - {input ?? 0}")
+                    Log = Input.ValueChanged.Select(input => $"Delay - {input ?? 0}")
                 })
             };
             this.Outputs.Add(FlowIn);

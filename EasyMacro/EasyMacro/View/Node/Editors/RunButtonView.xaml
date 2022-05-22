@@ -5,6 +5,23 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EasyMacro.View.Node.Editors"
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="100">
-    <Button Content="Run" Name="runButton"/>
+             d:DesignHeight="25" d:DesignWidth="75"
+             MinWidth="75">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Button Name="runButton" Focusable="False" HorizontalContentAlignment="Center" VerticalAlignment="Center"
+            Padding="0">
+        <Button.Content>
+            <TextBlock Text="Run" FontSize="14" Margin="0 -7"/>
+        </Button.Content>
+        
+    </Button>
 </UserControl>

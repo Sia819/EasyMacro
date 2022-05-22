@@ -23,7 +23,6 @@ namespace EasyMacro.ViewModel
             public string FilePath { get; set; }
             public ImageSource PreviewImage { get; set; }
         }
-
     }
 
     public partial class ImageManagerViewModel

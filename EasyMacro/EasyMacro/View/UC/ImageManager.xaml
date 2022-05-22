@@ -2,12 +2,21 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:local="clr-namespace:EasyMacro.View.UC"
              mc:Ignorable="d" 
              d:DesignHeight="400" 
              d:DesignWidth="350"
              d:Background="White">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary x:Key="ListBoxNoPadding" Source="pack://application:,,,/Resource/ListBoxNoPadding.xaml"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -17,13 +26,13 @@
             <RowDefinition Height="30"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBox Name="txtEditor" Text="" >
+        <TextBox Name="txtEditor" Text="" mah:TextBoxHelper.SelectAllOnFocus="True">
             <TextBox.Style>
                 <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
                     <Style.Resources>
                         <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
                             <VisualBrush.Visual>
-                                <Label Content="파일 경로를 입력해주세요." Foreground="LightGray" />
+                                <Label Content="이미지 경로를 입력해주세요." Foreground="LightGray" />
                             </VisualBrush.Visual>
                         </VisualBrush>
                     </Style.Resources>
@@ -43,23 +52,102 @@
         </TextBox>
 
         <Button Command="{Binding ImageFilePath}"
-                Grid.Column="1" Content="+"/>
+                Grid.Column="1" Content="+"
+                Focusable="False"/>
 
-        <ListBox Grid.Row="1" Grid.ColumnSpan="2" d:ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ImageManager}}, Path=PreviewImages}">
+        <ListBox Grid.Row="1" 
+                 Grid.ColumnSpan="2" 
+                 ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ImageManager}}, Path=PreviewImages}">
+            <ListBox.Style>
+                <Style TargetType="{x:Type ListBox}">
+                    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+                    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+                    <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListBox}">
+                                <Border Name="Bd"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        SnapsToDevicePixels="true"
+                                        Padding="0">
+                                    <!-- Original value was 1 -->
+                                    <ScrollViewer Padding="{TemplateBinding Padding}"
+                                                  Focusable="false">
+                                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                    </ScrollViewer>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsEnabled"
+                                             Value="false">
+                                        <Setter TargetName="Bd"
+                                                Property="Background"
+                                                Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsGrouping"
+                                             Value="true">
+                                        <Setter Property="ScrollViewer.CanContentScroll"
+                                        Value="false"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.Style>
+
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="Margin" Value="3"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <ContentPresenter/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Image Source="{Binding PreviewImage}" />
-                        <Grid />
+                    <Border BorderThickness="1" BorderBrush="LightPink">
+                        <Grid Height="60">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="21"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
 
-                    </Grid>
+                            <Border Grid.RowSpan="2" BorderBrush="Black" BorderThickness="1">
+                                <Image Source="{Binding PreviewImage}" Stretch="Fill" />
+                            </Border>
+
+                            <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Name}" />
+                            <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding FilePath}"
+                                       Foreground="LightSlateGray"
+                                       FontSize="8" Margin="5 0"
+                                       VerticalAlignment="Bottom"/>
+                            <Button Grid.Column="2" Grid.RowSpan="2" Content="X">
+                                
+                            </Button>
+
+                        </Grid>
+                    </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>
 
         </ListBox>
+        
     </Grid>
 </UserControl>

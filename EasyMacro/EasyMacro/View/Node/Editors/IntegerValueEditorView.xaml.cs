@@ -40,9 +40,9 @@ namespace EasyMacro.View.Node
 
             this.WhenActivated(d =>
             {
-                this.Bind(ViewModel, vm => vm.Value, v => v.valueUpDown.Value);
-                this.Bind(ViewModel, vm => vm.MinValue, v => v.valueUpDown.Minimum);
-                this.Bind(ViewModel, vm => vm.MaxValue, v => v.valueUpDown.Maximum);
+                this.OneWayBind(ViewModel, vm => (double)vm.Value, v => v.valueUpDown.Value);
+                this.OneWayBind(ViewModel, vm => vm.MinValue, v => v.valueUpDown.Minimum);
+                this.OneWayBind(ViewModel, vm => vm.MaxValue, v => v.valueUpDown.Maximum);
             });
 
         }

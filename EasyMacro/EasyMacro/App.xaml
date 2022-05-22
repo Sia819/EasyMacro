@@ -7,7 +7,7 @@
              StartupUri="View/MainWindow.xaml"
              >
     <!-- 
-    StartupUri="View/MainWindow.xaml"
+    
     StartupUri="DebugFiles/DebugWindow.xaml"
     StartupUri="DebugFiles/DebugWindow2.xaml"
     -->

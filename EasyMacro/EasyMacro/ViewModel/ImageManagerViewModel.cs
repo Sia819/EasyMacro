@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
@@ -27,8 +28,7 @@ namespace EasyMacro.ViewModel
 
     public partial class ImageManagerViewModel
     {
-
-
+        Dictionary<string, Bitmap> imgDict = new Dictionary<string, Bitmap>();
 
         private void ImageAddCommand()
         {
@@ -38,11 +38,16 @@ namespace EasyMacro.ViewModel
             {
                 if (Directory.Exists(ImageFilePath)) // TextBox에 있는것이 존재하는 폴더
                 {
-
+                    dlg.InitialDirectory = ImageFilePath;
                 }
                 else if (File.Exists(ImageFilePath)) // TextBox에 있는것이 파일
                 {
                     // 이미지 파일인지 체크
+                    if(Path.GetExtension(ImageFilePath) == ".jpg" || Path.GetExtension(ImageFilePath) == ".png")
+                    {
+                        imgDict.Add(ImageFilePath, new Bitmap(ImageFilePath));
+                        return;
+                    }
                 }
             }
 
@@ -70,14 +75,16 @@ namespace EasyMacro.ViewModel
             if (result == true)
             {
                 // Open document 
-                string fileName = dlg.FileName;
-                // Do something with fileName  
+                ImageFilePath = dlg.FileName;
+                // Do something with fileName
+                imgDict.Add(ImageFilePath, new Bitmap(ImageFilePath));
             }
         }
 
-
-
-
+        private void ImageDelCommand(string path)
+        {
+            imgDict.Remove(path);
+        }
 
     }
 }

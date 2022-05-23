@@ -11,19 +11,30 @@ namespace EasyMacroAPI.Command
     {
         public MacroTypes MacroType => MacroTypes.TempletMatch;
 
-        private Bitmap targetImg;
-        private ScreenCapture screenCapture;
+        public Bitmap TargetImg { get; set; }
+        public ScreenCapture screenCapture { get; set; }
         private Point point;
         private Folder folderA;
         private Folder folderB;
-        private bool isWantKeepFinding = false;
+        public bool isWantKeepFinding = false;
         public Delay delay = new Delay(1000);
 
         public delegate void Delegate(List<IAction> list);
 
+        public TempletMatch()
+        {
+            folderA = new Folder(this);
+            folderB = new Folder();
+        }
+
+        ~TempletMatch()
+        {
+            TargetImg.Dispose();
+        }
+        /*
         public TempletMatch(string targetDir)
         {
-            targetImg = new Bitmap(targetDir);
+            TargetImg = new Bitmap(targetDir);
             screenCapture = new ScreenCapture();
             folderA = new Folder(this);
             folderB = new Folder();
@@ -31,7 +42,7 @@ namespace EasyMacroAPI.Command
 
         public TempletMatch(Bitmap targetImg)
         {
-            this.targetImg = targetImg;
+            this.TargetImg = targetImg;
             screenCapture = new ScreenCapture();
             folderA = new Folder(this);
             folderB = new Folder();
@@ -39,7 +50,7 @@ namespace EasyMacroAPI.Command
 
         public TempletMatch(string targetDir, string windowName)
         {
-            targetImg = new Bitmap(targetDir);
+            TargetImg = new Bitmap(targetDir);
             screenCapture = new ScreenCapture(windowName);
             folderA = new Folder(this);
             folderB = new Folder();
@@ -47,11 +58,12 @@ namespace EasyMacroAPI.Command
 
         public TempletMatch(Bitmap targetImg, string windowName)
         {
-            this.targetImg = targetImg;
+            this.TargetImg = targetImg;
             screenCapture = new ScreenCapture(windowName);
             folderA = new Folder(this);
             folderB = new Folder();
         }
+        */
 
         public void SetDelayTime(int time)
         {
@@ -65,7 +77,7 @@ namespace EasyMacroAPI.Command
                 screenCapture.Do();
                 if (screenCapture.CapturedImage is not null)
                 {// 창을 찾은 경우
-                    point = CaptureManager.Instance.TempletMatch(screenCapture.CapturedImage, targetImg);
+                    point = CaptureManager.Instance.TempletMatch(screenCapture.CapturedImage, TargetImg);
                     if (point != Point.Empty)
                     {
                         folderA.Do();

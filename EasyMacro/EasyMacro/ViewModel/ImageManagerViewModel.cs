@@ -80,10 +80,15 @@ namespace EasyMacro.ViewModel
             }
         }
 
-        private void ImageDelCommand(string path)
+        public void ImageDelCommand(string path)
         {
             imgDict.Remove(path);
         }
 
+        public Bitmap CopyImg(string path)
+        {
+            Bitmap cloneBitmap = (Bitmap)imgDict[path].Clone();
+            return cloneBitmap;
+        }
     }
 }

@@ -27,7 +27,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             get
             {
                 if (_templetMatch is null)
-                    _templetMatch = new TempletMatch("");
+                    _templetMatch = new TempletMatch();
                 return _templetMatch;
             }
         }
@@ -35,16 +35,33 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         /// <summary>
         /// Delay Time
         /// </summary>
-        
-        private Bitmap targetBitmap { get; }
+        /// 
+        private static ImageManagerViewModel _imgMgr;
+        private ImageManagerViewModel imgMgr
+        {
+            get
+            {
+                if (_imgMgr is null)
+                    _imgMgr = new ImageManagerViewModel();
+                return _imgMgr;
+            }
+        }
 
         public ValueNodeInputViewModel<string> BitmapDir { get; }
 
+        public StringValueEditorViewModel dirEditor = new StringValueEditorViewModel();
+
         public ValueNodeInputViewModel<string> WindowName { get; }
+
+        public StringValueEditorViewModel winnameEditor = new StringValueEditorViewModel();
 
         public ValueNodeOutputViewModel<IStatement> FlowIn { get; }
 
         public ValueListNodeInputViewModel<IStatement> FlowOut { get; }
+
+        public ValueListNodeInputViewModel<IStatement> FlowOutOption1 { get; }
+
+        public ValueListNodeInputViewModel<IStatement> FlowOutOption2 { get; }
 
         public ValueNodeInputViewModel<int?> RunButton { get; }
 
@@ -67,6 +84,24 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return action;
         }
 
+        Action ImgBindToApi()
+        {
+            Action action = () =>
+            {
+                templetMatch.TargetImg = imgMgr.CopyImg(dirEditor.Value);
+            };
+            return action;
+        }
+
+        Action winnameToApi()
+        {
+            Action action = () =>
+            {
+                templetMatch.screenCapture.WindowName = winnameEditor.Value;
+            };
+            return action;
+        }
+
         public TempletMatchNodeViewModel() : base(NodeType.Function)
         {
             base.Name = "TempletMatch";
@@ -74,18 +109,22 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             BitmapDir = new ValueNodeInputViewModel<string>()
             {
                 Name = "BitmapDir",
-                Editor = new StringValueEditorViewModel(),
+                Editor = dirEditor,
                 Port = null,
             };
             this.Inputs.Add(BitmapDir);
 
+            dirEditor.ValueChanged.Select(_ => ImgBindToApi());
+
             WindowName = new ValueNodeInputViewModel<string>()
             {
                 Name = "WindowName",
-                Editor = new StringValueEditorViewModel(),
+                Editor = winnameEditor,
                 Port = null
             };
             this.Inputs.Add(WindowName);
+
+            winnameEditor.ValueChanged.Select(_ => winnameToApi());
 
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {
@@ -118,6 +157,16 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Name = "",
             };
             this.Inputs.Add(FlowOut);
+            FlowOutOption1 = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
+            {
+                Name = "TempletMatch 성공",
+            };
+            this.Inputs.Add(FlowOutOption1);
+            FlowOutOption2 = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
+            {
+                Name = "TempletMatch 실패",
+            };
+            this.Inputs.Add(FlowOutOption2);
         }
     }
 }

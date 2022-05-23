@@ -55,7 +55,7 @@
             <Grid>
                 <!-- Node List가 보이는 패널 -->
                 <nodeList:NodeListView x:Name="nodeList" Margin="0,0,0,58"/>
-                
+
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="10, 0, 10, 8">
                     <!-- 버튼을 둥글게, 스타일지정 -->
                     <StackPanel.Resources>
@@ -65,7 +65,7 @@
                             </ResourceDictionary.MergedDictionaries>
                         </ResourceDictionary>
                     </StackPanel.Resources>
-                    
+
                     <Button Name="autoLayoutButton" Content="Auto-layout" />
                     <Button Name="startAutoLayoutLiveButton" Margin="0, 5, 0, 0" Content="Start live auto-layout" />
                     <Button Name="stopAutoLayoutLiveButton" Margin="0, 5, 0, 0" Content="Stop live auto-layout" />
@@ -100,7 +100,7 @@
             </viewLib:NetworkView.NetworkBackground>
         </viewLib:NetworkView>
         <GridSplitter Grid.Row="1" Grid.Column="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
-        
+
         <Grid Grid.Row="1" Grid.Column="4">
             <!-- Run 트리거와 로그 디버거 -->
             <viewNode:CodeSimView Grid.Row="2" x:Name="codeSimView">
@@ -112,10 +112,9 @@
                         </ResourceDictionary.MergedDictionaries>
                     </ResourceDictionary>
                 </viewNode:CodeSimView.Resources>
-                
+
             </viewNode:CodeSimView>
-            
+
         </Grid>
     </Grid>
 </Page>
-ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ

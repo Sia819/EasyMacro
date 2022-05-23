@@ -174,8 +174,8 @@ namespace EasyMacro.ViewModel
         {
             MacroManager macroManager = MacroManager.Instance;
             //파일명 넣을것
-            macroManager.InsertList(new EasyMacroAPI.Command.TempletMatch(@"C:\target.png", "로컬 디스크 (C:)"));
-            macroManager.DoOnce(0);
+            //macroManager.InsertList(new EasyMacroAPI.Command.TempletMatch(@"C:\target.png", "로컬 디스크 (C:)"));
+            //macroManager.DoOnce(0);
         }
 
         /// <summary>

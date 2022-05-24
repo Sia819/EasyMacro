@@ -1,4 +1,4 @@
-﻿using EasyMacro.View.Node;
+﻿using EasyMacro.View.Node.Editors;
 using NodeNetwork.Toolkit.ValueNode;
 using ReactiveUI;
 

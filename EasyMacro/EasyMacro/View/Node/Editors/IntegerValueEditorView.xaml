@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="EasyMacro.View.Node.IntegerValueEditorView"
+﻿<UserControl x:Class="EasyMacro.View.Node.Editors.IntegerValueEditorView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -15,6 +15,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Resource/MahappsNumericUpDownCustomSize.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -24,22 +25,26 @@
                 <Border.OpacityMask>
                     <VisualBrush>
                         <VisualBrush.Visual>
-                            <Border 
-                    Background="Black"
-                    SnapsToDevicePixels="True"
-                    CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource AncestorType=Border}}"
-                    Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Border}}"
-                    Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Border}}"
-                    />
+                            <Border Background="Black"
+                                    SnapsToDevicePixels="True"
+                                    CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource AncestorType=Border}}"
+                                    Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Border}}"
+                                    Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Border}}" />
                         </VisualBrush.Visual>
                     </VisualBrush>
                 </Border.OpacityMask>
 
-                <mah:NumericUpDown Name="valueUpDown" BorderThickness="0" UpDownButtonsWidth="20"
-                                   VerticalAlignment="Center" Value="1" TextAlignment="Center" />
-            </Border>
+            <mah:NumericUpDown Name="valueUpDown" 
+                               BorderThickness="0" 
+                               UpDownButtonsWidth="20"
+                               VerticalAlignment="Center" 
+                               Value="1" 
+                               TextAlignment="Center" FontSize="11">
+                
+            </mah:NumericUpDown>
+        </Border>
             
-            <Border CornerRadius="5" BorderThickness="1" BorderBrush="LightGray"/>
+            <Border CornerRadius="5" BorderThickness="1" BorderBrush="LightGray" />
         
 
     </Grid>

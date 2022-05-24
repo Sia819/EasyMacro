@@ -32,18 +32,20 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 return _inputKeyboard;
             }
         }
-        /// <summary>
-        /// Delay Time
-        /// </summary>
-        /// 
+        
+        public ValueNodeInputViewModel<int?> RunButton { get; }
+
         public ValueNodeInputViewModel<int?> KeyboardPressType { get; }
+
         public ValueNodeInputViewModel<string> PressKey { get; }
+
+        public ValueNodeInputViewModel<bool?> TestCheckEditor { get; }
 
         public ValueNodeOutputViewModel<IStatement> FlowIn { get; }
 
         public ValueListNodeInputViewModel<IStatement> FlowOut { get; }
 
-        public ValueNodeInputViewModel<int?> RunButton { get; }
+        
 
         public bool IsCanExcute { get; set; } = true;
 
@@ -77,27 +79,10 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public InputKeyboardNodeViewModel() : base(NodeType.Function)
         {
-            KeyboardPressType = new ValueNodeInputViewModel<int?>()
-            {
-                Port = null,
-                Name = "MouseClickTypes",
-                Editor = new RadioButtonEditorViewModel()
-            };
-            var temp = (KeyboardPressType.Editor as RadioButtonEditorViewModel);
-            temp.MyList.Add(new MyListItem(true, "KEY_DOWN", temp.RadioGroupInstanceHash));
-            temp.MyList.Add(new MyListItem(false, "KEY_UP", temp.RadioGroupInstanceHash));
-            this.Inputs.Add(KeyboardPressType);
-
+            // 노드의 이름
             base.Name = "InputKeyboard";
-//TODO : 나머지 구현
-            PressKey = new ValueNodeInputViewModel<string>()
-            {
-                Name = "PressKey",
-                Editor = new StringValueEditorViewModel(),
-                Port = null
-            };
-            this.Inputs.Add(PressKey);
 
+            // Run-Button Editor 추가
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {
                 Port = null,
@@ -112,6 +97,37 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 }
             };
             this.Inputs.Add(this.RunButton);
+
+            // Key-Down, Key-Up ComboBox Editor 추가
+            KeyboardPressType = new ValueNodeInputViewModel<int?>()
+            {
+                Port = null,
+                Name = "MouseClickTypes",
+                Editor = new RadioButtonEditorViewModel()
+            };
+            var temp = (KeyboardPressType.Editor as RadioButtonEditorViewModel);
+            temp.MyList.Add(new MyListItem(true, "KEY_DOWN", temp.RadioGroupInstanceHash));
+            temp.MyList.Add(new MyListItem(false, "KEY_UP", temp.RadioGroupInstanceHash));
+            this.Inputs.Add(KeyboardPressType);
+
+            // 입력할 키를 파싱하는 TextBox Editor 추가
+            PressKey = new ValueNodeInputViewModel<string>()
+            {
+                Name = "PressKey",
+                Editor = new StringValueEditorViewModel(),
+                Port = null
+            };
+            this.Inputs.Add(PressKey);
+
+            TestCheckEditor = new ValueNodeInputViewModel<bool?>()
+            {
+                Name = "테스트 체크박스 타이틀",
+                Editor = new CheckBoxEditorViewModel("테스트 체크박스 컨텐츠"),
+                Port = null
+            };
+             this.Inputs.Add(TestCheckEditor);
+
+            //TODO : 나머지 구현
 
             FlowIn = new CodeGenOutputViewModel<IStatement>(PortType.Execution)
             {

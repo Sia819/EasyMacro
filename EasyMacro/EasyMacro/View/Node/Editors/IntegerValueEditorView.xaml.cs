@@ -1,13 +1,9 @@
-﻿ using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using EasyMacro.ViewModel.Node;
 using EasyMacro.ViewModel.Node.Editors;
 using ReactiveUI;
 
-namespace EasyMacro.View.Node
+namespace EasyMacro.View.Node.Editors
 {
     /// <summary>
     /// IntegerValueEditorView.xaml에 대한 상호 작용 논리

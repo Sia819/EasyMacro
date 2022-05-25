@@ -84,7 +84,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             X = new ValueNodeInputViewModel<int?>()
             {
                 Name = "X",
-                Editor = new IntegerValueEditorViewModel(),
+                Editor = new IntegerValueEditorViewModel(0),
                 Port = null
             };
             this.Inputs.Add(X);
@@ -92,8 +92,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             Y = new ValueNodeInputViewModel<int?>()
             {
                 Name = "Y",
-                Editor = new IntegerValueEditorViewModel(),
-                Port = null
+                Editor = new IntegerValueEditorViewModel(0),
+                Port = null,
             };
             this.Inputs.Add(Y);
 

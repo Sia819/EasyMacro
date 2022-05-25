@@ -31,7 +31,15 @@ namespace EasyMacroAPI.Command
         public void Do()
         {
             findWindowPosition.Do();
-            WinAPI.SetCursorPos(findWindowPosition.rect.Left + X, findWindowPosition.rect.Top + Y);
+            int relativeX = findWindowPosition.rect.Left + X;
+            int relativeY = findWindowPosition.rect.Top + Y;
+
+            if (relativeX > findWindowPosition.rect.Right)
+                relativeX = findWindowPosition.rect.Right;
+            if (relativeY > findWindowPosition.rect.Bottom)
+                relativeY = findWindowPosition.rect.Bottom;
+
+            WinAPI.SetCursorPos(relativeX, relativeY);
         }
     }
 }

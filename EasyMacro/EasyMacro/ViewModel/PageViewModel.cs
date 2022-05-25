@@ -72,8 +72,9 @@ namespace EasyMacro.ViewModel
             NodeList.AddNodeType(() => new TextLiteralNode());
             NodeList.AddNodeType(() => new DelayNodeViewModel());
             NodeList.AddNodeType(() => new InputKeyboardNodeViewModel());
-            NodeList.AddNodeType(() => new InputMouseNodeViewModel());
             NodeList.AddNodeType(() => new InputStringNodeViewModel());
+            NodeList.AddNodeType(() => new InputMouseNodeViewModel());
+            NodeList.AddNodeType(() => new RelativeMouseMoveNodeViewModel());
             NodeList.AddNodeType(() => new MouseClickNodeViewModel());
             NodeList.AddNodeType(() => new MouseMoveNodeViewModel());
             NodeList.AddNodeType(() => new TempletMatchNodeViewModel());

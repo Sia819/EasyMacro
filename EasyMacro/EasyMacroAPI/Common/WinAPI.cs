@@ -1,5 +1,6 @@
 ﻿using System;
 using EasyMacroAPI.Model;
+using System.Runtime.InteropServices;
 
 namespace EasyMacroAPI.Common
 {
@@ -16,29 +17,29 @@ namespace EasyMacroAPI.Common
 
         #region DLL Import
 
-        [System.Runtime.InteropServices.DllImport("user32.dll")] // 입력 제어
+        [DllImport("user32.dll")] // 입력 제어
         internal static extern void mouse_event(uint dwFlags, uint dx, uint dy, int dwData, int dwExtraInfo);
 
         /// <summary>
         /// 마우스 커서의 위치를 지정합니다.
         /// </summary>
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        [DllImport("user32.dll")]
         internal static extern int SetCursorPos(int x, int y);
 
         /// <summary>
         /// 키보드 이벤트를 발생시킵니다.
         /// </summary>
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        [DllImport("user32.dll")]
         internal static extern void keybd_event(byte vk, byte scan, int flags, int extrainfo);
 
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        [DllImport("user32.dll")]
         internal static extern bool RegisterHotKey(int hWnd, int id, KeyModifiers fsModifiers, Keys vk);
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        [DllImport("user32.dll")]
         internal static extern bool UnregisterHotKey(int hWnd, int id);
 
-        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto, SetLastError = true)]
+        [DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto, SetLastError = true)]
         internal static extern bool PostMessage(IntPtr hWnd, int id, int fsModifiers, int vk);
-        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto, SetLastError = true)]
+        [DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto, SetLastError = true)]
         internal static extern bool PostMessage(IntPtr hWnd, int id, IntPtr fsModifiers, IntPtr vk);
 
         #endregion

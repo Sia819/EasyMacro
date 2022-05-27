@@ -17,6 +17,7 @@
         ScreenCapture = 8,
         WindowCapture = 9,
         FindWindowPosition = 10,
+        FindMousePosition = 11,
 
         Folder = 99,
     }

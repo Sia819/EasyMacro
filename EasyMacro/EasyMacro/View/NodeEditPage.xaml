@@ -17,7 +17,6 @@
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1080"
       Title="NodeEditPage"
-      
       d:Background="White">
     <!--<Page.DataContext>
         <viewModel:PageViewModel/>
@@ -74,7 +73,7 @@
             <GridSplitter Grid.Row="1" Background="DarkGray"
                           VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                           Margin="0 0 0 2"/>
-            <uc:ImageManager Grid.Row="2"></uc:ImageManager>
+            <uc:ImageManagerView Grid.Row="2"></uc:ImageManagerView>
         </Grid>
 
 

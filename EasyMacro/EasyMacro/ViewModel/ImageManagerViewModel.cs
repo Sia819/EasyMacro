@@ -4,32 +4,43 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Media;
+using ReactiveUI;
+using System.Reactive;
+using System.Collections.ObjectModel;
+using EasyMacro.Common;
+using System.Windows.Media.Imaging;
 
 namespace EasyMacro.ViewModel
 {
     public partial class ImageManagerViewModel
     {
         public string ImageFilePath { get; set; }
-
+        public ObservableDictionary<string, ImageList> RegisterdImages { get; }
+        public ReactiveCommand<Unit, Unit> ImageAddCommand { get; }
+        public ReactiveCommand<string, Unit> ImageDeleteCommand { get; }
 
         public class ImageList
         {
             public string Name { get; set; }
             public string FilePath { get; set; }
-            public ImageSource PreviewImage { get; set; }
+            public Bitmap PreviewImage { get; set; }
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ImageManagerViewModel()
+        {
+            this.RegisterdImages = new();
+            this.ImageAddCommand = ReactiveUI.ReactiveCommand.Create(ImageAdd);
+            this.ImageDeleteCommand = ReactiveUI.ReactiveCommand.Create<string>(path => ImageDelCommand(path));
         }
     }
 
     public partial class ImageManagerViewModel
     {
-        Dictionary<string, Bitmap> imgDict = new Dictionary<string, Bitmap>();
-
-        private void ImageAddCommand()
+        private void ImageAdd()
         {
             // Configure open file dialog box 
             OpenFileDialog dlg = new OpenFileDialog();
@@ -44,7 +55,13 @@ namespace EasyMacro.ViewModel
                     // 이미지 파일인지 체크
                     if(Path.GetExtension(ImageFilePath) == ".jpg" || Path.GetExtension(ImageFilePath) == ".png")
                     {
-                        imgDict.Add(ImageFilePath, new Bitmap(ImageFilePath));
+                        var temp = new ImageList()
+                        {
+                            Name = (new FileInfo(ImageFilePath)).Name,
+                            FilePath = ImageFilePath,
+                            PreviewImage = new Bitmap(ImageFilePath)
+                        };
+                        RegisterdImages.Add(ImageFilePath, temp);
                         return;
                     }
                 }
@@ -73,21 +90,25 @@ namespace EasyMacro.ViewModel
             // Process open file dialog box results 
             if (result == true)
             {
-                // Open document 
-                ImageFilePath = dlg.FileName;
                 // Do something with fileName
-                imgDict.Add(ImageFilePath, new Bitmap(ImageFilePath));
+                var temp = new ImageList()
+                {
+                    Name = (new FileInfo(ImageFilePath)).Name,
+                    FilePath = dlg.FileName,
+                    PreviewImage = new Bitmap(dlg.FileName)
+                };
+                RegisterdImages.Add(dlg.FileName, temp);
             }
         }
 
-        public void ImageDelCommand(string path)
+        private void ImageDelCommand(string path)
         {
-            imgDict.Remove(path);
+            RegisterdImages.Remove(path);
         }
 
         public Bitmap CopyImg(string path)
         {
-            Bitmap cloneBitmap = (Bitmap)imgDict[path].Clone();
+            Bitmap cloneBitmap = (Bitmap)RegisterdImages[path].PreviewImage.Clone();
             return cloneBitmap;
         }
     }

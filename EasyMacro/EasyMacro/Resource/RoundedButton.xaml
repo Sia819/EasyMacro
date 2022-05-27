@@ -10,7 +10,8 @@
                             <Border CornerRadius="3" 
                                     Background="{TemplateBinding Background}"
                                     BorderThickness="1"
-                                    BorderBrush="Gray">
+                                    BorderBrush="Gray"
+                                    Padding="4 .7">
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </ControlTemplate>

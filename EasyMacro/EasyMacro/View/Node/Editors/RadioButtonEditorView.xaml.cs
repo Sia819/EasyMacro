@@ -3,6 +3,7 @@ using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -47,7 +48,7 @@ namespace EasyMacro.View.Node.Editors
 
             this.WhenActivated(d =>
             {
-                this.OneWayBind(ViewModel, vm => vm.MyList, v => v.radioList.ItemsSource);//.DisposeWith(d);
+                this.OneWayBind(ViewModel, vm => vm.MyList, v => v.radioList.ItemsSource).DisposeWith(d);
             });
         }
 

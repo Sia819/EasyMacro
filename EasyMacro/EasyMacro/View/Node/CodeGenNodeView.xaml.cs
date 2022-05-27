@@ -40,7 +40,6 @@ namespace EasyMacro.View.Node
             {
                 NodeView.ViewModel = this.ViewModel;
                 Disposable.Create(() => NodeView.ViewModel = null).DisposeWith(d);
-
                 this.OneWayBind(ViewModel, vm => vm.NodeType, v => v.NodeView.Background, ConvertNodeTypeToBrush).DisposeWith(d);
             });
         }

@@ -1,16 +1,18 @@
-﻿<UserControl x:Class="EasyMacro.View.UC.ImageManager"
+﻿<UserControl x:Class="EasyMacro.View.UC.ImageManagerView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:converter="clr-namespace:EasyMacro.Converter"
              xmlns:local="clr-namespace:EasyMacro.View.UC"
              mc:Ignorable="d" 
-             d:DesignHeight="400" 
+             d:DesignHeight="400"
              d:DesignWidth="350"
              d:Background="White">
     <UserControl.Resources>
         <ResourceDictionary>
+            <converter:BitmapToImageSourceConverter x:Key="BitmapToImage"/>
             <ResourceDictionary x:Key="ListBoxNoPadding" Source="pack://application:,,,/Resource/ListBoxNoPadding.xaml"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
@@ -53,11 +55,13 @@
 
         <Button Command="{Binding ImageFilePath}"
                 Grid.Column="1" Content="+"
-                Focusable="False"/>
+                Focusable="False"
+                Name="addButton"/>
 
         <ListBox Grid.Row="1" 
                  Grid.ColumnSpan="2" 
-                 ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ImageManager}}, Path=PreviewImages}">
+                 Name="imageList"
+                 d:ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ImageManagerView}}, Path=PreviewImages}">
             <ListBox.Style>
                 <Style TargetType="{x:Type ListBox}">
                     <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
@@ -130,7 +134,7 @@
                             </Grid.RowDefinitions>
 
                             <Border Grid.RowSpan="2" BorderBrush="Black" BorderThickness="1">
-                                <Image Source="{Binding PreviewImage}" Stretch="Fill" />
+                                <Image Source="{Binding PreviewImage, Converter={StaticResource BitmapToImage}}" Stretch="Fill" />
                             </Border>
 
                             <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Name}" />

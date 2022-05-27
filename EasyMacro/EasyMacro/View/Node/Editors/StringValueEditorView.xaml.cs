@@ -34,9 +34,10 @@ namespace EasyMacro.View.Node.Editors
         {
             InitializeComponent();
 
-            this.WhenActivated(d => d(
-                this.Bind(ViewModel, vm => vm.Value, v => v.TextBox.Text)
-            ));
+            this.WhenActivated(d =>
+            {
+                this.Bind(ViewModel, vm => vm.Value, v => v.TextBox.Text).DisposeWith(d);
+            });
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Reactive.Disposables;
+using System.Windows;
 using System.Windows.Controls;
 using EasyMacro.ViewModel.Node.Editors;
 using ReactiveUI;
@@ -35,8 +36,8 @@ namespace EasyMacro.View.Node.Editors
             InitializeComponent();
             this.WhenActivated(d =>
             {
-                this.OneWayBind(ViewModel, vm => (bool)vm.Value, v => v.checkControl.IsChecked);
-                this.Bind(ViewModel, vm => vm.CheckBoxContent, v => v.checkControl.Content);
+                this.OneWayBind(ViewModel, vm => (bool)vm.Value, v => v.checkControl.IsChecked).DisposeWith(d);
+                this.Bind(ViewModel, vm => vm.CheckBoxContent, v => v.checkControl.Content).DisposeWith(d);
             });
         }
     }

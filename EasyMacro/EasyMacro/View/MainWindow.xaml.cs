@@ -33,7 +33,8 @@ namespace EasyMacro.View
 
             HookLib.GlobalKeyboardHook globalKeyboardHook = new HookLib.GlobalKeyboardHook();
             EasyMacroAPI.MacroManager.Instance.RegisterMessageReceiver(globalKeyboardHook);
-            HookLib.GlobalKeyboardHook.StartHook();
+            HookLib.GlobalKeyboardHook.StartKeyboardHook();
+            HookLib.GlobalMouseKeyHook.StartMouseHook();
         }
 
         void Hello()
@@ -152,6 +153,7 @@ namespace HookLib
         public delegate int HookProc(int nCode, IntPtr wParam, IntPtr lParam);
 
         public const int WH_KEYBOARD_LL = 13;
+        public const int WH_MOUSE_LL = 14;
 
         private const int WM_KEYDOWN = 0x0100;
         private const int WM_SYSKEYDOWN = 0x0104;
@@ -159,9 +161,9 @@ namespace HookLib
         private static Dictionary<Keys, bool> keyStatus = null;
         private static Dictionary<(Keys, KeyModifiers), IMessageReceiver.HotkeyDelegate> registeredHotkey = null;
 
-        public static void StartHook()
+        public static void StartKeyboardHook()
         {
-            callbackDelegate = new HookProc(CallBack);
+            callbackDelegate = new HookProc(KeyboardCallBack);
             if (hookHandle != 0)
             {
                 return;
@@ -182,12 +184,12 @@ namespace HookLib
             hookHandle = GlobalKeyboardHook.SetWindowsHookEx(WH_KEYBOARD_LL, callbackDelegate, IntPtr.Zero, 0);  // 키보드 훅
         }
 
-        public static void StopHook()
+        public static void StopKeyboardHook()
         {
             GlobalKeyboardHook.UnhookWindowsHookEx(hookHandle);
         }
 
-        public static int CallBack(int nCode, IntPtr wParam, IntPtr lParam)
+        public static int KeyboardCallBack(int nCode, IntPtr wParam, IntPtr lParam)
         {
             if (lParam != IntPtr.Zero)
             {
@@ -219,8 +221,6 @@ namespace HookLib
             return GlobalKeyboardHook.CallNextHookEx(hookHandle, nCode, wParam, lParam);
         }
 
-
-
         [StructLayout(LayoutKind.Sequential)]
         private class KeyboardHookStruct
         {
@@ -251,5 +251,123 @@ namespace HookLib
             public int dwExtraInfo;
         }
 
+    }
+
+    public class GlobalMouseKeyHook : IMessageReceiver
+    {
+        #region DllImport
+        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        public static extern int SetWindowsHookEx(int idHook, HookProc lpfn, IntPtr hInstance, int threadId);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        public static extern bool UnhookWindowsHookEx(int idHook);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        public static extern int CallNextHookEx(int idHook, int nCode, IntPtr wParam, IntPtr lParam);
+        #endregion
+
+        #region IMessageReceiver 인터페이스 구현체
+        public bool IsConfigured => true;
+        public void AddHotkey(Keys keys, KeyModifiers keyModifiers, IMessageReceiver.HotkeyDelegate hotkeyDelegate)
+        {
+            registeredHotkey.Add((keys, keyModifiers), hotkeyDelegate);
+        }
+        public void RemoveHotkey(Keys keys, KeyModifiers keyModifiers)
+        {
+            registeredHotkey.Remove((keys, keyModifiers));
+        }
+        #endregion
+
+        private static Keys KeyModifiersToKeyConverter(KeyModifiers keyModifiers)
+        {
+            switch (keyModifiers)
+            {
+                case KeyModifiers.None:
+                    return Keys.None;
+                case KeyModifiers.Alt:
+                    //return Keys.LeftAlt;
+                    return Keys.Alt;
+                case KeyModifiers.Control:
+                    //return Keys.LeftCtrl;
+                    return Keys.Alt;
+                case KeyModifiers.Shift:
+                    //return Keys.LeftShift;
+                    return Keys.Shift;
+                case KeyModifiers.Windows:
+                    return Keys.LWin;
+
+                default:
+                    return Keys.None;
+            }
+        }
+
+        public static int hookHandle = 0;
+
+        private static HookProc callbackDelegate;
+
+        public delegate int HookProc(int nCode, IntPtr wParam, IntPtr lParam);
+
+        public const int WH_MOUSE_LL = 14;
+
+        private const int WM_KEYDOWN = 0x0100;
+        private const int WM_SYSKEYDOWN = 0x0104;
+
+        private static Dictionary<(Keys, KeyModifiers), IMessageReceiver.HotkeyDelegate> registeredHotkey = null;
+
+        public static void StartMouseHook()
+        {
+            callbackDelegate = new HookProc(MouseCallBack);
+            if (hookHandle != 0)
+            {
+                return;
+            }
+            if (registeredHotkey == null)
+            {
+                registeredHotkey = new Dictionary<(Keys, KeyModifiers), IMessageReceiver.HotkeyDelegate>();
+            }
+
+            hookHandle = GlobalMouseKeyHook.SetWindowsHookEx(WH_MOUSE_LL, callbackDelegate, IntPtr.Zero, 0);  // 키보드 훅
+        }
+
+        public static void StopMouseHook()
+        {
+            GlobalMouseKeyHook.UnhookWindowsHookEx(hookHandle);
+        }
+
+        public static int MouseCallBack(int nCode, IntPtr wParam, IntPtr lParam)
+        {
+            if (lParam != IntPtr.Zero)
+            {
+                MouseHookStruct? MouseInput = Marshal.PtrToStructure<MouseHookStruct>(lParam);
+
+                if (MouseInput != null)
+                {
+
+                    POINT point = MouseInput.pt;
+                    
+                    bool push = ((int)wParam == (int)WindowMessage.WM_LBUTTONDOWN) ? true : false;
+
+                    if (push)
+                    {
+                        //Application.Current.MainWindow
+                        StopMouseHook();
+                    }
+                        
+
+                    // Debug
+                    Console.WriteLine("(Key : " + point + ", push : " + push);
+                }
+            }
+            return GlobalMouseKeyHook.CallNextHookEx(hookHandle, nCode, wParam, lParam);
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public class MouseHookStruct
+        {
+            public POINT pt;
+            public int hwnd;
+            public int wHitTestCode;
+            public int dwExtraInfo;
+        }
     }
 }

@@ -17,6 +17,11 @@ namespace EasyMacroAPI.Command
 
         #endregion
 
+        public InputKeyboard()
+        {
+
+        }
+
         public InputKeyboard(Keys key, KeyPressTypes presstype)
         {
             this.Key = key;

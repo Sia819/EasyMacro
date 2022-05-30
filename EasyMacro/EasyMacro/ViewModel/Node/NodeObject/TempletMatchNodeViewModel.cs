@@ -55,6 +55,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public StringValueEditorViewModel winnameEditor = new StringValueEditorViewModel();
 
+        public ValueNodeInputViewModel<bool?> IsWantKeepFind { get; }
+
         public ValueNodeOutputViewModel<IStatement> FlowIn { get; }
 
         public ValueListNodeInputViewModel<IStatement> FlowOut { get; }
@@ -125,6 +127,14 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.Inputs.Add(WindowName);
 
             winnameEditor.ValueChanged.Select(_ => winnameToApi());
+
+            IsWantKeepFind = new ValueNodeInputViewModel<bool?>()
+            {
+                Name = "isWantKeepFind",
+                Editor = new CheckBoxEditorViewModel(),
+                Port = null,
+            };
+            this.Inputs.Add(IsWantKeepFind);
 
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {

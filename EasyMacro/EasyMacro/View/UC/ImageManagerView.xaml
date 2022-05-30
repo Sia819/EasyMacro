@@ -53,8 +53,7 @@
             </TextBox.Style>
         </TextBox>
 
-        <Button Command="{Binding ImageFilePath}"
-                Grid.Column="1" Content="+"
+        <Button Grid.Column="1" Content="+"
                 Focusable="False"
                 Name="addButton"/>
 
@@ -134,11 +133,11 @@
                             </Grid.RowDefinitions>
 
                             <Border Grid.RowSpan="2" BorderBrush="Black" BorderThickness="1">
-                                <Image Source="{Binding PreviewImage, Converter={StaticResource BitmapToImage}}" Stretch="Fill" />
+                                <Image Name="listItemImage" Source="{Binding Value.PreviewImage, Converter={StaticResource BitmapToImage}}" Stretch="Fill" />
                             </Border>
 
-                            <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Name}" />
-                            <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding FilePath}"
+                            <TextBox Name="listItemName" Grid.Column="1" Grid.Row="0" Text="{Binding Value.Name}" />
+                            <TextBlock Name="listItemFilePath" Grid.Column="1" Grid.Row="1" Text="{Binding Value.FilePath}"
                                        Foreground="LightSlateGray"
                                        FontSize="8" Margin="5 0"
                                        VerticalAlignment="Bottom"/>

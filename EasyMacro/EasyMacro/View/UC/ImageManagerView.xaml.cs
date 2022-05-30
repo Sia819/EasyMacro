@@ -37,6 +37,7 @@ namespace EasyMacro.View.UC
         public ImageManagerView()
         {
             InitializeComponent();
+            this.ViewModel = new ImageManagerViewModel();
 
             // 디자이너 미리보기
             Bitmap unknownImage = UnknownQuestionImage();
@@ -47,10 +48,12 @@ namespace EasyMacro.View.UC
 
             this.WhenActivated(d =>
             {
-                this.Bind(ViewModel, vm => vm.ImageFilePath, v => v.txtEditor).DisposeWith(d);
-                this.OneWayBind(ViewModel, vm => vm.RegisterdImages, v => v.imageList.ItemsSource).DisposeWith(d);
-                //this.OneWayBind(ViewModel, vm => vm.ImageAddCommand, v => v.addButton.Command);
-                this.BindCommand(this.ViewModel, vm => vm.ImageAddCommand, v => v.addButton);
+                this.Bind(this.ViewModel, vm => vm.ImageFilePath, v => v.txtEditor.Text)
+                    .DisposeWith(d);
+                this.OneWayBind(this.ViewModel, vm => vm.RegisterdImages, v => v.imageList.ItemsSource)
+                    .DisposeWith(d);
+                this.BindCommand(this.ViewModel, vm => vm.ImageAddCommand, view => view.addButton)
+                    .DisposeWith(d);
             });
         }
 

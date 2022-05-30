@@ -36,7 +36,7 @@ namespace EasyMacro.View.Node.Editors
             InitializeComponent();
             this.WhenActivated(d =>
             {
-                this.OneWayBind(ViewModel, vm => (bool)vm.Value, v => v.checkControl.IsChecked).DisposeWith(d);
+                this.Bind(ViewModel, vm => (bool)vm.Value, v => (bool)v.checkControl.IsChecked).DisposeWith(d);
                 this.Bind(ViewModel, vm => vm.CheckBoxContent, v => v.checkControl.Content).DisposeWith(d);
             });
         }

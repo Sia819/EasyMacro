@@ -7,6 +7,7 @@ using EasyMacroAPI.Command;
 using NodeNetwork.Toolkit.ValueNode;
 using ReactiveUI;
 using System;
+using System.Drawing;
 using System.Reactive.Linq;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
@@ -35,6 +36,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         public ValueNodeInputViewModel<int?> X { get; }
 
         public ValueNodeInputViewModel<int?> Y { get; }
+
+        public ValueNodeInputViewModel<Point> Point { get; }
 
         public ValueNodeOutputViewModel<IStatement> FlowIn { get; }
 
@@ -81,6 +84,14 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Port = null
             };
             this.Inputs.Add(Y);
+
+            Point = new ValueNodeInputViewModel<Point>()
+            {
+                Name = "Point",
+                Editor = new PointRecordEditorViewModel(),
+                Port = null
+            };
+            this.Inputs.Add(Point);
 
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {

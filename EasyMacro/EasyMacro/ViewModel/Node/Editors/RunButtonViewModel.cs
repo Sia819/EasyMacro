@@ -1,13 +1,8 @@
-﻿using EasyMacro.View.Node.Editors;
-using NodeNetwork.Toolkit.ValueNode;
-using NodeNetwork.ViewModels;
-using ReactiveUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Reactive;
-using System.Text;
-using System.Threading.Tasks;
+using EasyMacro.View.Node.Editors;
+using NodeNetwork.Toolkit.ValueNode;
+using ReactiveUI;
 
 namespace EasyMacro.ViewModel.Node.Editors
 {

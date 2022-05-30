@@ -4,7 +4,6 @@ using System.Reactive;
 using EasyMacro.View.Node.Editors;
 using NodeNetwork.Toolkit.ValueNode;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 
 namespace EasyMacro.ViewModel.Node.Editors
 {
@@ -28,11 +27,12 @@ namespace EasyMacro.ViewModel.Node.Editors
         void GetMousePos_ExcuteCommand()
         {
             HookLib.GlobalMouseKeyHook.StartMouseHook();
+            // 마우스 오른쪽 키가 눌려졌을 때, 등록한 콜백함수가 호출됨.
             HookLib.GlobalMouseKeyHook.RegisterMouseHotkey(HookLib.GlobalMouseKeyHook.mouse_status.Right,
-                                                            new HookLib.GlobalMouseKeyHook.HotkeyDelegate(hello));
+                                                            new HookLib.GlobalMouseKeyHook.HotkeyDelegate(mouseCallback));
         }
 
-        private void hello(PInvoke.POINT point)
+        private void mouseCallback(PInvoke.POINT point)
         {
             this.Value = this.ReactiveObject.MyPoint = point;
             HookLib.GlobalMouseKeyHook.StopMouseHook();

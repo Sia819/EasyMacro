@@ -151,21 +151,6 @@ namespace HookLib
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public static class GlobalMouseKeyHook
     {
         // GlobalMouseKeyHook는 EasyMacroAPI 에서 요구하지 않기 때문에 EasyMacroAPI.IMessageReceiver 인터페이스를 구현하지 않아도 됩니다.

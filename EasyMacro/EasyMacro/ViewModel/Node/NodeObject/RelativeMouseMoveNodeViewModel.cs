@@ -9,6 +9,7 @@ using NodeNetwork.ViewModels;
 using NodeNetwork.Views;
 using ReactiveUI;
 using System;
+using System.Drawing;
 using System.Reactive.Linq;
 using static EasyMacro.ViewModel.Node.Editors.RadioButtonEditorViewModel;
 
@@ -39,7 +40,12 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         public ValueNodeInputViewModel<string> WindowName { get; }
         public ValueNodeInputViewModel<int?> X { get; }
 
+        public IntegerValueEditorViewModel XValueEditor = new IntegerValueEditorViewModel(0);
         public ValueNodeInputViewModel<int?> Y { get; }
+
+        public IntegerValueEditorViewModel YValueEditor = new IntegerValueEditorViewModel(0);
+
+        public ValueNodeInputViewModel<Point> Point { get; }
 
         public ValueNodeOutputViewModel<IStatement> FlowIn { get; }
 
@@ -84,7 +90,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             X = new ValueNodeInputViewModel<int?>()
             {
                 Name = "X",
-                Editor = new IntegerValueEditorViewModel(0),
+                Editor = XValueEditor,
                 Port = null
             };
             this.Inputs.Add(X);
@@ -92,10 +98,18 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             Y = new ValueNodeInputViewModel<int?>()
             {
                 Name = "Y",
-                Editor = new IntegerValueEditorViewModel(0),
+                Editor = YValueEditor,
                 Port = null,
             };
             this.Inputs.Add(Y);
+
+            Point = new ValueNodeInputViewModel<Point>()
+            {
+                Name = "Point",
+                Editor = new PointRecordEditorViewModel(XValueEditor, YValueEditor, WindowName),
+                Port = null
+            };
+            this.Inputs.Add(Point);
 
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {

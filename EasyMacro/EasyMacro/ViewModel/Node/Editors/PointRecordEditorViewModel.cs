@@ -4,6 +4,7 @@ using System.Reactive;
 using EasyMacro.View.Node.Editors;
 using NodeNetwork.Toolkit.ValueNode;
 using ReactiveUI;
+using EasyMacroAPI.Command;
 
 namespace EasyMacro.ViewModel.Node.Editors
 {
@@ -17,8 +18,18 @@ namespace EasyMacro.ViewModel.Node.Editors
         public PointRecordEditorViewModelReactiveObject ReactiveObject { get; }
         public ReactiveCommand<Unit, Unit> GetMousePos_Command { get; }
 
-        public PointRecordEditorViewModel()
+        private FindWindowPosition findWindowPosition;
+
+        private ValueNodeInputViewModel<string> Windowname;
+        private IntegerValueEditorViewModel X;
+        private IntegerValueEditorViewModel Y;
+
+        public PointRecordEditorViewModel(IntegerValueEditorViewModel X, IntegerValueEditorViewModel Y, ValueNodeInputViewModel<string> windowname = null)
         {
+            this.X = X;
+            this.Y = Y;
+            findWindowPosition = new FindWindowPosition("");
+            Windowname = windowname;
             ReactiveObject = new();
             Value = ReactiveObject.MyPoint = new Point(0, 0);
             this.GetMousePos_Command = ReactiveCommand.Create(GetMousePos_ExcuteCommand);
@@ -35,6 +46,18 @@ namespace EasyMacro.ViewModel.Node.Editors
         private void mouseCallback(PInvoke.POINT point)
         {
             this.Value = this.ReactiveObject.MyPoint = point;
+            if(Windowname is not null && Windowname.Value != "")
+            {
+                findWindowPosition.WindowName = Windowname.Value;
+                findWindowPosition.Do();
+                this.X.Value = point.x - findWindowPosition.rect.Left;
+                this.Y.Value = point.y - findWindowPosition.rect.Top;
+            }
+            else
+            {
+                this.X.Value = point.x;
+                this.Y.Value = point.y;
+            }
             HookLib.GlobalMouseKeyHook.StopMouseHook();
             HookLib.GlobalMouseKeyHook.UnregisterMouseHotkey(HookLib.GlobalMouseKeyHook.mouse_status.Right);
         }

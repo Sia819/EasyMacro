@@ -39,8 +39,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public ValueNodeInputViewModel<string> PressKey { get; }
 
-        public ValueNodeInputViewModel<bool?> TestCheckEditor { get; }
-
         public ValueNodeOutputViewModel<IStatement> FlowIn { get; }
 
         public ValueListNodeInputViewModel<IStatement> FlowOut { get; }
@@ -118,14 +116,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Port = null
             };
             this.Inputs.Add(PressKey);
-
-            TestCheckEditor = new ValueNodeInputViewModel<bool?>()
-            {
-                Name = "테스트 체크박스 타이틀",
-                Editor = new CheckBoxEditorViewModel("테스트 체크박스 컨텐츠"),
-                Port = null
-            };
-             this.Inputs.Add(TestCheckEditor);
 
             //TODO : 나머지 구현
 

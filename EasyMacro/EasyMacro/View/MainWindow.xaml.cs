@@ -24,9 +24,6 @@
             
         }
 
-        
-
-
         private void mainFrame_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             UpdateFrameDataContext(sender, null);

@@ -9,6 +9,7 @@ using NodeNetwork.ViewModels;
 using NodeNetwork.Views;
 using ReactiveUI;
 using System;
+using System.Drawing;
 using System.Reactive.Linq;
 using static EasyMacro.ViewModel.Node.Editors.RadioButtonEditorViewModel;
 
@@ -37,10 +38,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         /// <summary>
         /// Delay Time
         /// </summary>
-        public ValueNodeInputViewModel<int?> X { get; }
-
-        public ValueNodeInputViewModel<int?> Y { get; }
-
         public ValueNodeOutputViewModel<IStatement> FlowIn { get; }
 
         public ValueListNodeInputViewModel<IStatement> FlowOut { get; }
@@ -54,9 +51,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             Action action = () =>
             {
                 CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
-
-                inputMouse.X = (int)X.Value;
-                inputMouse.Y = (int)Y.Value;
 
                 // RadioButton Index to MouseClickTypes Convert
                 switch ((this.MouseClickType.Editor as RadioButtonEditorViewModel).GetRadioSelectedIndex)
@@ -81,6 +75,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public InputMouseNodeViewModel() : base(NodeType.Function)
         {
+            base.Name = "InputMouse";
+
             MouseClickType = new ValueNodeInputViewModel<int?>()
             {
                 Port = null,
@@ -93,24 +89,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             temp.MyList.Add(new MyListItem(false, "RBDOWN", temp.RadioGroupInstanceHash));
             temp.MyList.Add(new MyListItem(false, "RBUP", temp.RadioGroupInstanceHash));
             this.Inputs.Add(MouseClickType);
-
-            base.Name = "InputMouse";
-
-            X = new ValueNodeInputViewModel<int?>()
-            {
-                Name = "X",
-                Editor = new IntegerValueEditorViewModel(),
-                Port = null
-            };
-            this.Inputs.Add(X);
-
-            Y = new ValueNodeInputViewModel<int?>()
-            {
-                Name = "Y",
-                Editor = new IntegerValueEditorViewModel(),
-                Port = null
-            };
-            this.Inputs.Add(Y);
 
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {
@@ -132,9 +110,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Name = "",
                 Value = this.RunButton.ValueChanged.Select(_ => new NodeCompile(this.Func())
                 {
-                    Log = Observable.Merge(X.ValueChanged.Select(x => $"InputMouse - ({x.Value}, {this.Y.Value}, {inputMouse.MouseClickType})"),
-                                            Y.ValueChanged.Select(y => $"InputMouse - ({this.X.Value}, {y.Value}, {inputMouse.MouseClickType})"),
-                                            MouseClickType.ValueChanged.Select(mouseClickTypes => $"InputMouse - ({this.X.Value}, {this.Y.Value}, {inputMouse.MouseClickType})"))
+                    Log = MouseClickType.ValueChanged.Select(mouseClickTypes => $"InputMouse - ({inputMouse.MouseClickType})")
                 })
             };
             this.Outputs.Add(FlowIn);

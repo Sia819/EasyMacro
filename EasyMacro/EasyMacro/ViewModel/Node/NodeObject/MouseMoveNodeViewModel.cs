@@ -35,7 +35,10 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         /// </summary>
         public ValueNodeInputViewModel<int?> X { get; }
 
+        public IntegerValueEditorViewModel XValueEditor = new IntegerValueEditorViewModel();
         public ValueNodeInputViewModel<int?> Y { get; }
+
+        public IntegerValueEditorViewModel YValueEditor = new IntegerValueEditorViewModel();
 
         public ValueNodeInputViewModel<Point> Point { get; }
 
@@ -72,7 +75,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             X = new ValueNodeInputViewModel<int?>()
             {
                 Name = "X",
-                Editor = new IntegerValueEditorViewModel(),
+                Editor = XValueEditor,
                 Port = null
             };
             this.Inputs.Add(X);
@@ -80,7 +83,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             Y = new ValueNodeInputViewModel<int?>()
             {
                 Name = "Y",
-                Editor = new IntegerValueEditorViewModel(),
+                Editor = YValueEditor,
                 Port = null
             };
             this.Inputs.Add(Y);
@@ -88,7 +91,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             Point = new ValueNodeInputViewModel<Point>()
             {
                 Name = "Point",
-                Editor = new PointRecordEditorViewModel(),
+                Editor = new PointRecordEditorViewModel(XValueEditor, YValueEditor),
                 Port = null
             };
             this.Inputs.Add(Point);
@@ -100,10 +103,10 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Editor = new RunButtonViewModel()
                 {
                     RunScript = ReactiveCommand.Create
-        (
-            Func(),
-            this.WhenAnyValue(vm => vm.IsCanExcute)
-        )
+                    (
+                        Func(),
+                        this.WhenAnyValue(vm => vm.IsCanExcute)
+                    )
                 }
             };
             this.Inputs.Add(this.RunButton);

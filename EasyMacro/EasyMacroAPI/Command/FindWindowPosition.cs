@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 
 namespace EasyMacroAPI.Command
 {
-    class FindWindowPosition : IAction
+    public class FindWindowPosition : IAction
     {
         public MacroTypes MacroType => MacroTypes.FindWindowPosition;
 

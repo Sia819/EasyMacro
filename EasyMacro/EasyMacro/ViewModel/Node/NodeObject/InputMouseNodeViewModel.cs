@@ -75,25 +75,25 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public InputMouseNodeViewModel() : base(NodeType.Function)
         {
-            base.Name = "InputMouse";
+            base.Name = "마우스 버튼 누르고/떼고있기";
 
             MouseClickType = new ValueNodeInputViewModel<int?>()
             {
                 Port = null,
-                Name = "MouseClickTypes",
+                Name = "누르기/떼기",
                 Editor = new RadioButtonEditorViewModel()
             };
             var temp = (MouseClickType.Editor as RadioButtonEditorViewModel);
-            temp.MyList.Add(new MyListItem(true, "LBDOWN", temp.RadioGroupInstanceHash));
-            temp.MyList.Add(new MyListItem(false, "LBUP", temp.RadioGroupInstanceHash));
-            temp.MyList.Add(new MyListItem(false, "RBDOWN", temp.RadioGroupInstanceHash));
-            temp.MyList.Add(new MyListItem(false, "RBUP", temp.RadioGroupInstanceHash));
+            temp.MyList.Add(new MyListItem(true, "왼쪽 버튼 누르고 있기", temp.RadioGroupInstanceHash));
+            temp.MyList.Add(new MyListItem(false, "왼쪽 버튼 떼기", temp.RadioGroupInstanceHash));
+            temp.MyList.Add(new MyListItem(false, "오른쪽 버튼 누르고 있기", temp.RadioGroupInstanceHash));
+            temp.MyList.Add(new MyListItem(false, "오른쪽 버튼 떼기", temp.RadioGroupInstanceHash));
             this.Inputs.Add(MouseClickType);
 
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {
                 Port = null,
-                Name = "Run",
+                
                 Editor = new RunButtonViewModel()
                 {
                     RunScript = ReactiveCommand.Create

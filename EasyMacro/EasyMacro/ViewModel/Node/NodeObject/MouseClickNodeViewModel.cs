@@ -76,11 +76,11 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public MouseClickNodeViewModel() : base(NodeType.Function)
         {
-            base.Name = "MouseClick";
+            base.Name = "마우스 클릭";
 
             X = new ValueNodeInputViewModel<int?>()
             {
-                Name = "X",
+                Name = "X좌표",
                 Editor = XValueEditor,
                 Port = null
             };
@@ -88,7 +88,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
             Y = new ValueNodeInputViewModel<int?>()
             {
-                Name = "Y",
+                Name = "Y좌표",
                 Editor = YValueEditor,
                 Port = null
             };
@@ -104,7 +104,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
             Delay = new ValueNodeInputViewModel<int?>()
             {
-                Name = "Delay",
+                Name = "지연시간",
                 Editor = new IntegerValueEditorViewModel(0) { Value = 40 },
                 Port = null,
             };
@@ -113,7 +113,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {
                 Port = null,
-                Name = "Run",
+                
                 Editor = new RunButtonViewModel()
                 {
                     RunScript = ReactiveCommand.Create

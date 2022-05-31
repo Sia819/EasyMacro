@@ -18,7 +18,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public StartNodeViewModel() : base(NodeType.EventNode)
         {
-            this.Name = "Start";
+            this.Name = "시작";
 
             OnClickFlow = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
             {

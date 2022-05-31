@@ -82,12 +82,12 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public CombInputKeyboardViewModel() : base(NodeType.Function)
         {
+            base.Name = "조합 키 입력";
 
-            base.Name = "CombInputKeyboard";
             //TODO : 나머지 구현
             Input = new ValueNodeInputViewModel<string>()
             {
-                Name = "Input Key",
+                Name = "입력 키",
                 Editor = new StringValueEditorViewModel(),
                 Port = null,
             };
@@ -120,7 +120,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {
                 Port = null,
-                Name = "Run",
+                
                 Editor = new RunButtonViewModel()
                 {
                     RunScript = ReactiveCommand.Create

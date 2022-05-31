@@ -106,11 +106,12 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public TempletMatchNodeViewModel() : base(NodeType.Function)
         {
-            base.Name = "TempletMatch";
+            base.Name = "이미지 찾기";
+
             //TODO : 구조변경
             BitmapDir = new ValueNodeInputViewModel<string>()
             {
-                Name = "BitmapDir",
+                Name = "사진파일 경로",
                 Editor = dirEditor,
                 Port = null,
             };
@@ -120,7 +121,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
             WindowName = new ValueNodeInputViewModel<string>()
             {
-                Name = "WindowName",
+                Name = "프로세스 이름",
                 Editor = winnameEditor,
                 Port = null
             };
@@ -130,7 +131,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
             IsWantKeepFind = new ValueNodeInputViewModel<bool?>()
             {
-                Name = "isWantKeepFind",
+                Name = "못 찾아도 넘어가지 않기",
                 Editor = new CheckBoxEditorViewModel(),
                 Port = null,
             };
@@ -139,7 +140,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {
                 Port = null,
-                Name = "Run",
+                
                 Editor = new RunButtonViewModel()
                 {
                     RunScript = ReactiveCommand.Create
@@ -169,12 +170,12 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.Inputs.Add(FlowOut);
             FlowOutOption1 = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
             {
-                Name = "TempletMatch 성공",
+                Name = "이미지 찾기 성공",
             };
             this.Inputs.Add(FlowOutOption1);
             FlowOutOption2 = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
             {
-                Name = "TempletMatch 실패",
+                Name = "이미지 찾기 실패",
             };
             this.Inputs.Add(FlowOutOption2);
         }

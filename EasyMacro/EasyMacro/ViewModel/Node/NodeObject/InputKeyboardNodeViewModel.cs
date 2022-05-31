@@ -78,13 +78,34 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         public InputKeyboardNodeViewModel() : base(NodeType.Function)
         {
             // 노드의 이름
-            base.Name = "InputKeyboard";
+            base.Name = "키보드 버튼 누르고/떼고있기";
+
+            // Key-Down, Key-Up ComboBox Editor 추가
+            KeyboardPressType = new ValueNodeInputViewModel<int?>()
+            {
+                Port = null,
+                Name = "누르기/떼기",
+                Editor = new RadioButtonEditorViewModel()
+            };
+            var temp = (KeyboardPressType.Editor as RadioButtonEditorViewModel);
+            temp.MyList.Add(new MyListItem(true, "누르고있기", temp.RadioGroupInstanceHash));
+            temp.MyList.Add(new MyListItem(false, "떼기", temp.RadioGroupInstanceHash));
+            this.Inputs.Add(KeyboardPressType);
+
+            // 입력할 키를 파싱하는 TextBox Editor 추가
+            PressKey = new ValueNodeInputViewModel<string>()
+            {
+                Name = "입력 키",
+                Editor = new StringValueEditorViewModel(),
+                Port = null
+            };
+            this.Inputs.Add(PressKey);
 
             // Run-Button Editor 추가
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {
                 Port = null,
-                Name = "Run",
+
                 Editor = new RunButtonViewModel()
                 {
                     RunScript = ReactiveCommand.Create
@@ -95,27 +116,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 }
             };
             this.Inputs.Add(this.RunButton);
-
-            // Key-Down, Key-Up ComboBox Editor 추가
-            KeyboardPressType = new ValueNodeInputViewModel<int?>()
-            {
-                Port = null,
-                Name = "MouseClickTypes",
-                Editor = new RadioButtonEditorViewModel()
-            };
-            var temp = (KeyboardPressType.Editor as RadioButtonEditorViewModel);
-            temp.MyList.Add(new MyListItem(true, "KEY_DOWN", temp.RadioGroupInstanceHash));
-            temp.MyList.Add(new MyListItem(false, "KEY_UP", temp.RadioGroupInstanceHash));
-            this.Inputs.Add(KeyboardPressType);
-
-            // 입력할 키를 파싱하는 TextBox Editor 추가
-            PressKey = new ValueNodeInputViewModel<string>()
-            {
-                Name = "PressKey",
-                Editor = new StringValueEditorViewModel(),
-                Port = null
-            };
-            this.Inputs.Add(PressKey);
 
             //TODO : 나머지 구현
 

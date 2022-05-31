@@ -63,11 +63,12 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public DelayNodeViewModel() : base(NodeType.Function)
         {
-            base.Name = "Delay";
+            base.Name = "지연시키기";
+
             //TODO : 나머지 구현
             Input = new ValueNodeInputViewModel<int?>()
             {
-                Name = "Delay Time",
+                Name = "지연시간",
                 Editor = new IntegerValueEditorViewModel(0),
                 Port = null,
             };
@@ -76,7 +77,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {
                 Port = null,
-                Name = "Run",
+                
                 Editor = new RunButtonViewModel()
                 {
                     RunScript = ReactiveCommand.Create

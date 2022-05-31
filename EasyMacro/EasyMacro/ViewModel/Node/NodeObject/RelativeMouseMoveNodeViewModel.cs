@@ -77,19 +77,19 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public RelativeMouseMoveNodeViewModel() : base(NodeType.Function)
         {
-            base.Name = "RelativeMouseMove";
+            base.Name = "마우스 상대좌표 이동";
 
             WindowName = new ValueNodeInputViewModel<string>()
             {
                 Port = null,
-                Name = "WindowName",
+                Name = "프로세스 이름",
                 Editor = new StringValueEditorViewModel()
             };
             this.Inputs.Add(WindowName);
 
             X = new ValueNodeInputViewModel<int?>()
             {
-                Name = "X",
+                Name = "X좌표",
                 Editor = XValueEditor,
                 Port = null
             };
@@ -97,7 +97,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
             Y = new ValueNodeInputViewModel<int?>()
             {
-                Name = "Y",
+                Name = "Y좌표",
                 Editor = YValueEditor,
                 Port = null,
             };
@@ -114,7 +114,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {
                 Port = null,
-                Name = "Run",
+                
                 Editor = new RunButtonViewModel()
                 {
                     RunScript = ReactiveCommand.Create

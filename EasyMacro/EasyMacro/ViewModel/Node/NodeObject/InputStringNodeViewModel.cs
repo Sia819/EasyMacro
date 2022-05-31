@@ -63,7 +63,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public InputStringNodeViewModel() : base(NodeType.Function)
         {
-            base.Name = "InputString";
+            base.Name = "문자열 입력";
             //TODO : 나머지 구현
 
             Input = new ValueNodeInputViewModel<string>()
@@ -77,7 +77,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {
                 Port = null,
-                Name = "Run",
+                
                 Editor = new RunButtonViewModel()
                 {
                     RunScript = ReactiveCommand.Create

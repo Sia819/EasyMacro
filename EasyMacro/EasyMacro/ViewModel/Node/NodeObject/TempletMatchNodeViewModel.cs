@@ -75,10 +75,24 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             {
                 CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
 
-                //templetMatch.Text = Input.Value;
+                templetMatch.TargetImg = new Bitmap(BitmapDir.Value);
+                templetMatch.screenCapture.WindowName = WindowName.Value;
+                templetMatch.isWantKeepFinding = IsWantKeepFind.Value ?? false;
+                
                 templetMatch.Do();
 
-                foreach (var a in FlowOut.Values.Items)
+                ValueListNodeInputViewModel<IStatement> selectedFlowout;
+
+                if (templetMatch.result)
+                {
+                    selectedFlowout = FlowOutOption1;
+                }
+                else
+                {
+                    selectedFlowout = FlowOutOption2;
+                }
+
+                foreach (var a in selectedFlowout.Values.Items)
                 {
                     a.Compile(new CompilerContext());
                 }
@@ -168,11 +182,13 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Name = "",
             };
             this.Inputs.Add(FlowOut);
+
             FlowOutOption1 = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
             {
                 Name = "이미지 찾기 성공",
             };
             this.Inputs.Add(FlowOutOption1);
+            
             FlowOutOption2 = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
             {
                 Name = "이미지 찾기 실패",

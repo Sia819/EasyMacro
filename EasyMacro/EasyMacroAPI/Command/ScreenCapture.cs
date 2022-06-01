@@ -11,7 +11,7 @@ namespace EasyMacroAPI.Command
 
         public string WindowName { get; set; }
 
-        public bool IsFullScreen => (WindowName is null) ? true : false;
+        public bool IsFullScreen => (WindowName is null || WindowName == "") ? true : false;
 
         public Bitmap CapturedImage { get; private set; }
 

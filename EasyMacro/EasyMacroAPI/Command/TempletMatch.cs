@@ -14,17 +14,16 @@ namespace EasyMacroAPI.Command
         public Bitmap TargetImg { get; set; }
         public ScreenCapture screenCapture { get; set; }
         private Point point;
-        private Folder folderA;
-        private Folder folderB;
         public bool isWantKeepFinding = false;
+        public bool result;
+        public int retryTimes;
         public Delay delay = new Delay(1000);
 
         public delegate void Delegate(List<IAction> list);
 
         public TempletMatch()
         {
-            folderA = new Folder(this);
-            folderB = new Folder();
+            screenCapture = new ScreenCapture();
         }
 
         ~TempletMatch()
@@ -72,28 +71,30 @@ namespace EasyMacroAPI.Command
 
         public void Do()
         {
+            int count = 0;
             do
             {
+                count++;
                 screenCapture.Do();
                 if (screenCapture.CapturedImage is not null)
                 {// 창을 찾은 경우
                     point = CaptureManager.Instance.TempletMatch(screenCapture.CapturedImage, TargetImg);
                     if (point != Point.Empty)
                     {
-                        folderA.Do();
+                        result = true;
                         break;
                     }
                     else if (point == Point.Empty && !isWantKeepFinding)
                     {
-                        folderB.Do();
+                        result = false;
                     }
                 }
                 else if(screenCapture.CapturedImage is null && !isWantKeepFinding)
                 {// 창을 찾지 못한 경우
-                    folderB.Do();
+                    result = false;
                 }
                 delay.Do();
-            } while (isWantKeepFinding);
+            } while (isWantKeepFinding || retryTimes >= count);
         }
     }
 }

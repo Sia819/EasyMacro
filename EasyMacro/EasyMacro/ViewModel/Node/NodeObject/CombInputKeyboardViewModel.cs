@@ -137,10 +137,10 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Name = "",
                 Value = this.RunButton.ValueChanged.Select(_ => new NodeCompile(this.Func())
                 {
-                    Log = Observable.Merge(Input.ValueChanged.Select(key => $"CombinputKeyboard - ({this.Alt} + {this.Ctrl} + {this.Shift} + {key})"),
-                                            Alt.ValueChanged.Select(Alt => $"CombinputKeyboard - ({Alt} + {this.Ctrl} + {this.Shift} + {this.Input})"),
-                                            Ctrl.ValueChanged.Select(Ctrl => $"CombinputKeyboard - ({this.Alt} + {Ctrl} + {this.Shift} + {this.Input})"),
-                                            Shift.ValueChanged.Select(Shift => $"CombinputKeyboard - ({this.Alt} + {this.Ctrl} + {Shift} + {this.Input})"))
+                    Log = Observable.Merge(Input.ValueChanged.Select(key => $"CombinputKeyboard - ({this.Alt.Value} + {this.Ctrl.Value} + {this.Shift.Value} + {key})"),
+                                            Alt.ValueChanged.Select(Alt => $"CombinputKeyboard - ({Alt} + {this.Ctrl.Value} + {this.Shift.Value} + {this.Input.Value})"),
+                                            Ctrl.ValueChanged.Select(Ctrl => $"CombinputKeyboard - ({this.Alt.Value} + {Ctrl} + {this.Shift.Value} + {this.Input.Value})"),
+                                            Shift.ValueChanged.Select(Shift => $"CombinputKeyboard - ({this.Alt.Value} + {this.Ctrl.Value} + {Shift} + {this.Input.Value})"))
                 })
             };
             this.Outputs.Add(FlowIn);

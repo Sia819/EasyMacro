@@ -80,7 +80,7 @@ namespace HookLib
             hookHandle = SetWindowsHookEx(User32.WindowsHookType.WH_KEYBOARD_LL, callbackDelegate, IntPtr.Zero, 0);  // 키보드 훅
         }
 
-        public void StopKeyboardHook()
+        public static void StopKeyboardHook()
         {
             hookHandle.Dispose();
         }
@@ -238,8 +238,6 @@ namespace HookLib
         {
             registeredHotkey.Remove(status);
         }
-
-
 
         public static void SetDispatcher(Dispatcher dispatcher)
         {

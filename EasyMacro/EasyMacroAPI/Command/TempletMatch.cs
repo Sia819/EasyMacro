@@ -16,7 +16,8 @@ namespace EasyMacroAPI.Command
         private Point point;
         public bool isWantKeepFinding = false;
         public bool result;
-        public int retryTimes;
+        public int retryTimes = 0;
+        public double accuracy = 0.8;
         public Delay delay = new Delay(1000);
 
         public delegate void Delegate(List<IAction> list);
@@ -71,14 +72,14 @@ namespace EasyMacroAPI.Command
 
         public void Do()
         {
-            int count = 0;
+            int count = -1;
             do
             {
                 count++;
                 screenCapture.Do();
                 if (screenCapture.CapturedImage is not null)
                 {// 창을 찾은 경우
-                    point = CaptureManager.Instance.TempletMatch(screenCapture.CapturedImage, TargetImg);
+                    point = CaptureManager.Instance.TempletMatch(screenCapture.CapturedImage, TargetImg, accuracy);
                     if (point != Point.Empty)
                     {
                         result = true;
@@ -93,8 +94,9 @@ namespace EasyMacroAPI.Command
                 {// 창을 찾지 못한 경우
                     result = false;
                 }
-                delay.Do();
-            } while (isWantKeepFinding || retryTimes >= count);
+                if(isWantKeepFinding || retryTimes > count)
+                    delay.Do();
+            } while (isWantKeepFinding || retryTimes > count);
         }
     }
 }

@@ -60,7 +60,7 @@ namespace EasyMacroAPI
             return bmp;
         }
 
-        public System.Drawing.Point TempletMatch(Bitmap screenImg, Bitmap targetImg)
+        public System.Drawing.Point TempletMatch(Bitmap screenImg, Bitmap targetImg, double accuracy)
         {
             // 원본 이미지
             using (Mat ScreenMat = OpenCvSharp.Extensions.BitmapConverter.ToMat(screenImg))
@@ -73,7 +73,7 @@ namespace EasyMacroAPI
                 OpenCvSharp.Point minloc, maxloc;
                 Cv2.MinMaxLoc(result, out minval, out maxval, out minloc, out maxloc);
 
-                if(maxval >= 0.8)
+                if(maxval >= accuracy)
                 {
                     //new Command.MouseMove(maxloc.X, maxloc.Y).Do();
                     return new System.Drawing.Point(maxloc.X, maxloc.Y);

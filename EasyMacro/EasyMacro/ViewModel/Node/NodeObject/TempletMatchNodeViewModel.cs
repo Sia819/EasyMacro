@@ -57,6 +57,10 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public ValueNodeInputViewModel<bool?> IsWantKeepFind { get; }
 
+        public ValueNodeInputViewModel<int?> RetryTimes { get; }
+
+        public ValueNodeInputViewModel<int?> Accuracy { get; }
+
         public ValueNodeOutputViewModel<IStatement> FlowIn { get; }
 
         public ValueListNodeInputViewModel<IStatement> FlowOut { get; }
@@ -78,6 +82,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 templetMatch.TargetImg = new Bitmap(BitmapDir.Value);
                 templetMatch.screenCapture.WindowName = WindowName.Value;
                 templetMatch.isWantKeepFinding = IsWantKeepFind.Value ?? false;
+                templetMatch.retryTimes = RetryTimes.Value ?? 0;
+                templetMatch.accuracy = (Accuracy.Value ?? 80) / 100;
                 
                 templetMatch.Do();
 
@@ -145,11 +151,27 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
             IsWantKeepFind = new ValueNodeInputViewModel<bool?>()
             {
-                Name = "못 찾아도 넘어가지 않기",
+                Name = "못 찾으면 넘어가지 않기",
                 Editor = new CheckBoxEditorViewModel(),
                 Port = null,
             };
             this.Inputs.Add(IsWantKeepFind);
+
+            RetryTimes = new ValueNodeInputViewModel<int?>()
+            {
+                Name = "재시도 횟수",
+                Editor = new IntegerValueEditorViewModel(),
+                Port = null,
+            };
+            this.Inputs.Add(RetryTimes);
+
+            Accuracy = new ValueNodeInputViewModel<int?>()
+            {
+                Name = "비교 정확도",
+                Editor = new IntegerValueEditorViewModel(1,100),
+                Port = null,
+            };
+            this.Inputs.Add(Accuracy);
 
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {

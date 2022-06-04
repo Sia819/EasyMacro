@@ -61,9 +61,9 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public ValueNodeInputViewModel<int?> Accuracy { get; }
 
-        public ValueNodeOutputViewModel<IStatement> FlowIn { get; }
+        public ValueNodeInputViewModel<int?> Delay { get; }
 
-        public ValueListNodeInputViewModel<IStatement> FlowOut { get; }
+        public ValueNodeOutputViewModel<IStatement> FlowIn { get; }
 
         public ValueListNodeInputViewModel<IStatement> FlowOutOption1 { get; }
 
@@ -84,6 +84,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 templetMatch.isWantKeepFinding = IsWantKeepFind.Value ?? false;
                 templetMatch.retryTimes = RetryTimes.Value ?? 0;
                 templetMatch.accuracy = (Accuracy.Value ?? 80) / 100;
+                templetMatch.SetDelayTime(Delay.Value ?? 1000);
                 
                 templetMatch.Do();
 
@@ -168,10 +169,18 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             Accuracy = new ValueNodeInputViewModel<int?>()
             {
                 Name = "비교 정확도",
-                Editor = new IntegerValueEditorViewModel(1,100),
+                Editor = new IntegerValueEditorViewModel(1,100,80),
                 Port = null,
             };
             this.Inputs.Add(Accuracy);
+
+            Delay = new ValueNodeInputViewModel<int?>()
+            {
+                Name = "지연시간",
+                Editor = new IntegerValueEditorViewModel(0),
+                Port = null,
+            };
+            this.Inputs.Add(Delay);
 
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {
@@ -198,12 +207,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 })
             };
             this.Outputs.Add(FlowIn);
-
-            FlowOut = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
-            {
-                Name = "",
-            };
-            this.Inputs.Add(FlowOut);
 
             FlowOutOption1 = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
             {

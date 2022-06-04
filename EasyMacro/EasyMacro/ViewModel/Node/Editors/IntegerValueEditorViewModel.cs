@@ -15,9 +15,9 @@ namespace EasyMacro.ViewModel.Node.Editors
         public int MinValue { get; set; }
         public int MaxValue { get; set; }
 
-        public IntegerValueEditorViewModel(int minValue = -2147483648, int maxValue = 2147483647)
+        public IntegerValueEditorViewModel(int minValue = -2147483648, int maxValue = 2147483647, int value = 0)
         {
-            Value = 0;
+            Value = value;
             this.MinValue = (int)minValue;
             this.MaxValue = (int)maxValue;
         }

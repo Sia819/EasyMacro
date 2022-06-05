@@ -63,6 +63,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public ValueNodeInputViewModel<int?> Delay { get; }
 
+        public IntegerValueEditorViewModel delayEditor = new IntegerValueEditorViewModel(0);
+
         public ValueNodeOutputViewModel<IStatement> FlowIn { get; }
 
         public ValueListNodeInputViewModel<IStatement> FlowOutOption1 { get; }
@@ -176,11 +178,13 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
             Delay = new ValueNodeInputViewModel<int?>()
             {
-                Name = "지연시간",
-                Editor = new IntegerValueEditorViewModel(0),
+                Name = "지연시간 (1초 = 1000)",
+                Editor = delayEditor,
                 Port = null,
             };
             this.Inputs.Add(Delay);
+
+            delayEditor.Value = 1000;
 
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {

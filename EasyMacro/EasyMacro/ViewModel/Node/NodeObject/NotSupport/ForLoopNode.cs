@@ -8,6 +8,7 @@ using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
 using EasyMacro.View.Node;
 using ReactiveUI;
+using EasyMacro.ViewModel.Node.Editors;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
@@ -24,7 +25,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         public ValueListNodeInputViewModel<IStatement> LoopEndFlow { get; }
 
         public ValueNodeInputViewModel<ITypedExpression<int>> FirstIndex { get; }
-        public ValueNodeInputViewModel<ITypedExpression<int>> LastIndex { get; }
+        public ValueNodeInputViewModel<int?> LastIndex { get; }
 
         public ValueNodeOutputViewModel<ITypedExpression<int>> CurrentIndex { get; }
 
@@ -52,19 +53,21 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             };
             this.Inputs.Add(LoopEndFlow);
 
-
+            
             FirstIndex = new CodeGenInputViewModel<ITypedExpression<int>>(PortType.Integer)
             {
                 Name = "First Index",
                 Group = boundsGroup
             };
-            this.Inputs.Add(FirstIndex);
+            //this.Inputs.Add(FirstIndex);
+            
 
-            LastIndex = new CodeGenInputViewModel<ITypedExpression<int>>(PortType.Integer)
+            LastIndex = new ValueNodeInputViewModel<int?>
             {
                 Name = "Last Index",
-                Group = boundsGroup
-
+                Group = boundsGroup,
+                Editor = new IntegerValueEditorViewModel(1) { Value = 1 },
+                Port = null,
             };
             this.Inputs.Add(LastIndex);
 
@@ -80,8 +83,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                     .Select(v => {
                         value.LoopBody = new StatementSequence(LoopBodyFlow.Values.Items);
                         value.LoopEnd = new StatementSequence(LoopEndFlow.Values.Items);
-                        value.LowerBound = v.FirstI ?? new IntLiteral { Value = 0 };
-                        value.UpperBound = v.LastI ?? new IntLiteral { Value = 1 };
+                        value.LowerBound = new IntLiteral { Value = 0 };
+                        value.UpperBound = new IntLiteral { Value = v.LastI.Value };
                         return value;
                     }),
                 Group = controlFlowGroup
@@ -91,7 +94,9 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             CurrentIndex = new CodeGenOutputViewModel<ITypedExpression<int>>(PortType.Integer)
             {
                 Name = "Current Index",
-                Value = Observable.Return(new VariableReference<int> { LocalVariable = value.CurrentIndex })
+                Value = Observable.Return(new VariableReference<int> { LocalVariable = value.CurrentIndex }),
+                Editor = new IntegerValueEditorViewModel(),
+                Port = null,
             };
             this.Outputs.Add(CurrentIndex);
         }

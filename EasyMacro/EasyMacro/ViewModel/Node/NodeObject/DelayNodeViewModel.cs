@@ -26,7 +26,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             get
             {
                 if (_delay is null)
-                    _delay = new Delay(0);
+                    _delay = new Delay(1000);
                 return _delay;
             }
         }
@@ -34,7 +34,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         /// <summary>
         /// Delay Time
         /// </summary>
-        public ValueNodeInputViewModel<int?> Input { get; }
+        public ValueNodeInputViewModel<int?> Delay { get; }
 
         public ValueNodeOutputViewModel<IStatement> FlowIn { get; }
         
@@ -50,7 +50,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             {
                 CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
 
-                delay.Time = (int)Input.Value < 0 ? 0 : (int)Input.Value;
+                delay.Time = (int)Delay.Value < 0 ? 0 : (int)Delay.Value;
                 delay.Do();
 
                 foreach (var a in FlowOut.Values.Items)
@@ -66,13 +66,13 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             base.Name = "지연시키기";
 
             //TODO : 나머지 구현
-            Input = new ValueNodeInputViewModel<int?>()
+            Delay = new ValueNodeInputViewModel<int?>()
             {
-                Name = "지연시간",
-                Editor = new IntegerValueEditorViewModel(0),
+                Name = "지연시간 (1초 = 1000)",
+                Editor = new IntegerValueEditorViewModel(0) { Value = 1000 },
                 Port = null,
             };
-            this.Inputs.Add(Input);
+            this.Inputs.Add(Delay);
 
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {
@@ -95,7 +95,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Name = "",
                 Value = this.RunButton.ValueChanged.Select(_ => new NodeCompile(this.Func())
                 {
-                    Log = Input.ValueChanged.Select(input => $"Delay - {input ?? 0}")
+                    Log = Delay.ValueChanged.Select(input => $"Delay - {input ?? 0}")
                 })
             };
             this.Outputs.Add(FlowIn);

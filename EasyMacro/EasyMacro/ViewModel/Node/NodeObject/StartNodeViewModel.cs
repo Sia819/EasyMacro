@@ -4,6 +4,7 @@ using DynamicData;
 using NodeNetwork.Toolkit.ValueNode;
 using EasyMacro.View.Node;
 using ReactiveUI;
+using NodeNetwork.ViewModels;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {

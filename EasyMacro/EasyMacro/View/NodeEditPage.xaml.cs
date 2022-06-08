@@ -66,7 +66,7 @@ namespace EasyMacro.View
                     .BindTo(this, v => v.stopAutoLayoutLiveButton.Visibility);
             });
 
-            this.ViewModel = new PageViewModel();
+            this.ViewModel = PageViewModel.Instance;
         }
 
         private void debug_Click(object sender, RoutedEventArgs e)

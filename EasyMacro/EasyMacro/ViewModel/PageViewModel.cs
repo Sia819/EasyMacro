@@ -19,6 +19,8 @@ using ReactiveUI;
 
 namespace EasyMacro.ViewModel
 {
+    
+
     class NetworkBreadcrumb : BreadcrumbViewModel
     {
         #region Network
@@ -31,8 +33,12 @@ namespace EasyMacro.ViewModel
         #endregion
     }
 
+
     public class PageViewModel : ReactiveObject
     {
+        private static PageViewModel _instance;
+        public static PageViewModel Instance => _instance ??= new PageViewModel();
+
         #region Network
         private readonly ObservableAsPropertyHelper<NetworkViewModel> _network;
         public NetworkViewModel Network => _network.Value;
@@ -51,7 +57,9 @@ namespace EasyMacro.ViewModel
         public ReactiveCommand<Unit, Unit> UngroupNodes { get; }
         public ReactiveCommand<Unit, Unit> OpenGroup { get; }
 
-        public PageViewModel()
+        public StartNodeViewModel eventNode;
+
+        private PageViewModel()
         {
             this.WhenAnyValue(vm => vm.NetworkBreadcrumbBar.ActiveItem).Cast<NetworkBreadcrumb>()
                 .Select(b => b?.Network)
@@ -62,10 +70,11 @@ namespace EasyMacro.ViewModel
                 Network = new NetworkViewModel()
             });
 
-            StartNodeViewModel eventNode = new StartNodeViewModel { CanBeRemovedByUser = false };
+            eventNode = new StartNodeViewModel { CanBeRemovedByUser = false };
             Network.Nodes.Add(eventNode);
 
             NodeList.AddNodeType(() => new StartNodeViewModel());
+            NodeList.AddNodeType(() => new ReStartNodeViewModel());
             NodeList.AddNodeType(() => new ForLoopNode());
             NodeList.AddNodeType(() => new IntLiteralNode());
             NodeList.AddNodeType(() => new PrintNode());

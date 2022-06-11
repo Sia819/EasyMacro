@@ -10,7 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using static EasyMacro.ViewModel.ImageManagerViewModel;
+//using static EasyMacro.ViewModel.ImageManagerViewModel;
 
 namespace EasyMacro.View.UC
 {
@@ -37,14 +37,14 @@ namespace EasyMacro.View.UC
         public ImageManagerView()
         {
             InitializeComponent();
-            this.ViewModel = new ImageManagerViewModel();
+            this.ViewModel = ImageManagerViewModel.Instance;
 
             // 디자이너 미리보기
             Bitmap unknownImage = UnknownQuestionImage();
-            PreviewImages = new ObservableCollection<ImageList>();
-            PreviewImages.Add(new ImageList { FilePath = "preview/myFilePath/1.png", Name = "ImageName1", PreviewImage = unknownImage });
-            PreviewImages.Add(new ImageList { FilePath = "preview/myFilePath/2.png", Name = "ImageName2", PreviewImage = unknownImage });
-            PreviewImages.Add(new ImageList { FilePath = "preview/myFilePath/3.png", Name = "ImageName3", PreviewImage = unknownImage });
+            PreviewImages = new ObservableCollection<ImageManagerViewModel.ImageList>();
+            PreviewImages.Add(new ImageManagerViewModel.ImageList { FilePath = "preview/myFilePath/1.png", Name = "ImageName1", PreviewImage = unknownImage });
+            PreviewImages.Add(new ImageManagerViewModel.ImageList { FilePath = "preview/myFilePath/2.png", Name = "ImageName2", PreviewImage = unknownImage });
+            PreviewImages.Add(new ImageManagerViewModel.ImageList { FilePath = "preview/myFilePath/3.png", Name = "ImageName3", PreviewImage = unknownImage });
 
             this.WhenActivated(d =>
             {
@@ -57,10 +57,11 @@ namespace EasyMacro.View.UC
             });
         }
 
-        public ObservableCollection<ImageList> PreviewImages { get; set; }
+        public ObservableCollection<ImageManagerViewModel.ImageList> PreviewImages { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        // 물음표 이미지 만들기
         public Bitmap UnknownQuestionImage()
         {
             System.Drawing.Image unknownImage = new Bitmap(100, 100);

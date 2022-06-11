@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EasyMacro.View.Node.Editors"
              mc:Ignorable="d" 
-             d:DesignHeight="30" d:DesignWidth="150">
+             d:DesignHeight="20" d:DesignWidth="100">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -15,7 +15,32 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <ComboBox Name="imageSelector">
-         
-    </ComboBox>
+    <Grid Height="20">
+        <Border CornerRadius="6">
+            <Border.OpacityMask>
+                <VisualBrush>
+                    <VisualBrush.Visual>
+                        <Border Background="Black"
+                                    SnapsToDevicePixels="True"
+                                    CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource AncestorType=Border}}"
+                                    Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Border}}"
+                                    Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Border}}" />
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Border.OpacityMask>
+
+            <ComboBox Name="imageSelector" ItemsSource="{Binding RegisterdImages}" 
+                      SelectionChanged="imageSelector_SelectionChanged"
+                      MinWidth="100" BorderThickness="0" VerticalAlignment="Center">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Key}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+        </Border>
+
+        <Border CornerRadius="5" BorderThickness="1" BorderBrush="LightGray" />
+    </Grid>
 </UserControl>

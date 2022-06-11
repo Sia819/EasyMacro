@@ -19,8 +19,6 @@ namespace EasyMacro.Model.Node
         public string CurrentValue => _currentValue.Value;
         private readonly ObservableAsPropertyHelper<string> _currentValue;
 
-
-
         public string Compile(CompilerContext context)
         {
             MyAction.Invoke();

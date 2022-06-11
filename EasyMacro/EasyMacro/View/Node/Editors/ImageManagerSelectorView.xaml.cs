@@ -2,6 +2,7 @@
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
+using EasyMacro.ViewModel;
 using EasyMacro.ViewModel.Node.Editors;
 using ReactiveUI;
 
@@ -36,7 +37,28 @@ namespace EasyMacro.View.Node.Editors
         {
             InitializeComponent();
 
+            this.DataContext = ImageManagerViewModel.Instance; 
+            this.ViewModel = new ImageManagerSelectorViewModel();
+
+            //this.WhenActivated(d =>
+            //{
+            //    // ImageManagerViewModel 에 있는 Dictionary에 바인딩합니다.
+            //    this.OneWayBind(ImageManagerViewModel.Instance, vm => vm.RegisterdImages, v => v.imageSelector.ItemsSource).DisposeWith(d);
+            //});
+        }
+
+        /// <summary> 사용자가 ComboBox의 아이템을 변경함. </summary>
+        private void imageSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string selectedImageName = ((System.Collections.Generic.KeyValuePair<string, ImageManagerViewModel.ImageList>)(sender as ComboBox).SelectedValue).Key; // Selected ComboBox item string
+            if (selectedImageName is null)
+                throw new Exception("ComboBox에서 선택된 string은 null");
+
             
+            if (this.ViewModel.SelectedBitmap is not null) this.ViewModel.SelectedBitmap.Dispose(); // 이미지 교체전, 이전 이미지가 존재시 메모리해제
+            this.ViewModel.SelectedBitmap = ImageManagerViewModel.Instance.RegisterdImages[selectedImageName].ImageClone(); // 이미지를 클론함.
+
+            this.ViewModel.Value = selectedImageName; // 이후 Value-Changed 옵저버가 반응하여, 비트맵을 TemplateMatch객체에 전달함.
         }
     }
 }

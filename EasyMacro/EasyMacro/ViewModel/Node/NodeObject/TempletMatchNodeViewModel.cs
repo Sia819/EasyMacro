@@ -36,24 +36,20 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         /// Delay Time
         /// </summary>
         /// 
-        private static ImageManagerViewModel _imgMgr;
-        private ImageManagerViewModel imgMgr
-        {
-            get
-            {
-                if (_imgMgr is null)
-                    _imgMgr = new ImageManagerViewModel();
-                return _imgMgr;
-            }
-        }
+        // private static ImageManagerViewModel _imgMgr;
+        // private ImageManagerViewModel imgMgr
+        // {
+        //     get
+        //     {
+        //         if (_imgMgr is null)
+        //             _imgMgr = new ImageManagerViewModel();
+        //         return _imgMgr;
+        //     }
+        // }
 
         public ValueNodeInputViewModel<string> BitmapDir { get; }
 
-        public StringValueEditorViewModel dirEditor = new StringValueEditorViewModel();
-
         public ValueNodeInputViewModel<string> WindowName { get; }
-
-        public StringValueEditorViewModel winnameEditor = new StringValueEditorViewModel();
 
         public ValueNodeInputViewModel<bool?> IsWantKeepFind { get; }
 
@@ -75,19 +71,18 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public bool IsCanExcute { get; set; } = true;
 
-        Action Func()
+        private Action Func()
         {
             Action action = () =>
             {
                 CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
 
-                templetMatch.TargetImg = new Bitmap(BitmapDir.Value);
                 templetMatch.screenCapture.WindowName = WindowName.Value;
                 templetMatch.isWantKeepFinding = IsWantKeepFind.Value ?? false;
                 templetMatch.retryTimes = RetryTimes.Value ?? 0;
                 templetMatch.accuracy = (Accuracy.Value ?? 80) / 100;
                 templetMatch.SetDelayTime(Delay.Value ?? 1000);
-                
+
                 templetMatch.Do();
 
                 ValueListNodeInputViewModel<IStatement> selectedFlowout;
@@ -109,20 +104,26 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return action;
         }
 
-        Action ImgBindToApi()
+        // TODO : 이미지를 EasyMacroAPI의 템플릿매치에 사용될이미지로 지정합니다.
+        private Action ImgBindToApi()
         {
             Action action = () =>
             {
-                templetMatch.TargetImg = imgMgr.CopyImg(dirEditor.Value);
+                if (String.IsNullOrEmpty((BitmapDir.Editor as ImageManagerSelectorViewModel).Value) is false) // 셀렉터 ComboBox의 ViewModel-Value값이 null 또는 "" 가 아닌 경우
+                {
+                    // dispose 작업은 ImageManagerSelectorView의 imageSelector_SelectionChanged() 에서 함.
+                    templetMatch.TargetImg = (BitmapDir.Editor as ImageManagerSelectorViewModel).SelectedBitmap;
+                }
             };
             return action;
         }
 
-        Action winnameToApi()
+        private Action WinnameToApi()
         {
             Action action = () =>
             {
-                templetMatch.screenCapture.WindowName = winnameEditor.Value;
+                // TODO : TextBox의 String을 받는 구조 -> 창 찾기 컨트롤의 값을 받는 구조.
+                templetMatch.screenCapture.WindowName = (this.WindowName.Editor as StringValueEditorViewModel).Value;
             };
             return action;
         }
@@ -135,22 +136,24 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             BitmapDir = new ValueNodeInputViewModel<string>()
             {
                 Name = "사진파일 경로",
-                Editor = dirEditor,
+                Editor = new ImageManagerSelectorViewModel(),
                 Port = null,
             };
+            (BitmapDir.Editor as ImageManagerSelectorViewModel).ValueChanged.Do(value =>
+            { 
+                System.Windows.MessageBox.Show(value); 
+            });
             this.Inputs.Add(BitmapDir);
-
-            dirEditor.ValueChanged.Select(_ => ImgBindToApi());
 
             WindowName = new ValueNodeInputViewModel<string>()
             {
                 Name = "프로세스 이름",
-                Editor = winnameEditor,
+                Editor = new StringValueEditorViewModel() { },
                 Port = null
             };
+            (WindowName.Editor as StringValueEditorViewModel).ValueChanged.Select(_ => WinnameToApi());
             this.Inputs.Add(WindowName);
 
-            winnameEditor.ValueChanged.Select(_ => winnameToApi());
 
             IsWantKeepFind = new ValueNodeInputViewModel<bool?>()
             {
@@ -171,7 +174,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             Accuracy = new ValueNodeInputViewModel<int?>()
             {
                 Name = "비교 정확도",
-                Editor = new IntegerValueEditorViewModel(1,100,80),
+                Editor = new IntegerValueEditorViewModel(1, 100, 80),
                 Port = null,
             };
             this.Inputs.Add(Accuracy);
@@ -189,7 +192,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {
                 Port = null,
-                
+
                 Editor = new RunButtonViewModel()
                 {
                     RunScript = ReactiveCommand.Create
@@ -217,7 +220,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Name = "이미지 찾기 성공",
             };
             this.Inputs.Add(FlowOutOption1);
-            
+
             FlowOutOption2 = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
             {
                 Name = "이미지 찾기 실패",

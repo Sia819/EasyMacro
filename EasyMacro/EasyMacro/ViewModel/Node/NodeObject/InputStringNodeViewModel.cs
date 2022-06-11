@@ -77,14 +77,10 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {
                 Port = null,
-                
+
                 Editor = new RunButtonViewModel()
                 {
-                    RunScript = ReactiveCommand.Create
-        (
-            Func(),
-            this.WhenAnyValue(vm => vm.IsCanExcute)
-        )
+                    RunScript = ReactiveCommand.Create(Func(), this.WhenAnyValue(vm => vm.IsCanExcute) )
                 }
             };
             this.Inputs.Add(this.RunButton);

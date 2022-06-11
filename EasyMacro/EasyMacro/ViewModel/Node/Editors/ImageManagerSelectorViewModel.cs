@@ -1,6 +1,7 @@
 ﻿using EasyMacro.View.Node.Editors;
 using NodeNetwork.Toolkit.ValueNode;
 using ReactiveUI;
+using System.Drawing;
 
 namespace EasyMacro.ViewModel.Node.Editors
 {
@@ -11,9 +12,11 @@ namespace EasyMacro.ViewModel.Node.Editors
             Splat.Locator.CurrentMutable.Register(() => new ImageManagerSelectorView(), typeof(IViewFor<ImageManagerSelectorViewModel>));
         }
 
+        public Bitmap SelectedBitmap { get; set; }
+
         public ImageManagerSelectorViewModel()
         {
-            Value = "";
+            Value = null;
         }
     }
 }

@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace EasyMacroAPI.Model
 {
-    public interface IMessageReceiver
-    {
-        public bool IsConfigured { get; }
-
-        public delegate void HotkeyDelegate();
-
-        public void AddHotkey(Keys keys, KeyModifiers keyModifiers, HotkeyDelegate hotkeyDelegate);
-
-        public void RemoveHotkey(Keys keys, KeyModifiers keyModifiers);
-    }
+    // public interface IMessageReceiver
+    // {
+    //     public bool IsConfigured { get; }
+    // 
+    //     public delegate void HotkeyDelegate();
+    // 
+    //     public void AddKeyboardHotkey(Keys keys, KeyModifiers keyModifiers, HotkeyDelegate hotkeyDelegate);
+    // 
+    //     public void RemoveKeyboardHotkey(Keys keys, KeyModifiers keyModifiers);
+    // }
 }

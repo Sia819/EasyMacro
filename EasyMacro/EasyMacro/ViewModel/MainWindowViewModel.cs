@@ -4,13 +4,11 @@ using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
-
 using EasyMacro.Model;
 using EasyMacro.Model.DisplayMacro;
 using EasyMacro.ViewModel.Node.NodeObject;
 using static EasyMacro.Common.DebugState;
 using EasyMacroAPI;
-
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Win32;
 using DynamicData;
@@ -103,7 +101,7 @@ namespace EasyMacro.ViewModel
 
         #region Private Field
         // EasyMacroAPI 라이브러리의 MacroManager, 매크로 로직 관리 매니저
-        private MacroManager macroManager;
+        //private MacroManager macroManager;
         #endregion
 
 
@@ -119,7 +117,7 @@ namespace EasyMacro.ViewModel
             IsToolboxFolded = false; // 기본적으로 도구상자는 열려있습니다.
 
             // 매크로에 대한 초기화
-            macroManager = MacroManager.Instance;
+            // macroManager = MacroManager.Instance;
             // 디자이너에서만 보여지는 템플릿
             DesignerList = new ObservableCollection<IMacro>()
             {
@@ -172,7 +170,7 @@ namespace EasyMacro.ViewModel
         /// </summary>
         private void Test()
         {
-            MacroManager macroManager = MacroManager.Instance;
+            // MacroManager macroManager = MacroManager.Instance;
             //파일명 넣을것
             //macroManager.InsertList(new EasyMacroAPI.Command.TempletMatch(@"C:\target.png", "로컬 디스크 (C:)"));
             //macroManager.DoOnce(0);
@@ -183,7 +181,7 @@ namespace EasyMacro.ViewModel
         /// </summary>
         private void Save()
         {
-            macroManager.SaveData();
+            // macroManager.SaveData();
         }
 
         /// <summary>
@@ -208,35 +206,35 @@ namespace EasyMacro.ViewModel
                 MessageBox.Show("파일 열기 작업이 취소되었습니다.");
             }
 
-            macroManager.LoadData(macroPath);
+            // macroManager.LoadData(macroPath);
             LogicList.Clear();
 
             // 로직의 실체는 MacroManager로드 기능에 의해 이미 로드되었고, UI에는 아직 표시되지 않았으므로
             // 로드된 매크로를 기반으로, 각각 종류에 맞게 UI에 표시되도록 합니다.
-            foreach (var macroAction in macroManager.ActionList)
-            {
-                switch (macroAction.MacroType)
-                {
-                    case EasyMacroAPI.Model.MacroTypes.Delay:
-                        // 딜레이
-                        LogicList.Add(new SleepMacro(macroAction));
-                        break;
-                    case EasyMacroAPI.Model.MacroTypes.MouseMove:
-                        // 마우스 이동
-                        LogicList.Add(new MouseMacro(macroAction)); // 마우스 매크로는 어떤 종류의 마우스매크로인지 따로 체킹한다.
-                        break;
-                    case EasyMacroAPI.Model.MacroTypes.MouseClick:
-                        // 마우스 클릭
-                        LogicList.Add(new MouseMacro(macroAction));
-                        break;
-                    default:
-                        // 구현되지 않은 매크로
-                        if (IsDebugMode)
-                            throw new NotImplementedException($"지정하지 않은 매크로 타입\"{macroAction}\"이 있습니다.\n구현해 주세요!");
-                        LogicList.Add(new UndefinedMacro(macroAction));
-                        break;
-                }
-            }
+            // foreach (var macroAction in macroManager.ActionList)
+            // {
+            //     switch (macroAction.MacroType)
+            //     {
+            //         case EasyMacroAPI.Model.MacroTypes.Delay:
+            //             // 딜레이
+            //             LogicList.Add(new SleepMacro(macroAction));
+            //             break;
+            //         case EasyMacroAPI.Model.MacroTypes.MouseMove:
+            //             // 마우스 이동
+            //             LogicList.Add(new MouseMacro(macroAction)); // 마우스 매크로는 어떤 종류의 마우스매크로인지 따로 체킹한다.
+            //             break;
+            //         case EasyMacroAPI.Model.MacroTypes.MouseClick:
+            //             // 마우스 클릭
+            //             LogicList.Add(new MouseMacro(macroAction));
+            //             break;
+            //         default:
+            //             // 구현되지 않은 매크로
+            //             if (IsDebugMode)
+            //                 throw new NotImplementedException($"지정하지 않은 매크로 타입\"{macroAction}\"이 있습니다.\n구현해 주세요!");
+            //             LogicList.Add(new UndefinedMacro(macroAction));
+            //             break;
+            //     }
+            // }
         }
 
         /// <summary>
@@ -256,7 +254,7 @@ namespace EasyMacro.ViewModel
             MessageBox.Show("Start Commend Excuted!");
 
             //macroManager.DoOnce(0);
-            macroManager.StartMacro();
+            // macroManager.StartMacro();
         }
 
         private void ToggleFoldToolbox()

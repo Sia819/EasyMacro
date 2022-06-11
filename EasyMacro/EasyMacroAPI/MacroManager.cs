@@ -15,6 +15,7 @@ using System.Drawing;
 
 namespace EasyMacroAPI
 {
+    /*
     public class MacroManager
     {
         public static MacroManager Instance => instance ??= new MacroManager();
@@ -116,14 +117,14 @@ namespace EasyMacroAPI
             isMacroStarted = true;
             if (hotKey.IsConfigured == false)
                 throw new Exception("매크로 리시버가 구성되지 않았습니다. WinProc구현 클래스에 인터페이스를 상속하여 IMessageReceiver 프로퍼티에 등록하여주세요.");
-            hotKey.AddHotkey(Keys.F9, KeyModifiers.None, StopMacro);
+            hotKey.AddKeyboardHotkey(Keys.F9, KeyModifiers.None, StopMacro);
             macroThread.Start();
         }
 
         public void StopMacro()
         {
             isMacroStarted = false; // 항상 찾아야되는 템플릿 매치와, 기본적이 매크로 스레드 모두 정지.
-            hotKey.RemoveHotkey(Keys.F9, KeyModifiers.None);
+            hotKey.RemoveKeyboardHotkey(Keys.F9, KeyModifiers.None);
             Console.WriteLine("Stopped");
         }
 
@@ -213,4 +214,5 @@ namespace EasyMacroAPI
             }
         }
     }
+    */
 }

@@ -39,8 +39,8 @@ namespace EasyMacro.ViewModel.Node.Editors
         {
             HookLib.GlobalMouseKeyHook.StartMouseHook();
             // 마우스 오른쪽 키가 눌려졌을 때, 등록한 콜백함수가 호출됨.
-            HookLib.GlobalMouseKeyHook.RegisterMouseHotkey(HookLib.GlobalMouseKeyHook.mouse_status.Right,
-                                                            new HookLib.GlobalMouseKeyHook.HotkeyDelegate(mouseCallback));
+            HookLib.GlobalMouseKeyHook.AddMouseHotkey(HookLib.GlobalMouseKeyHook.mouse_button.Right,
+                                                            new HookLib.GlobalMouseKeyHook.MouseHotkeyDelegate(mouseCallback));
         }
 
         private void mouseCallback(PInvoke.POINT point)
@@ -59,7 +59,7 @@ namespace EasyMacro.ViewModel.Node.Editors
                 this.Y.Value = point.y;
             }
             HookLib.GlobalMouseKeyHook.StopMouseHook();
-            HookLib.GlobalMouseKeyHook.UnregisterMouseHotkey(HookLib.GlobalMouseKeyHook.mouse_status.Right);
+            HookLib.GlobalMouseKeyHook.RemoveMouseHotkey(HookLib.GlobalMouseKeyHook.mouse_button.Right);
         }
 
         public class PointRecordEditorViewModelReactiveObject : ReactiveObject

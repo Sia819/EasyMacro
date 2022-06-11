@@ -10,71 +10,136 @@ namespace HookLib
     using PInvoke;
     using System.Windows.Threading;
 
-    public class GlobalKeyboardHook : IMessageReceiver
+    public static class GlobalKeyboardHook
     {
-        #region IMessageReceiver 인터페이스 구현체
-        public bool IsConfigured => true;
-        public void AddHotkey(Keys keys, KeyModifiers keyModifiers, IMessageReceiver.HotkeyDelegate hotkeyDelegate)
+        private static SafeHookHandle hookHandle = null;
+
+        private static WindowsHookDelegate callbackDelegate = null;
+        // 모든 감시할 키보드 키
+        private static Dictionary<Keys, bool> keyboardKeyStatus = null;
+        // 등록된 핫키에 대응하는 델리게이트
+        private static Dictionary<(Keys, KeyModifiers), KeyboardHotkeyDelegate> registeredHotkey = null;
+
+        public delegate void KeyboardHotkeyDelegate(Keys keys, KeyModifiers keyModifiers = KeyModifiers.None);
+
+        public static void AddKeyboardHotkey(Keys keys, KeyModifiers keyModifiers, KeyboardHotkeyDelegate hotkeyDelegate)
         {
-            registeredHotkey.Add((keys, keyModifiers), hotkeyDelegate);
+            if (registeredHotkey.ContainsKey((keys, keyModifiers)) is not true)   // Dupe regist check
+                registeredHotkey.Add((keys, keyModifiers), hotkeyDelegate);
         }
-        public void RemoveHotkey(Keys keys, KeyModifiers keyModifiers)
+
+        public static void RemoveKeyboardHotkey(Keys keys, KeyModifiers keyModifiers)
         {
             registeredHotkey.Remove((keys, keyModifiers));
         }
-        #endregion
 
         private static Keys KeyModifiersToKeyConverter(KeyModifiers keyModifiers)
         {
             switch (keyModifiers)
             {
-                case KeyModifiers.None:
-                    return Keys.None;
-                case KeyModifiers.Alt:
-                    //return Keys.LeftAlt;
-                    return Keys.Alt;
-                case KeyModifiers.Control:
-                    //return Keys.LeftCtrl;
-                    return Keys.Alt;
-                case KeyModifiers.Shift:
-                    //return Keys.LeftShift;
-                    return Keys.Shift;
-                case KeyModifiers.Windows:
-                    return Keys.LWin;
+                case KeyModifiers.None: return Keys.None;
+                case KeyModifiers.Control: return Keys.Control;    //return Keys.LeftCtrl;
+                case KeyModifiers.Alt: return Keys.Alt;    //return Keys.LeftAlt;
+                case KeyModifiers.Shift: return Keys.Shift;  //return Keys.LeftShift;
+                case KeyModifiers.Windows: return Keys.LWin;
 
-                default:
-                    return Keys.None;
+                default: return Keys.None;
             }
         }
 
-        //public static int hookHandle = 0;
-        private static SafeHookHandle hookHandle = null;
-        private static WindowsHookDelegate callbackDelegate;
+        private static KeyModifiers KeyToKeyModifiersConverter(Keys keys)
+        {
+            switch (keys)
+            {
+                case Keys.None: return KeyModifiers.None;
+                case Keys.Control: return KeyModifiers.Control;    //return Keys.LeftCtrl;
+                case Keys.ControlKey: return KeyModifiers.Control;    //return Keys.LeftCtrl;
+                case Keys.LControlKey: return KeyModifiers.Control;    //return Keys.LeftCtrl;
+                case Keys.RControlKey: return KeyModifiers.Control;    //return Keys.LeftCtrl;
+                case Keys.Shift: return KeyModifiers.Shift;  //return Keys.LeftShift;
+                case Keys.ShiftKey: return KeyModifiers.Shift;  //return Keys.LeftShift;
+                case Keys.LShiftKey: return KeyModifiers.Shift;  //return Keys.LeftShift;
+                case Keys.RShiftKey: return KeyModifiers.Shift;  //return Keys.LeftShift;
+                case Keys.Alt: return KeyModifiers.Alt;    //return Keys.LeftAlt;
+                case Keys.LWin: return KeyModifiers.Windows;
+                case Keys.RWin: return KeyModifiers.Windows;
+                case Keys.CapsLock: return KeyModifiers.CapsLock;
 
-        // 모든 감시할 키보드 키
-        private static Dictionary<Keys, bool> keyboardKeyStatus = null;
-        // 등록된 핫키에 대응하는 델리게이트
-        private static Dictionary<(Keys, KeyModifiers), IMessageReceiver.HotkeyDelegate> registeredHotkey = null;
+                default: return KeyModifiers.NotSupport;
+            }
+        }
+
+        private static bool KeyModifiersPressedFlagsCheck(KeyModifiers keyModifiers)
+        {
+            KeyModifiers pressedState = KeyModifiers.None;
+            if (keyboardKeyStatus[Keys.Control]
+                || keyboardKeyStatus[Keys.ControlKey]
+                || keyboardKeyStatus[Keys.LControlKey]
+                || keyboardKeyStatus[Keys.RControlKey])
+            { 
+                pressedState |= KeyModifiers.Control;
+            }
+            if (keyboardKeyStatus[Keys.Shift]
+                || keyboardKeyStatus[Keys.ShiftKey]
+                || keyboardKeyStatus[Keys.LShiftKey]
+                || keyboardKeyStatus[Keys.RShiftKey])
+            {
+                pressedState |= KeyModifiers.Shift;
+            }
+            if (keyboardKeyStatus[Keys.Alt]
+                || keyboardKeyStatus[Keys.LMenu]
+                || keyboardKeyStatus[Keys.RMenu]
+                || keyboardKeyStatus[Keys.Menu])
+            {
+                pressedState |= KeyModifiers.Alt;
+            }
+            if (keyboardKeyStatus[Keys.LWin]
+                || keyboardKeyStatus[Keys.RWin])
+            {
+                pressedState |= KeyModifiers.Windows;
+            }
+            if (keyboardKeyStatus[Keys.CapsLock])
+            {
+                pressedState |= KeyModifiers.CapsLock;
+            }
+            return (pressedState == keyModifiers);
+        }
+
+        private static bool IsKeyModifiersPressed()
+        {
+            return keyboardKeyStatus[Keys.Control]
+                    || keyboardKeyStatus[Keys.ControlKey]
+                    || keyboardKeyStatus[Keys.LControlKey]
+                    || keyboardKeyStatus[Keys.RControlKey]
+                    || keyboardKeyStatus[Keys.Shift]
+                    || keyboardKeyStatus[Keys.ShiftKey]
+                    || keyboardKeyStatus[Keys.LShiftKey]
+                    || keyboardKeyStatus[Keys.RShiftKey]
+                    || keyboardKeyStatus[Keys.Alt]
+                    || keyboardKeyStatus[Keys.LMenu]
+                    || keyboardKeyStatus[Keys.RMenu]
+                    || keyboardKeyStatus[Keys.Menu]
+                    || keyboardKeyStatus[Keys.LWin]
+                    || keyboardKeyStatus[Keys.RWin]
+                    || keyboardKeyStatus[Keys.CapsLock];
+        }
+
+
 
         public static void StartKeyboardHook()
         {
-            callbackDelegate = new WindowsHookDelegate(KeyboardCallBack);
-            if (hookHandle is not null)
+
+            if (hookHandle is not null) return;
+            if (callbackDelegate is null) callbackDelegate = new WindowsHookDelegate(KeyboardCallBack);
+            if (registeredHotkey == null) registeredHotkey = new();
+            // 키보드 버튼 상태 딕셔너리 초기화
+            if (keyboardKeyStatus is null)
             {
-                if (!hookHandle.IsInvalid || !hookHandle.IsClosed)
-                    return;
-            }
-            if (keyboardKeyStatus == null)
-            {
-                keyboardKeyStatus = new Dictionary<Keys, bool>();
+                keyboardKeyStatus = new();
                 foreach (Keys key in Enum.GetValues(typeof(Keys)))
                 {
                     if (keyboardKeyStatus.ContainsKey(key) is not true) keyboardKeyStatus.Add(key, false);
                 }
-            }
-            if (registeredHotkey == null)
-            {
-                registeredHotkey = new Dictionary<(Keys, KeyModifiers), IMessageReceiver.HotkeyDelegate>();
             }
 
             hookHandle = SetWindowsHookEx(User32.WindowsHookType.WH_KEYBOARD_LL, callbackDelegate, IntPtr.Zero, 0);  // 키보드 훅
@@ -82,41 +147,44 @@ namespace HookLib
 
         public static void StopKeyboardHook()
         {
-            hookHandle.Dispose();
+            hookHandle.Dispose();   // Hook 핸들 해제
+            hookHandle = null;      // Hook 중이 아닙니다.
         }
 
         public static int KeyboardCallBack(int nCode, IntPtr wParam, IntPtr lParam)
         {
             if (lParam != IntPtr.Zero)
             {
-                KeyboardHookStruct? keyboardInput = Marshal.PtrToStructure<KeyboardHookStruct>(lParam);
+                KeyboardHookStruct keyboardInput = Marshal.PtrToStructure<KeyboardHookStruct>(lParam);
+                Keys key = (Keys)keyboardInput.vkCode;
 
-                if (keyboardInput != null)
+                // 키보드 키 상태 상시 체크 Dictionary 상태 변경
+                bool push = ((int)wParam == (int)User32.WindowMessage.WM_KEYDOWN || (int)wParam == (int)User32.WindowMessage.WM_SYSKEYDOWN) ? true : false;
+                keyboardKeyStatus[key] = push;
+
+                // 실행할 핫키 Dictionary에 등록된 델리게이트를 실행
+                foreach (KeyValuePair<(Keys, KeyModifiers), KeyboardHotkeyDelegate> pair in registeredHotkey)
                 {
-                    Keys key = (Keys)keyboardInput.vkCode;
-                    bool push = ((int)wParam == (int)User32.WindowMessage.WM_KEYDOWN || (int)wParam == (int)User32.WindowMessage.WM_SYSKEYDOWN) ? true : false;
+                    bool InvokeRequire = false;
+                    if (keyboardKeyStatus[pair.Key.Item1]) // 해당되는 키가 눌려짐.
+                        if (pair.Key.Item2 == KeyModifiers.None && !IsKeyModifiersPressed()) InvokeRequire = true; // None일 경우, 어떤 조합키도 눌려지면 안됨.
+                        else if (pair.Key.Item2 != KeyModifiers.None && KeyModifiersPressedFlagsCheck(pair.Key.Item2)) InvokeRequire = true; // None이 아닌경우, 해당하는 키가 눌러져야됨.
+                        else if (pair.Key.Item1 == Keys.AnyKey) InvokeRequire = true; // 아무 키나 눌렸을 때 동작하도록 설정된 경우
 
-                    keyboardKeyStatus[key] = push;  // 상태변경
-
-                    // Debug
-                    Console.WriteLine("(Key : {0}, push : {1}", key, push);
-
-                    foreach (KeyValuePair<(Keys, KeyModifiers), IMessageReceiver.HotkeyDelegate> pair in registeredHotkey)
+                    if (InvokeRequire)
                     {
-                        // TODO : KeyModifiers가 동시에 두개 들어오면 구분문제?
-                        if (keyboardKeyStatus[pair.Key.Item1] && keyboardKeyStatus[KeyModifiersToKeyConverter(pair.Key.Item2)])
-                        {
-                            pair.Value.Invoke();
-                        }
+                        pair.Value.Invoke(key, pair.Key.Item2);
                     }
-
                 }
+
+                // Debug - Console
+                Console.WriteLine("(Key : {0}, push : {1}", key, push);
             }
             return CallNextHookEx(hookHandle.DangerousGetHandle(), nCode, wParam, lParam);
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        private class KeyboardHookStruct
+        private struct KeyboardHookStruct
         {
             /// <summary>
             /// Specifies a virtual-key code. The code must be a value in the range 1 to 254.
@@ -148,22 +216,19 @@ namespace HookLib
             /// </summary>
             public int dwExtraInfo;
         }
-
     }
 
     public static class GlobalMouseKeyHook
     {
-        // GlobalMouseKeyHook는 EasyMacroAPI 에서 요구하지 않기 때문에 EasyMacroAPI.IMessageReceiver 인터페이스를 구현하지 않아도 됩니다.
-
         /// <summary> SafeHandle of Hook from Windows API, received by "SetWindowsHookEx" method. </summary>
         public static SafeHookHandle hookHandle = null;
 
         // RegisterMouseHotkey 함수로, 이 클래스에 등록되는 콜백함수들은 좌표를 반환합니다.
-        public delegate void HotkeyDelegate(POINT point);
+        public delegate void MouseHotkeyDelegate(POINT point);
 
         private static WindowsHookDelegate callbackDelegate = null;
-        private static Dictionary<mouse_status, bool> mouseKeyStatus = null;
-        private static Dictionary<mouse_status, HotkeyDelegate> registeredHotkey = null;
+        private static Dictionary<mouse_button, bool> mouseKeyStatus = null;
+        private static Dictionary<mouse_button, MouseHotkeyDelegate> registeredHotkey = null;
         private static Dispatcher dispatcher = null;
 
         /// <summary> 마우스 훅을 시작합니다. </summary>
@@ -171,19 +236,21 @@ namespace HookLib
         {
             // Dupe started check
             if (hookHandle is not null) return;
-
             // Initialize static member
-            if (callbackDelegate is null) callbackDelegate = new(MouseCallBack);
+            if (callbackDelegate is null) callbackDelegate = new WindowsHookDelegate(MouseCallBack);
+            if (registeredHotkey is null) registeredHotkey = new();
+            // 마우스 버튼 상태 딕셔너리 초기화
             if (mouseKeyStatus is null)
             {
                 mouseKeyStatus = new();
-                foreach (mouse_status pair in Enum.GetValues(typeof(mouse_status)))
-                    if (pair != mouse_status.NotSupport) mouseKeyStatus.Add(pair, false);
-
+                foreach (mouse_button pair in Enum.GetValues(typeof(mouse_button)))
+                {
+                    if (pair != mouse_button.NotSupport) mouseKeyStatus.Add(pair, false);
+                }
             }
-            if (registeredHotkey is null) registeredHotkey = new();
 
-            hookHandle = SetWindowsHookEx(User32.WindowsHookType.WH_MOUSE_LL, callbackDelegate, IntPtr.Zero, 0);  // 키보드 훅
+
+            hookHandle = SetWindowsHookEx(User32.WindowsHookType.WH_MOUSE_LL, callbackDelegate, IntPtr.Zero, 0);  // 마우스 훅
         }
 
         /// <summary> 마우스 훅을 종료합니다. </summary>
@@ -198,11 +265,13 @@ namespace HookLib
             if (lParam != IntPtr.Zero)
             {
                 MSLLHOOKSTRUCT mouseInput = Marshal.PtrToStructure<MSLLHOOKSTRUCT>(lParam);     // mouse data of pt, wheel, timespan and ect
-                mouse_status status = windowMessageToMouseStatus((WindowMessage)(int)wParam, out bool isPush);   // mouse key
 
-                mouseKeyStatus[status] = isPush;    // 상태변경
+                // 마우스 키 상태 상시 체크 Dictionary 상태 변경
+                mouse_button status = windowMessageToMouseStatus((WindowMessage)(int)wParam, out bool isPush);
+                mouseKeyStatus[status] = isPush;
 
-                foreach (KeyValuePair<mouse_status, HotkeyDelegate> i in registeredHotkey)  // check registerd hotkey delegate
+                // 실행할 핫키 Dictionary에 등록된 델리게이트를 실행
+                foreach (KeyValuePair<mouse_button, MouseHotkeyDelegate> i in registeredHotkey)  // check registerd hotkey delegate
                 {
                     if (mouseKeyStatus[i.Key] == true) // registered key has pushed
                     {
@@ -210,9 +279,13 @@ namespace HookLib
                         else dispatcher.BeginInvoke(i.Value, mouseInput.pt);
                         mouseKeyStatus[i.Key] = false;
                     }
+                    else if (i.Key == mouse_button.AnyKey)
+                    {// 아무 키나 눌렸을 때 동작하도록 설정된 경우
+                        i.Value.Invoke(mouseInput.pt);
+                    }
                 }
 
-                //Debug
+                //Debug - Console
                 // Console.WriteLine(
                 //     "(pt:({0}, {1}), mouseData:{2}, flags:{3}, time:{4}, dwExtraInfo:{5}",
                 //     mouseInput.pt.x,
@@ -228,13 +301,13 @@ namespace HookLib
         /// <summary>
         /// Hook 작업이 종료되어도, 등록된 Delegate가 제거되지 않으므로 사용시 주의가 필요합니다.
         /// </summary>
-        public static void RegisterMouseHotkey(mouse_status status, HotkeyDelegate hotkeyDelegate)
+        public static void AddMouseHotkey(mouse_button button, MouseHotkeyDelegate hotkeyDelegate)
         {
-            if (registeredHotkey.ContainsKey(status) is not true)   // Dupe regist check
-                registeredHotkey.Add(status, hotkeyDelegate);
+            if (registeredHotkey.ContainsKey(button) is not true)   // Dupe regist check
+                registeredHotkey.Add(button, hotkeyDelegate);
         }
-        
-        public static void UnregisterMouseHotkey(mouse_status status)
+
+        public static void RemoveMouseHotkey(mouse_button status)
         {
             registeredHotkey.Remove(status);
         }
@@ -256,23 +329,24 @@ namespace HookLib
             public UIntPtr dwExtraInfo;
         }
 
-        private static mouse_status windowMessageToMouseStatus(WindowMessage message, out bool isPush)
+        private static mouse_button windowMessageToMouseStatus(WindowMessage message, out bool isPush)
         {
             switch (message)
             {
-                case WindowMessage.WM_LBUTTONDOWN: isPush = true; return mouse_status.Left;
-                case WindowMessage.WM_LBUTTONUP: isPush = false; return mouse_status.Left;
-                case WindowMessage.WM_MBUTTONDOWN: isPush = true; return mouse_status.Middle;
-                case WindowMessage.WM_MBUTTONUP: isPush = false; return mouse_status.Middle;
-                case WindowMessage.WM_RBUTTONDOWN: isPush = true; return mouse_status.Right;
-                case WindowMessage.WM_RBUTTONUP: isPush = false; return mouse_status.Right;
-                case WindowMessage.WM_MOUSEWHEEL: isPush = false; return mouse_status.Wheel;
-                default: isPush = false; return mouse_status.NotSupport;
+                case WindowMessage.WM_LBUTTONDOWN: isPush = true; return mouse_button.Left;
+                case WindowMessage.WM_LBUTTONUP: isPush = false; return mouse_button.Left;
+                case WindowMessage.WM_MBUTTONDOWN: isPush = true; return mouse_button.Middle;
+                case WindowMessage.WM_MBUTTONUP: isPush = false; return mouse_button.Middle;
+                case WindowMessage.WM_RBUTTONDOWN: isPush = true; return mouse_button.Right;
+                case WindowMessage.WM_RBUTTONUP: isPush = false; return mouse_button.Right;
+                case WindowMessage.WM_MOUSEWHEEL: isPush = false; return mouse_button.Wheel;
+                default: isPush = false; return mouse_button.NotSupport;
             }
         }
 
-        public enum mouse_status
+        public enum mouse_button
         {
+            AnyKey = -2,
             NotSupport = -1,
             Left,
             Middle,

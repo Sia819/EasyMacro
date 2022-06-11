@@ -5,11 +5,8 @@ using EasyMacro.View.Node;
 using EasyMacro.ViewModel.Node.Editors;
 using EasyMacroAPI.Command;
 using NodeNetwork.Toolkit.ValueNode;
-using NodeNetwork.ViewModels;
-using NodeNetwork.Views;
 using ReactiveUI;
 using System;
-using System.Drawing;
 using System.Reactive.Linq;
 using System.Windows;
 

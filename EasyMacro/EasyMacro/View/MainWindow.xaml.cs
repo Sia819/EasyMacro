@@ -15,8 +15,8 @@
         {
             InitializeComponent();
 
-            HookLib.GlobalKeyboardHook globalKeyboardHook = new HookLib.GlobalKeyboardHook();
-            EasyMacroAPI.MacroManager.Instance.RegisterMessageReceiver(globalKeyboardHook);
+            //HookLib.GlobalKeyboardHook globalKeyboardHook = new HookLib.GlobalKeyboardHook();
+            //EasyMacroAPI.MacroManager.Instance.RegisterMessageReceiver(globalKeyboardHook);
             HookLib.GlobalKeyboardHook.StartKeyboardHook();
 
             

@@ -1,8 +1,6 @@
 ﻿using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using DynamicData;
 using EasyMacro.Model.Node;
@@ -10,17 +8,13 @@ using EasyMacro.ViewModel.Node;
 using EasyMacro.ViewModel.Node.NodeObject;
 using NodeNetwork.Toolkit.BreadcrumbBar;
 using NodeNetwork.Toolkit.Group;
-using NodeNetwork.Toolkit.Layout;
 using NodeNetwork.Toolkit.Layout.ForceDirected;
 using NodeNetwork.Toolkit.NodeList;
-using NodeNetwork.Utilities;
 using NodeNetwork.ViewModels;
 using ReactiveUI;
 
 namespace EasyMacro.ViewModel
 {
-    
-
     class NetworkBreadcrumb : BreadcrumbViewModel
     {
         #region Network
@@ -32,7 +26,6 @@ namespace EasyMacro.ViewModel
         }
         #endregion
     }
-
 
     public class PageViewModel : ReactiveObject
     {
@@ -137,6 +130,22 @@ namespace EasyMacro.ViewModel
                     Name = selectedGroupNode.Name
                 });
             }, isGroupNodeSelected);
+
+            // 핫키 등록
+            HookLib.GlobalKeyboardHook.StartKeyboardHook();
+            HookLib.GlobalKeyboardHook.AddKeyboardHotkey(EasyMacroAPI.Model.Keys.F9, EasyMacroAPI.Model.KeyModifiers.None, StartMacro);
+            //HookLib.GlobalKeyboardHook.AddKeyboardHotkey(EasyMacroAPI.Model.Keys.F9, EasyMacroAPI.Model.KeyModifiers.Control | EasyMacroAPI.Model.KeyModifiers.Alt, StartMacro);
+            HookLib.GlobalKeyboardHook.AddKeyboardHotkey(EasyMacroAPI.Model.Keys.F10, EasyMacroAPI.Model.KeyModifiers.None, StopMacro);
+        }
+
+        public void StartMacro(EasyMacroAPI.Model.Keys keys, EasyMacroAPI.Model.KeyModifiers keyModifiers)
+        {
+            MessageBox.Show("F9");
+        }
+
+        public void StopMacro(EasyMacroAPI.Model.Keys keys, EasyMacroAPI.Model.KeyModifiers keyModifiers)
+        {
+            MessageBox.Show("F10");
         }
 
     }

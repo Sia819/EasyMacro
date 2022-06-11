@@ -834,6 +834,11 @@ namespace EasyMacroAPI.Model
     //[Flags]
     public enum Keys
     {
+        // 어떤 키 이던지 반응합니다. 오직 EasyMacro에서만 사용할 수 있습니다.
+        AnyKey = -2,
+        // 등록되지 않은 키 입니다. 오직 EasyMacro에서만 사용할 수 있습니다.
+        NotSupport = -1,
+
         //
         // 요약:
         //     The bitmask to extract modifiers from a key value.

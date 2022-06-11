@@ -19,33 +19,33 @@ namespace EasyMacroConsoleTest
 
         public void SaveTest()
         {
-            Console.WriteLine("EasyMacroConsoleTest 프로젝트의 SaveTest에 진입했습니다.");
-
-            MacroManager macroManager = MacroManager.Instance;
-
-            macroManager.InsertList(new MouseMove(111, 111));
-            macroManager.InsertList(new Delay(1000));
-            macroManager.InsertList(new MouseMove(222, 222));
-            macroManager.InsertList(new Delay(2000));
-
-            macroManager.SaveData();
-            macroManager.LoadData();
-
-            //macroManager.StartMacro();
-            macroManager.DoOnce(0);
+            // Console.WriteLine("EasyMacroConsoleTest 프로젝트의 SaveTest에 진입했습니다.");
+            // 
+            // MacroManager macroManager = MacroManager.Instance;
+            // 
+            // macroManager.InsertList(new MouseMove(111, 111));
+            // macroManager.InsertList(new Delay(1000));
+            // macroManager.InsertList(new MouseMove(222, 222));
+            // macroManager.InsertList(new Delay(2000));
+            // 
+            // macroManager.SaveData();
+            // macroManager.LoadData();
+            // 
+            // //macroManager.StartMacro();
+            // macroManager.DoOnce(0);
         }
 
         public void ClickTest()
         {
-            MacroManager macroManager = MacroManager.Instance;
-
-            macroManager.InsertList(new MouseClick(111, 111));
-
-            macroManager.SaveData();
-            macroManager.LoadData();
-
-            //macroManager.StartMacro();
-            macroManager.DoOnce(0);
+            // MacroManager macroManager = MacroManager.Instance;
+            // 
+            // macroManager.InsertList(new MouseClick(111, 111));
+            // 
+            // macroManager.SaveData();
+            // macroManager.LoadData();
+            // 
+            // //macroManager.StartMacro();
+            // macroManager.DoOnce(0);
         }
     }
 }

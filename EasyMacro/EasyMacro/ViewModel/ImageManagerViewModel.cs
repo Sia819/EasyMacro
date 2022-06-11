@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -9,10 +8,7 @@ using System.Windows;
 using Microsoft.Win32;
 using EasyMacro.Common;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using System.ComponentModel;
-using PropertyChanged;
-using System.Collections.ObjectModel;
 
 namespace EasyMacro.ViewModel
 {

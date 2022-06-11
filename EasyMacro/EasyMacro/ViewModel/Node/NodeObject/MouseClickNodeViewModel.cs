@@ -59,16 +59,19 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             Action action = () =>
             {
-                CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
-
-                mouseClick.X = (int)X.Value;
-                mouseClick.Y = (int)Y.Value;
-                mouseClick.Delay = (int)Delay.Value;
-                mouseClick.Do();
-
-                foreach (var a in FlowOut.Values.Items)
+                if (CodeSimViewModel.Instance.IsRunning)
                 {
-                    a.Compile(new CompilerContext());
+                    CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
+
+                    mouseClick.X = (int)X.Value;
+                    mouseClick.Y = (int)Y.Value;
+                    mouseClick.Delay = (int)Delay.Value;
+                    mouseClick.Do();
+
+                    foreach (var a in FlowOut.Values.Items)
+                    {
+                        a.Compile(new CompilerContext());
+                    }
                 }
             };
             return action;

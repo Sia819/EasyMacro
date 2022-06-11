@@ -50,24 +50,27 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             Action action = () =>
             {
-                CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
-
-                // RadioButton Index to MouseClickTypes Convert
-                switch ((this.MouseClickType.Editor as RadioButtonEditorViewModel).GetRadioSelectedIndex)
+                if (CodeSimViewModel.Instance.IsRunning)
                 {
-                    case 0: inputMouse.MouseClickType = EasyMacroAPI.Model.MouseClickTypes.LBDOWN; break;
-                    case 1: inputMouse.MouseClickType = EasyMacroAPI.Model.MouseClickTypes.LBUP; break;
-                    case 2: inputMouse.MouseClickType = EasyMacroAPI.Model.MouseClickTypes.RBDOWN; break;
-                    case 3: inputMouse.MouseClickType = EasyMacroAPI.Model.MouseClickTypes.RBUP; break;
+                    CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
 
-                    default: inputMouse.MouseClickType = EasyMacroAPI.Model.MouseClickTypes.LBDOWN; break; // RadioButton에서 아무것도 선택되지 않음.
-                }
+                    // RadioButton Index to MouseClickTypes Convert
+                    switch ((this.MouseClickType.Editor as RadioButtonEditorViewModel).GetRadioSelectedIndex)
+                    {
+                        case 0: inputMouse.MouseClickType = EasyMacroAPI.Model.MouseClickTypes.LBDOWN; break;
+                        case 1: inputMouse.MouseClickType = EasyMacroAPI.Model.MouseClickTypes.LBUP; break;
+                        case 2: inputMouse.MouseClickType = EasyMacroAPI.Model.MouseClickTypes.RBDOWN; break;
+                        case 3: inputMouse.MouseClickType = EasyMacroAPI.Model.MouseClickTypes.RBUP; break;
 
-                inputMouse.Do();
+                        default: inputMouse.MouseClickType = EasyMacroAPI.Model.MouseClickTypes.LBDOWN; break; // RadioButton에서 아무것도 선택되지 않음.
+                    }
 
-                foreach (var a in FlowOut.Values.Items)
-                {
-                    a.Compile(new CompilerContext());
+                    inputMouse.Do();
+
+                    foreach (var a in FlowOut.Values.Items)
+                    {
+                        a.Compile(new CompilerContext());
+                    }
                 }
             };
             return action;

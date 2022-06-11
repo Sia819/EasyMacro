@@ -1,4 +1,6 @@
 ﻿using EasyMacroAPI.Model;
+using System;
+using System.Threading;
 
 namespace EasyMacroAPI.Command
 {
@@ -14,6 +16,8 @@ namespace EasyMacroAPI.Command
         /// </summary>
         public int Time { get; set; }
 
+        private ManualResetEvent mre;
+
         /// <summary>
         /// 생성자
         /// </summary>
@@ -25,7 +29,14 @@ namespace EasyMacroAPI.Command
 
         public void Do()
         {
-            System.Threading.Thread.Sleep(Time);
+            mre = new ManualResetEvent(false);
+            var signalled = mre.WaitOne(TimeSpan.FromMilliseconds(Time));
+            
+            if (!signalled)
+            {
+                // Set 호출로 인한 강제 타임아웃 당한 경우.
+            }
+            mre.Dispose();
         }
     }
 }

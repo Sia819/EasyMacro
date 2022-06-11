@@ -23,7 +23,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
             OnClickFlow = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
             {
-                Name = "Start"
+                Name = "Start",
+                MaxConnections = 1
             };
 
             this.Inputs.Add(OnClickFlow);

@@ -51,25 +51,28 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             Action action = () =>
             {
-                CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
-                //TODO : 키 지정방식 수정 필요, 작동 안됨
-                
-                inputKeyboard.Key = (Keys)Enum.Parse(typeof(Keys), PressKey.Value);
-
-                // RadioButtoKeyboardPressTypen Index to MouseClickTypes Convert
-                switch ((this.KeyboardPressType.Editor as RadioButtonEditorViewModel).GetRadioSelectedIndex)
+                if (CodeSimViewModel.Instance.IsRunning)
                 {
-                    case 0: inputKeyboard.KeyPressTypes = KeyPressTypes.KEY_DOWN; break;
-                    case 1: inputKeyboard.KeyPressTypes = KeyPressTypes.KEY_UP; break;
+                    CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
+                    //TODO : 키 지정방식 수정 필요, 작동 안됨
 
-                    default: inputKeyboard.KeyPressTypes = KeyPressTypes.KEY_DOWN; break; // RadioButton에서 아무것도 선택되지 않음.
-                }
+                    inputKeyboard.Key = (Keys)Enum.Parse(typeof(Keys), PressKey.Value);
 
-                inputKeyboard.Do();
+                    // RadioButtoKeyboardPressTypen Index to MouseClickTypes Convert
+                    switch ((this.KeyboardPressType.Editor as RadioButtonEditorViewModel).GetRadioSelectedIndex)
+                    {
+                        case 0: inputKeyboard.KeyPressTypes = KeyPressTypes.KEY_DOWN; break;
+                        case 1: inputKeyboard.KeyPressTypes = KeyPressTypes.KEY_UP; break;
 
-                foreach (var a in FlowOut.Values.Items)
-                {
-                    a.Compile(new CompilerContext());
+                        default: inputKeyboard.KeyPressTypes = KeyPressTypes.KEY_DOWN; break; // RadioButton에서 아무것도 선택되지 않음.
+                    }
+
+                    inputKeyboard.Do();
+
+                    foreach (var a in FlowOut.Values.Items)
+                    {
+                        a.Compile(new CompilerContext());
+                    }
                 }
             };
             return action;

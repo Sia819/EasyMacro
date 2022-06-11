@@ -2,14 +2,22 @@
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading;
+using System.Windows;
+using System.Windows.Threading;
+using EasyMacro.Model.Node;
 using EasyMacro.Model.Node.Compiler;
-using MoonSharp.Interpreter;
 using ReactiveUI;
 
 namespace EasyMacro.ViewModel.Node
 {
     public class CodeSimViewModel : ReactiveObject
     {
+        #region Singleton
+        private static CodeSimViewModel instance;
+        public static CodeSimViewModel Instance => instance ??= new CodeSimViewModel();
+        #endregion
+
         #region Code
         public IStatement Code
         {
@@ -29,29 +37,56 @@ namespace EasyMacro.ViewModel.Node
         #endregion
 
         public ReactiveCommand<Unit, Unit> RunScript { get; }
+
         public ReactiveCommand<Unit, Unit> ClearOutput { get; }
+
+        public bool IsRunning = false;
+        public bool ReStart = false;
+
+        private Thread nodeFlowThread;
 
         private CodeSimViewModel()
         {
-            RunScript = ReactiveCommand.Create(() =>
-            {
-                // Script script = new Script();
-                // script.Globals["print"] = (Action<string>)Print;
-                // string source = Code.Compile(new CompilerContext());
-                // script.DoString(source); // Run Panel 에 나오는 값, MouseMove시 오류발생
-                Code.Compile(new CompilerContext());
-            },
-                this.WhenAnyValue(vm => vm.Code).Select(code => code != null));
+            RunScript = ReactiveCommand.Create(RunScript_ExcuteCommand, // Excute
+                                               this.WhenAnyValue(vm => vm.Code).Select(code => code != null)); //CanExcute
+
+            nodeFlowThread = new Thread(new ThreadStart(nodeFlowThread_Excute)) { IsBackground = true };
 
             ClearOutput = ReactiveCommand.Create(() => { Output = ""; });
         }
 
-        public void Print(string msg)
+        public void RunScript_ExcuteCommand()
         {
-            Output += msg + "\n";
+            if (this.Code is not null && !nodeFlowThread.IsAlive)
+            {
+                if ((nodeFlowThread.ThreadState & ThreadState.Unstarted) == 0)
+                {
+                    nodeFlowThread = new Thread(new ThreadStart(nodeFlowThread_Excute)) { IsBackground = true };
+                }
+                nodeFlowThread.Start();
+            }
         }
 
-        private static CodeSimViewModel instance;
-        public static CodeSimViewModel Instance => instance ??= new CodeSimViewModel();
+        public void TerminateThread()
+        {
+            IsRunning = false;
+        }
+
+        void nodeFlowThread_Excute()
+        {
+            ReStart = true;
+            while (ReStart)
+            {
+                ReStart = false;
+                IsRunning = true;
+                Code.Compile(new CompilerContext());
+            }
+        }
+
+        public void Print(string msg)
+        {
+            Application.Current.Dispatcher.BeginInvoke(() => { Output += msg + "\n"; }, DispatcherPriority.Normal);
+        }
+
     }
 }

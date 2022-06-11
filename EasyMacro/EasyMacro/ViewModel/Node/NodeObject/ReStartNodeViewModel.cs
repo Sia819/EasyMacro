@@ -39,13 +39,16 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         { //TODO : 스레드로 변경시 수정
             Action action = () =>
             {
-                CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
-                StartNodeViewModel eventNode = PageViewModel.Instance.eventNode;
-                Application.Current.MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.SystemIdle, new Action(() =>
+                if (CodeSimViewModel.Instance.IsRunning)
                 {
-                    new StatementSequence(eventNode.OnClickFlow.Values.Items).Compile(new CompilerContext());
+                    CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
+                    StartNodeViewModel eventNode = PageViewModel.Instance.eventNode;
+                    Application.Current.MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.SystemIdle, new Action(() =>
+                    {
+                        CodeSimViewModel.Instance.ReStart = true;
+                    }
+                    ));
                 }
-                ));
             };
             return action;
         }

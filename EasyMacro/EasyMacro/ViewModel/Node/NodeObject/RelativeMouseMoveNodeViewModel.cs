@@ -59,17 +59,22 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             Action action = () =>
             {
-                CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
-
-                relativeMouseMove.ChangeWindowName(WindowName.Value);
-                relativeMouseMove.X = (int)X.Value;
-                relativeMouseMove.Y = (int)Y.Value;
-
-                relativeMouseMove.Do();
-
-                foreach (var a in FlowOut.Values.Items)
+                if (CodeSimViewModel.Instance.IsRunning)
                 {
-                    a.Compile(new CompilerContext());
+
+
+                    CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
+
+                    relativeMouseMove.ChangeWindowName(WindowName.Value);
+                    relativeMouseMove.X = (int)X.Value;
+                    relativeMouseMove.Y = (int)Y.Value;
+
+                    relativeMouseMove.Do();
+
+                    foreach (var a in FlowOut.Values.Items)
+                    {
+                        a.Compile(new CompilerContext());
+                    }
                 }
             };
             return action;

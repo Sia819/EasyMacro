@@ -53,26 +53,29 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             Action action = () =>
             {
-                CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
+                if (CodeSimViewModel.Instance.IsRunning)
+                {
+                    CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
 
-                if (Ctrl.Value ?? false)
-                {
-                    combInputKeyboard.AddList((Keys)Enum.Parse(typeof(Keys), "ControlKey"));
-                }
-                if (Alt.Value ?? false)
-                {
-                    combInputKeyboard.AddList((Keys)Enum.Parse(typeof(Keys), "Menu"));
-                }
-                if (Shift.Value ?? false)
-                {
-                    combInputKeyboard.AddList((Keys)Enum.Parse(typeof(Keys), "ShiftKey"));
-                }
-                combInputKeyboard.AddList((Keys)Enum.Parse(typeof(Keys), Input.Value));
-                combInputKeyboard.Do();
+                    if (Ctrl.Value ?? false)
+                    {
+                        combInputKeyboard.AddList((Keys)Enum.Parse(typeof(Keys), "ControlKey"));
+                    }
+                    if (Alt.Value ?? false)
+                    {
+                        combInputKeyboard.AddList((Keys)Enum.Parse(typeof(Keys), "Menu"));
+                    }
+                    if (Shift.Value ?? false)
+                    {
+                        combInputKeyboard.AddList((Keys)Enum.Parse(typeof(Keys), "ShiftKey"));
+                    }
+                    combInputKeyboard.AddList((Keys)Enum.Parse(typeof(Keys), Input.Value));
+                    combInputKeyboard.Do();
 
-                foreach (var a in FlowOut.Values.Items)
-                {
-                    a.Compile(new CompilerContext());
+                    foreach (var a in FlowOut.Values.Items)
+                    {
+                        a.Compile(new CompilerContext());
+                    }
                 }
             };
             return action;
@@ -118,7 +121,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {
                 Port = null,
-                
+
                 Editor = new RunButtonViewModel()
                 {
                     RunScript = ReactiveCommand.Create

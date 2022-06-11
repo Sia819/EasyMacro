@@ -140,12 +140,14 @@ namespace EasyMacro.ViewModel
 
         public void StartMacro(EasyMacroAPI.Model.Keys keys, EasyMacroAPI.Model.KeyModifiers keyModifiers)
         {
-            MessageBox.Show("F9");
+            //MessageBox.Show("F9");
+            CodeSimViewModel.Instance.RunScript_ExcuteCommand();
         }
 
         public void StopMacro(EasyMacroAPI.Model.Keys keys, EasyMacroAPI.Model.KeyModifiers keyModifiers)
         {
-            MessageBox.Show("F10");
+            //MessageBox.Show("F10");
+            CodeSimViewModel.Instance.TerminateThread();
         }
 
     }

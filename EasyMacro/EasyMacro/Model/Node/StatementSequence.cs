@@ -7,6 +7,7 @@ namespace EasyMacro.Model.Node
     {
         public List<IStatement> Statements { get; } = new List<IStatement>();
 
+
         public StatementSequence()
         { }
 

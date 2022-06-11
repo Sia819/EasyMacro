@@ -48,14 +48,17 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             Action action = () =>
             {
-                CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
-
-                inputString.Text = Input.Value;
-                inputString.Do();
-
-                foreach (var a in FlowOut.Values.Items)
+                if (CodeSimViewModel.Instance.IsRunning)
                 {
-                    a.Compile(new CompilerContext());
+                    CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
+
+                    inputString.Text = Input.Value;
+                    inputString.Do();
+
+                    foreach (var a in FlowOut.Values.Items)
+                    {
+                        a.Compile(new CompilerContext());
+                    }
                 }
             };
             return action;

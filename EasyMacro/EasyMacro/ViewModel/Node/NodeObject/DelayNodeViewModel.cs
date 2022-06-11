@@ -37,25 +37,28 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         public ValueNodeInputViewModel<int?> Delay { get; }
 
         public ValueNodeOutputViewModel<IStatement> FlowIn { get; }
-        
+
         public ValueListNodeInputViewModel<IStatement> FlowOut { get; }
 
         public ValueNodeInputViewModel<int?> RunButton { get; }
 
         public bool IsCanExcute { get; set; } = true;
-        
+
         Action Func()
         {
             Action action = () =>
             {
-                CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
-
-                delay.Time = (int)Delay.Value < 0 ? 0 : (int)Delay.Value;
-                delay.Do();
-
-                foreach (var a in FlowOut.Values.Items)
+                if (CodeSimViewModel.Instance.IsRunning)
                 {
-                    a.Compile(new CompilerContext());
+                    CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
+
+                    delay.Time = (int)Delay.Value < 0 ? 0 : (int)Delay.Value;
+                    delay.Do();
+
+                    foreach (var a in FlowOut.Values.Items)
+                    {
+                        a.Compile(new CompilerContext());
+                    }
                 }
             };
             return action;
@@ -77,7 +80,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {
                 Port = null,
-                
+
                 Editor = new RunButtonViewModel()
                 {
                     RunScript = ReactiveCommand.Create

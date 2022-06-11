@@ -61,8 +61,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             {
                 if (CodeSimViewModel.Instance.IsRunning)
                 {
-
-
                     CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
 
                     relativeMouseMove.ChangeWindowName(WindowName.Value);

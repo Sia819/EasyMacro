@@ -167,9 +167,11 @@ namespace HookLib
                 {
                     bool InvokeRequire = false;
                     if (keyboardKeyStatus[pair.Key.Item1]) // 해당되는 키가 눌려짐.
+                    {
                         if (pair.Key.Item2 == KeyModifiers.None && !IsKeyModifiersPressed()) InvokeRequire = true; // None일 경우, 어떤 조합키도 눌려지면 안됨.
                         else if (pair.Key.Item2 != KeyModifiers.None && KeyModifiersPressedFlagsCheck(pair.Key.Item2)) InvokeRequire = true; // None이 아닌경우, 해당하는 키가 눌러져야됨.
-                        else if (pair.Key.Item1 == Keys.AnyKey) InvokeRequire = true; // 아무 키나 눌렸을 때 동작하도록 설정된 경우
+                    }
+                    else if (pair.Key.Item1 == Keys.AnyKey) InvokeRequire = true; // 아무 키나 눌렸을 때 동작하도록 설정된 경우
 
                     if (InvokeRequire)
                     {

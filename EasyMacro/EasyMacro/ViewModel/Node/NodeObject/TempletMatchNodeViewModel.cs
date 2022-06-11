@@ -102,16 +102,13 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return action;
         }
 
-        private ImageManagerSelectorViewModel ComboBoxEditor = new ImageManagerSelectorViewModel();
-
         // TODO : 이미지를 EasyMacroAPI의 템플릿매치에 사용될이미지로 지정합니다.
         private Action ImgBindToApi()
         {
             Action action = () =>
             {
-                if (String.IsNullOrEmpty((BitmapDir.Editor as ImageManagerSelectorViewModel).Value) is false) //
+                if (String.IsNullOrEmpty((BitmapDir.Editor as ImageManagerSelectorViewModel).Value) is false)
                 {
-                    MessageBox.Show("ComboBox Value인 Text가 변경되었습니다.");
                     // dispose 작업은 ImageManagerSelectorView의 imageSelector_SelectionChanged() 에서 함.
                     templetMatch.TargetImg = (BitmapDir.Editor as ImageManagerSelectorViewModel).SelectedBitmap;
                 }
@@ -137,12 +134,9 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             BitmapDir = new ValueNodeInputViewModel<string>()
             {
                 Name = "사진파일 경로",
-                Editor = ComboBoxEditor,//new ImageManagerSelectorViewModel(),
+                Editor = new ImageManagerSelectorViewModel(),
                 Port = null,
             };
-            //(BitmapDir.Editor as ImageManagerSelectorViewModel).ValueChanged.Select(_ => ImgBindToApi());//(value =>
-            //BitmapDir.ValueChanged.Do(_ => ImgBindToApi().Invoke() );
-            //BitmapDir.ValueChanged.Do();
             BitmapDir.ValueChanged.Select(_ => ImgBindToApi()).Do(action => action.Invoke()).Subscribe();
 
             this.Inputs.Add(BitmapDir);

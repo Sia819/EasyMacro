@@ -22,11 +22,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             Splat.Locator.CurrentMutable.Register(() => new CodeGenNodeView(), typeof(IViewFor<ReStartNodeViewModel>));
         }
 
-        /// <summary>
-        /// Delay Time
-        /// </summary>
-        /// 
-
         public ValueNodeOutputViewModel<IStatement> FlowIn { get; }
 
         public ValueListNodeInputViewModel<IStatement> FlowOut { get; }

@@ -33,7 +33,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         /// <summary>
         /// Delay Time
         /// </summary>
-        public ValueNodeInputViewModel<string> Input { get; }
+        public ValueNodeInputViewModel<Keys> Input { get; }
 
         public ValueNodeInputViewModel<bool?> Alt { get; }
 
@@ -56,7 +56,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 if (CodeSimViewModel.Instance.IsRunning)
                 {
                     CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
-
+                    combInputKeyboard.Keys = new System.Collections.Generic.List<Keys>();
                     if (Ctrl.Value ?? false)
                     {
                         combInputKeyboard.AddList((Keys)Enum.Parse(typeof(Keys), "ControlKey"));
@@ -69,7 +69,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                     {
                         combInputKeyboard.AddList((Keys)Enum.Parse(typeof(Keys), "ShiftKey"));
                     }
-                    combInputKeyboard.AddList((Keys)Enum.Parse(typeof(Keys), Input.Value));
+                    combInputKeyboard.AddList(Input.Value);//((Keys)Enum.Parse(typeof(Keys), Input.Value));
                     combInputKeyboard.Do();
 
                     foreach (var a in FlowOut.Values.Items)
@@ -86,34 +86,34 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             base.Name = "조합 키 입력";
 
             //TODO : 나머지 구현
-            Input = new ValueNodeInputViewModel<string>()
+            Input = new ValueNodeInputViewModel<Keys>()
             {
                 Name = "입력 키",
-                Editor = new StringValueEditorViewModel(),
+                Editor = new KeyboardRecordEditorViewModel(),//new StringValueEditorViewModel(),
                 Port = null,
             };
             this.Inputs.Add(Input);
 
             Alt = new ValueNodeInputViewModel<bool?>()
             {
-                Name = "Alt",
-                Editor = new CheckBoxEditorViewModel(),
+                Name = null,
+                Editor = new CheckBoxEditorViewModel("Alt"),
                 Port = null,
             };
             this.Inputs.Add(Alt);
 
             Ctrl = new ValueNodeInputViewModel<bool?>()
             {
-                Name = "Ctrl",
-                Editor = new CheckBoxEditorViewModel(),
+                Name = null,
+                Editor = new CheckBoxEditorViewModel("Ctrl"),
                 Port = null,
             };
             this.Inputs.Add(Ctrl);
 
             Shift = new ValueNodeInputViewModel<bool?>()
             {
-                Name = "Shift",
-                Editor = new CheckBoxEditorViewModel(),
+                Name = null,
+                Editor = new CheckBoxEditorViewModel("Shift"),
                 Port = null,
             };
             this.Inputs.Add(Shift);

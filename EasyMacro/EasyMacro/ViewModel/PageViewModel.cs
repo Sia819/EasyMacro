@@ -76,9 +76,9 @@ namespace EasyMacro.ViewModel
             NodeList.AddNodeType(() => new StartNodeViewModel());
             NodeList.AddNodeType(() => new ReStartNodeViewModel());
             NodeList.AddNodeType(() => new ForLoopNode());
-            NodeList.AddNodeType(() => new IntLiteralNode());
-            NodeList.AddNodeType(() => new PrintNode());
-            NodeList.AddNodeType(() => new TextLiteralNode());
+            //NodeList.AddNodeType(() => new IntLiteralNode());
+            //NodeList.AddNodeType(() => new PrintNode());
+            //NodeList.AddNodeType(() => new TextLiteralNode());
             NodeList.AddNodeType(() => new DelayNodeViewModel());
             NodeList.AddNodeType(() => new CombInputKeyboardViewModel());
             NodeList.AddNodeType(() => new InputKeyboardNodeViewModel());

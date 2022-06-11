@@ -11,6 +11,7 @@ using ReactiveUI;
 using System;
 using System.Drawing;
 using System.Reactive.Linq;
+using System.Windows;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
@@ -80,7 +81,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 templetMatch.screenCapture.WindowName = WindowName.Value;
                 templetMatch.isWantKeepFinding = IsWantKeepFind.Value ?? false;
                 templetMatch.retryTimes = RetryTimes.Value ?? 0;
-                templetMatch.accuracy = (Accuracy.Value ?? 80) / 100;
+                templetMatch.accuracy = (double)(Accuracy.Value ?? 80) / 100;
                 templetMatch.SetDelayTime(Delay.Value ?? 1000);
 
                 templetMatch.Do();
@@ -104,13 +105,16 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return action;
         }
 
+        private ImageManagerSelectorViewModel ComboBoxEditor = new ImageManagerSelectorViewModel();
+
         // TODO : 이미지를 EasyMacroAPI의 템플릿매치에 사용될이미지로 지정합니다.
         private Action ImgBindToApi()
         {
             Action action = () =>
             {
-                if (String.IsNullOrEmpty((BitmapDir.Editor as ImageManagerSelectorViewModel).Value) is false) // 셀렉터 ComboBox의 ViewModel-Value값이 null 또는 "" 가 아닌 경우
+                if (String.IsNullOrEmpty((BitmapDir.Editor as ImageManagerSelectorViewModel).Value) is false) //
                 {
+                    MessageBox.Show("ComboBox Value인 Text가 변경되었습니다.");
                     // dispose 작업은 ImageManagerSelectorView의 imageSelector_SelectionChanged() 에서 함.
                     templetMatch.TargetImg = (BitmapDir.Editor as ImageManagerSelectorViewModel).SelectedBitmap;
                 }
@@ -136,13 +140,14 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             BitmapDir = new ValueNodeInputViewModel<string>()
             {
                 Name = "사진파일 경로",
-                Editor = new ImageManagerSelectorViewModel(),
+                Editor = ComboBoxEditor,//new ImageManagerSelectorViewModel(),
                 Port = null,
             };
-            (BitmapDir.Editor as ImageManagerSelectorViewModel).ValueChanged.Do(value =>
-            { 
-                System.Windows.MessageBox.Show(value); 
-            });
+            //(BitmapDir.Editor as ImageManagerSelectorViewModel).ValueChanged.Select(_ => ImgBindToApi());//(value =>
+            //BitmapDir.ValueChanged.Do(_ => ImgBindToApi().Invoke() );
+            //BitmapDir.ValueChanged.Do();
+            BitmapDir.ValueChanged.Select(_ => ImgBindToApi()).Do(action => action.Invoke()).Subscribe();
+
             this.Inputs.Add(BitmapDir);
 
             WindowName = new ValueNodeInputViewModel<string>()

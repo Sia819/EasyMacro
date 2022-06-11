@@ -44,7 +44,14 @@ namespace EasyMacro.ViewModel
             public Bitmap ImageClone()
             {
                 // 이미지를 클론하는 중, 멀티스레드 다중참조를 우려
-                return Application.Current.MainWindow.Dispatcher.Invoke(()=> PreviewImage.Clone() as Bitmap);
+                return Application.Current.MainWindow.Dispatcher.Invoke(
+                    () => PreviewImage.Clone(new Rectangle(0, 0, PreviewImage.Width, PreviewImage.Height), PreviewImage.PixelFormat));
+            }
+            ~ImageList()
+            {
+                Name = null;
+                FilePath = null;
+                PreviewImage.Dispose();
             }
         }
 
@@ -66,7 +73,7 @@ namespace EasyMacro.ViewModel
         {
             // Configure open file dialog box 
             OpenFileDialog dlg = new OpenFileDialog();
-            
+
             if (!String.IsNullOrEmpty(ImageFilePath))
             {
                 if (Directory.Exists(ImageFilePath)) // TextBox에 있는것이 존재하는 폴더
@@ -84,14 +91,14 @@ namespace EasyMacro.ViewModel
                                             ".tif", ".tiff",
                                             ".png" };
                     bool isImage = false;
-                    foreach(var c in imageCodecs)
+                    foreach (var c in imageCodecs)
                     {
                         if (imageCodec == c)
                         {
                             isImage = true;
                         }
                     }
-                    
+
                     if (!isImage)
                     {
                         MessageBox.Show("이미지 형식 파일이 아닙니다!!");
@@ -103,7 +110,7 @@ namespace EasyMacro.ViewModel
                         {
                             Name = dictDupeRename(Path.GetFileNameWithoutExtension(ImageFilePath)),
                             FilePath = ImageFilePath,
-                            PreviewImage = new Bitmap(ImageFilePath)
+                            PreviewImage = PathToBitmap(ImageFilePath)
                         };
                         RegisterdImages.Add(temp.Name, temp);
                         return Observable.Return(Unit.Default);
@@ -144,11 +151,24 @@ namespace EasyMacro.ViewModel
                 {
                     Name = dictDupeRename(Path.GetFileNameWithoutExtension(dlg.FileName)),
                     FilePath = dlg.FileName,
-                    PreviewImage = new Bitmap(dlg.FileName)
+                    PreviewImage = PathToBitmap(dlg.FileName)
                 };
                 RegisterdImages.Add(temp.Name, temp);
             }
             return Observable.Return(Unit.Default);
+        }
+
+        private Bitmap PathToBitmap(string path)
+        {
+            Bitmap targetBmp;
+            using (Bitmap oldBmp = new Bitmap(path))
+            {
+                using (Bitmap newBmp = new Bitmap(oldBmp))
+                {
+                    targetBmp = newBmp.Clone(new Rectangle(0, 0, newBmp.Width, newBmp.Height), PixelFormat.Format32bppRgb);
+                }
+            }
+            return targetBmp;
         }
 
         private void ImageDelCommand(string path)

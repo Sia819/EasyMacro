@@ -40,11 +40,11 @@ namespace EasyMacro.View.UC
             this.ViewModel = ImageManagerViewModel.Instance;
 
             // 디자이너 미리보기
-            Bitmap unknownImage = UnknownQuestionImage();
-            PreviewImages = new ObservableCollection<ImageManagerViewModel.ImageList>();
-            PreviewImages.Add(new ImageManagerViewModel.ImageList { FilePath = "preview/myFilePath/1.png", Name = "ImageName1", PreviewImage = unknownImage });
-            PreviewImages.Add(new ImageManagerViewModel.ImageList { FilePath = "preview/myFilePath/2.png", Name = "ImageName2", PreviewImage = unknownImage });
-            PreviewImages.Add(new ImageManagerViewModel.ImageList { FilePath = "preview/myFilePath/3.png", Name = "ImageName3", PreviewImage = unknownImage });
+            // Bitmap unknownImage = UnknownQuestionImage();
+            // PreviewImages = new ObservableCollection<ImageManagerViewModel.ImageList>();
+            // PreviewImages.Add(new ImageManagerViewModel.ImageList { FilePath = "preview/myFilePath/1.png", Name = "ImageName1", PreviewImage = unknownImage });
+            // PreviewImages.Add(new ImageManagerViewModel.ImageList { FilePath = "preview/myFilePath/2.png", Name = "ImageName2", PreviewImage = unknownImage });
+            // PreviewImages.Add(new ImageManagerViewModel.ImageList { FilePath = "preview/myFilePath/3.png", Name = "ImageName3", PreviewImage = unknownImage });
 
             this.WhenActivated(d =>
             {

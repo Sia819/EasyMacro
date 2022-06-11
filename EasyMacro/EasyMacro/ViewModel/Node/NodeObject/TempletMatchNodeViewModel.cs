@@ -174,7 +174,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             Accuracy = new ValueNodeInputViewModel<int?>()
             {
                 Name = "비교 정확도",
-                Editor = new IntegerValueEditorViewModel(1, 100, 80),
+                Editor = new IntegerValueEditorViewModel(1, 100) { Value = 80 },
                 Port = null,
             };
             this.Inputs.Add(Accuracy);

@@ -8,6 +8,7 @@ using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
 using EasyMacro.View.Node;
 using ReactiveUI;
+using EasyMacro.ViewModel.Node.Editors;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
@@ -24,51 +25,53 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         public ValueListNodeInputViewModel<IStatement> LoopEndFlow { get; }
 
         public ValueNodeInputViewModel<ITypedExpression<int>> FirstIndex { get; }
-        public ValueNodeInputViewModel<ITypedExpression<int>> LastIndex { get; }
+        public ValueNodeInputViewModel<int?> LastIndex { get; }
 
         public ValueNodeOutputViewModel<ITypedExpression<int>> CurrentIndex { get; }
 
+        public IntegerValueEditorViewModel currentIndexEditor = new IntegerValueEditorViewModel(0);
+
         public ForLoopNode() : base(NodeType.FlowControl)
         {
-            var boundsGroup = new EndpointGroup("Bounds");
-
-            var controlFlowGroup = new EndpointGroup("Control Flow");
+            var controlFlowGroup = new EndpointGroup("");
 
             var controlFlowInputsGroup = new EndpointGroup(controlFlowGroup);
 
-            this.Name = "For Loop";
+            this.Name = "반복";
 
             LoopBodyFlow = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
             {
-                Name = "Loop Body",
-                Group = controlFlowInputsGroup
+                Name = "반복할 노드들",
+                Group = controlFlowInputsGroup,
+                MaxConnections = 1,
             };
             this.Inputs.Add(LoopBodyFlow);
 
             LoopEndFlow = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
             {
-                Name = "Loop End",
-                Group = controlFlowInputsGroup
+                Name = "반복이 끝난 후",
+                Group = controlFlowInputsGroup,
+                MaxConnections = 1,
             };
             this.Inputs.Add(LoopEndFlow);
 
-
+            
             FirstIndex = new CodeGenInputViewModel<ITypedExpression<int>>(PortType.Integer)
             {
                 Name = "First Index",
-                Group = boundsGroup
             };
-            this.Inputs.Add(FirstIndex);
+            //this.Inputs.Add(FirstIndex);
+            
 
-            LastIndex = new CodeGenInputViewModel<ITypedExpression<int>>(PortType.Integer)
+            LastIndex = new ValueNodeInputViewModel<int?>
             {
-                Name = "Last Index",
-                Group = boundsGroup
-
+                Name = "몇 번 반복할지",
+                Editor = new IntegerValueEditorViewModel(1) { Value = 1 },
+                Port = null,
             };
             this.Inputs.Add(LastIndex);
 
-            ForLoop value = new ForLoop();
+            ForLoop value = new ForLoop(currentIndexEditor);
 
             var loopBodyChanged = LoopBodyFlow.Values.Connect().Select(_ => Unit.Default).StartWith(Unit.Default);
             var loopEndChanged = LoopEndFlow.Values.Connect().Select(_ => Unit.Default).StartWith(Unit.Default);
@@ -80,8 +83,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                     .Select(v => {
                         value.LoopBody = new StatementSequence(LoopBodyFlow.Values.Items);
                         value.LoopEnd = new StatementSequence(LoopEndFlow.Values.Items);
-                        value.LowerBound = v.FirstI ?? new IntLiteral { Value = 0 };
-                        value.UpperBound = v.LastI ?? new IntLiteral { Value = 1 };
+                        value.LowerBound = 0;
+                        value.UpperBound = v.LastI.Value;
                         return value;
                     }),
                 Group = controlFlowGroup
@@ -90,8 +93,10 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
             CurrentIndex = new CodeGenOutputViewModel<ITypedExpression<int>>(PortType.Integer)
             {
-                Name = "Current Index",
-                Value = Observable.Return(new VariableReference<int> { LocalVariable = value.CurrentIndex })
+                Name = "몇 번째 반복중인지",
+                Value = Observable.Return(new VariableReference<int> { LocalVariable = value.CurrentIndex }),
+                Editor = currentIndexEditor,
+                Port = null,
             };
             this.Outputs.Add(CurrentIndex);
         }

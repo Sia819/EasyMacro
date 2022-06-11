@@ -149,6 +149,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             FlowOut = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
             {
                 Name = "",
+                MaxConnections = 1
             };
             this.Inputs.Add(FlowOut);
         }

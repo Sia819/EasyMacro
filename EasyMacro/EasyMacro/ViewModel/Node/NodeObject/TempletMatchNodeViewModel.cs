@@ -220,12 +220,14 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             FlowOutOption1 = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
             {
                 Name = "이미지 찾기 성공",
+                MaxConnections = 1
             };
             this.Inputs.Add(FlowOutOption1);
 
             FlowOutOption2 = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
             {
                 Name = "이미지 찾기 실패",
+                MaxConnections = 1
             };
             this.Inputs.Add(FlowOutOption2);
         }

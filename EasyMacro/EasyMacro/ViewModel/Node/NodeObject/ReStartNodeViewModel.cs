@@ -10,6 +10,7 @@ using NodeNetwork.Views;
 using ReactiveUI;
 using System;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -34,7 +35,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         { //TODO : 스레드로 변경시 수정
             Action action = () =>
             {
-                if (CodeSimViewModel.Instance.IsRunning)
+                if (CodeSimViewModel.Instance.IsRunning || Thread.CurrentThread.IsBackground is false)
                 {
                     CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
                     StartNodeViewModel eventNode = PageViewModel.Instance.eventNode;

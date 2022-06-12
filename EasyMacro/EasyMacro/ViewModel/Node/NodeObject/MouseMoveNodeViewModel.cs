@@ -9,6 +9,7 @@ using ReactiveUI;
 using System;
 using System.Drawing;
 using System.Reactive.Linq;
+using System.Threading;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
@@ -44,7 +45,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             Action action = () =>
             {
-                if (CodeSimViewModel.Instance.IsRunning)
+                if (CodeSimViewModel.Instance.IsRunning || Thread.CurrentThread.IsBackground is false)
                 {
                     CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
 

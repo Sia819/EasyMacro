@@ -10,6 +10,7 @@ namespace EasyMacro.Model.Node
     {
         Execution, 
         Integer, 
-        String
+        String,
+        Point
     }
 }

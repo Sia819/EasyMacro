@@ -15,7 +15,26 @@ namespace EasyMacro.ViewModel.Node.Editors
             Splat.Locator.CurrentMutable.Register(() => new PointRecordEditorView(), typeof(IViewFor<PointRecordEditorViewModel>));
         }
 
-        public PointRecordEditorViewModelReactiveObject ReactiveObject { get; }
+        #region ButtonEnable Property
+        public bool ButtonEnable
+        {
+            get => buttonEnable;
+            set => this.RaiseAndSetIfChanged(ref buttonEnable, value);
+        }
+        private bool buttonEnable;
+        #endregion ButtonEnable Property
+
+        #region Editable Property
+        public bool Editable
+        {
+            get => editable;
+            set => this.RaiseAndSetIfChanged(ref editable, value);
+        }
+        private bool editable;
+        #endregion
+
+        public ReactiveCommand<Unit, Unit> GetMousePos_Command { get; internal set; }
+
 
         private FindWindowPosition findWindowPosition;
 
@@ -25,12 +44,11 @@ namespace EasyMacro.ViewModel.Node.Editors
         {
             findWindowPosition = new FindWindowPosition("");
             Windowname = windowname;
-            ReactiveObject = new PointRecordEditorViewModelReactiveObject();
-            ReactiveObject.GetMousePos_Command = ReactiveCommand.Create(GetMousePos_ExcuteCommand);
-            ReactiveObject.Editable = false;
-            ReactiveObject.Editable = false;
+            GetMousePos_Command = ReactiveCommand.Create(GetMousePos_ExcuteCommand);
+            ButtonEnable = true;
+            Editable = true;
 
-            Value = ReactiveObject.MyPoint = new Point(0, 0);
+            Value = new Point(0, 0);
 
         }
 
@@ -38,7 +56,7 @@ namespace EasyMacro.ViewModel.Node.Editors
         {
             HookLib.GlobalMouseKeyHook.StartMouseHook();
             // 마우스 오른쪽 키가 눌려졌을 때, 등록한 콜백함수가 호출됨.
-            HookLib.GlobalMouseKeyHook.AddMouseHotkey(HookLib.GlobalMouseKeyHook.mouse_button.Right,
+            HookLib.GlobalMouseKeyHook.AddMouseHotkey(HookLib.GlobalMouseKeyHook.mouse_button.Right, 
                                                       new HookLib.GlobalMouseKeyHook.MouseHotkeyDelegate(mouseCallback));
         }
 
@@ -46,44 +64,17 @@ namespace EasyMacro.ViewModel.Node.Editors
         {
             if (Windowname is null || String.IsNullOrEmpty(Windowname.Value))
             {
-                this.Value = this.ReactiveObject.MyPoint = point;
+                this.Value = point;
             }
             else
             {
                 findWindowPosition.WindowName = Windowname.Value;
                 findWindowPosition.Do();
-                this.Value = this.ReactiveObject.MyPoint = new Point(point.x - findWindowPosition.rect.Left, point.y - findWindowPosition.rect.Top);
+                this.Value = new Point(point.x - findWindowPosition.rect.Left, point.y - findWindowPosition.rect.Top);
             }
             HookLib.GlobalMouseKeyHook.StopMouseHook();
             HookLib.GlobalMouseKeyHook.RemoveMouseHotkey(HookLib.GlobalMouseKeyHook.mouse_button.Right);
         }
 
-        public class PointRecordEditorViewModelReactiveObject : ReactiveObject
-        {
-            #region MyPoint
-            public Point MyPoint
-            {
-                get => myPoint;
-                set => this.RaiseAndSetIfChanged(ref myPoint, value);
-            }
-            private Point myPoint;
-            #endregion
-
-            public bool ButtonEnable
-            {
-                get => buttonEnable;
-                set => this.RaiseAndSetIfChanged(ref buttonEnable, value);
-            }
-            private bool buttonEnable;
-
-            public bool Editable 
-            { 
-                get => editable;
-                set => this.RaiseAndSetIfChanged(ref editable, value);
-            }
-            private bool editable;
-
-            public ReactiveCommand<Unit, Unit> GetMousePos_Command { get; internal set; }
-        }
     }
 }

@@ -25,6 +25,6 @@
                 </ContentControl>
             </DataTemplate>
         </ListBox.ItemTemplate>
-
+        
     </ListBox>
 </UserControl>

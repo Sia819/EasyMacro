@@ -36,6 +36,7 @@ namespace EasyMacro.View.Node
         public const String ExecutionPortTemplateKey = "ExecutionPortTemplate";
         public const String IntegerPortTemplateKey = "IntegerPortTemplate";
         public const String StringPortTemplateKey = "StringPortTemplate";
+        public const String PointPortTemplateKey = "PointPortTemplate";
         #endregion
 
         public CodeGenPortView()
@@ -62,6 +63,7 @@ namespace EasyMacro.View.Node
                 case PortType.Execution: return (ControlTemplate)Resources[ExecutionPortTemplateKey];
                 case PortType.Integer: return (ControlTemplate)Resources[IntegerPortTemplateKey];
                 case PortType.String: return (ControlTemplate)Resources[StringPortTemplateKey];
+                case PortType.Point: return (ControlTemplate)Resources[PointPortTemplateKey];
                 default: throw new Exception("Unsupported port type");
             }
         }

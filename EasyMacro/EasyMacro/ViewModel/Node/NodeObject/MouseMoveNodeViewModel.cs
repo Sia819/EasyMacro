@@ -66,11 +66,10 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             base.Name = "마우스 절대좌표 이동";
 
-            MyPoint = new ValueNodeInputViewModel<Point>()
+            MyPoint = new CodeGenInputViewModel<Point>(PortType.Point)
             {
                 Name = "Point",
-                Editor = new PointRecordEditorViewModel(),
-                Port = null
+                Editor = new PointRecordEditorViewModel()
             };
             this.Inputs.Add(MyPoint);
 

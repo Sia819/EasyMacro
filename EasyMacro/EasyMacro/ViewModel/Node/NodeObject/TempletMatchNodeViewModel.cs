@@ -87,7 +87,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                         templetMatch.SetDelayTime(Delay.Value ?? 1000);
 
                         templetMatch.Do();
-                        Application.Current.Dispatcher.Invoke(() => (ResultPoint.Editor as PointRecordEditorViewModel).ReactiveObject.MyPoint = templetMatch.FoundPoint); // 멀티스레드에서 UI 수정
+                        Application.Current.Dispatcher.Invoke(() => (ResultPoint.Editor as PointRecordEditorViewModel).Value = templetMatch.FoundPoint); // 멀티스레드에서 UI 수정
 
                         ValueListNodeInputViewModel<IStatement> selectedFlowout;
 
@@ -191,10 +191,14 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             };
             this.Inputs.Add(Delay);
 
-            ResultPoint = new ValueNodeOutputViewModel<Point>()
+            ResultPoint = new CodeGenOutputViewModel<Point>(PortType.Point)
             {
                 Name = "Point",
-                Editor = new PointRecordEditorViewModel(),
+                Editor = new PointRecordEditorViewModel() 
+                { 
+                    Editable = false,
+                    ButtonEnable = false
+                }
             };
             this.Outputs.Add(ResultPoint);
 

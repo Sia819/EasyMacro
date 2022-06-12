@@ -33,14 +33,26 @@
                 </Grid>
             </Viewbox>
         </ControlTemplate>
+
+        <ControlTemplate x:Key="{x:Static local:CodeGenPortView.PointPortTemplateKey}" TargetType="views:PortView">
+            <Viewbox StretchDirection="Both" Stretch="Uniform">
+                <Grid Width="20" Height="20">
+                    <Ellipse Fill="#86C691" HorizontalAlignment="Left" VerticalAlignment="Center" Height="15" Width="15"/>
+                    <Path Fill="#86C691" Data="M 0 0 L 4 4 L 0 8 Z" HorizontalAlignment="Right" VerticalAlignment="Center" Height="8" Width="4"/>
+                </Grid>
+            </Viewbox>
+        </ControlTemplate>
+
     </UserControl.Resources>
+    
     <views:PortView x:Name="PortView" RenderTransformOrigin="0.5,0.5">
         <views:PortView.Template>
 
             <ControlTemplate TargetType="views:PortView">
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <Grid Width="20" Height="20">
-                        <Path Fill="White" Data="M 0 0 L 8 0 L 18 10 L 8 20 L 0 20 Z" HorizontalAlignment="Center"/>
+                        <Ellipse Fill="#86C691" HorizontalAlignment="Left" VerticalAlignment="Center" Height="15" Width="15"/>
+                        <Path Fill="#86C691" Data="M 0 0 L 4 4 L 0 8 Z" HorizontalAlignment="Right" VerticalAlignment="Center" Height="8" Width="4"/>
                     </Grid>
                 </Viewbox>
             </ControlTemplate>

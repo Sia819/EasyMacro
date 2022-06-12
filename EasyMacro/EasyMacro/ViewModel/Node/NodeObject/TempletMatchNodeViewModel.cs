@@ -8,6 +8,7 @@ using NodeNetwork.Toolkit.ValueNode;
 using ReactiveUI;
 using System;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Windows;
 
 namespace EasyMacro.ViewModel.Node.NodeObject

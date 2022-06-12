@@ -73,30 +73,33 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             Action action = () =>
             {
-                CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
-
-                templetMatch.screenCapture.WindowName = WindowName.Value;
-                templetMatch.isWantKeepFinding = IsWantKeepFind.Value ?? false;
-                templetMatch.retryTimes = RetryTimes.Value ?? 0;
-                templetMatch.accuracy = (double)(Accuracy.Value ?? 80) / 100;
-                templetMatch.SetDelayTime(Delay.Value ?? 1000);
-
-                templetMatch.Do();
-
-                ValueListNodeInputViewModel<IStatement> selectedFlowout;
-
-                if (templetMatch.result)
+                if (CodeSimViewModel.Instance.IsRunning || Thread.CurrentThread.IsBackground is false)
                 {
-                    selectedFlowout = FlowOutOption1;
-                }
-                else
-                {
-                    selectedFlowout = FlowOutOption2;
-                }
+                    CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
 
-                foreach (var a in selectedFlowout.Values.Items)
-                {
-                    a.Compile(new CompilerContext());
+                    templetMatch.screenCapture.WindowName = WindowName.Value;
+                    templetMatch.isWantKeepFinding = IsWantKeepFind.Value ?? false;
+                    templetMatch.retryTimes = RetryTimes.Value ?? 0;
+                    templetMatch.accuracy = (double)(Accuracy.Value ?? 80) / 100;
+                    templetMatch.SetDelayTime(Delay.Value ?? 1000);
+
+                    templetMatch.Do();
+
+                    ValueListNodeInputViewModel<IStatement> selectedFlowout;
+
+                    if (templetMatch.result)
+                    {
+                        selectedFlowout = FlowOutOption1;
+                    }
+                    else
+                    {
+                        selectedFlowout = FlowOutOption2;
+                    }
+
+                    foreach (var a in selectedFlowout.Values.Items)
+                    {
+                        a.Compile(new CompilerContext());
+                    }
                 }
             };
             return action;

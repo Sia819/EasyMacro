@@ -80,6 +80,7 @@ namespace EasyMacro.ViewModel.Node
                 ReStart = false;
                 IsRunning = true;
                 Code.Compile(new CompilerContext());
+                IsRunning = false;
             }
         }
 

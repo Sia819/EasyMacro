@@ -51,7 +51,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             Action action = () =>
             {
-                if (CodeSimViewModel.Instance.IsRunning)
+                if (CodeSimViewModel.Instance.IsRunning || Thread.CurrentThread.IsBackground is false)
                 {
                     CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
                     //TODO : 키 지정방식 수정 필요, 작동 안됨

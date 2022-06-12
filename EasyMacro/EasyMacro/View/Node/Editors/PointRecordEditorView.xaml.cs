@@ -35,11 +35,19 @@ namespace EasyMacro.View.Node.Editors
 
             this.WhenActivated(d =>
             {
-                this.OneWayBind(ViewModel, vm => vm.GetMousePos_Command, v => v.recordButton.Command)
+                this.OneWayBind(ViewModel, vm => vm.ReactiveObject.GetMousePos_Command, v => v.recordButton.Command)
                     .DisposeWith(d);
+                this.OneWayBind(ViewModel, vm => vm.ReactiveObject.ButtonEnable, v => v.recordButton.Visibility)
+                    .DisposeWith(d);
+
                 this.OneWayBind(ViewModel, vm => vm.ReactiveObject.MyPoint, v => v.X_UpDown.Value, (point) => point.X)
                     .DisposeWith(d);
+                this.OneWayBind(ViewModel, vm => vm.ReactiveObject.Editable, v => v.X_UpDown.IsEnabled)
+                    .DisposeWith(d);
+
                 this.OneWayBind(ViewModel, vm => vm.ReactiveObject.MyPoint, v => v.Y_UpDown.Value, (point) => point.Y)
+                    .DisposeWith(d);
+                this.OneWayBind(ViewModel, vm => vm.ReactiveObject.Editable, v => v.Y_UpDown.IsEnabled)
                     .DisposeWith(d);
             });
         }

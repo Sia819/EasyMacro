@@ -58,9 +58,9 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public ValueNodeInputViewModel<int?> Delay { get; }
 
-        public IntegerValueEditorViewModel delayEditor = new IntegerValueEditorViewModel(0);
-
         public ValueNodeOutputViewModel<IStatement> FlowIn { get; }
+
+        public ValueNodeOutputViewModel<Point> ResultPoint { get; }
 
         public ValueListNodeInputViewModel<IStatement> FlowOutOption1 { get; }
 
@@ -76,30 +76,34 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             {
                 if (CodeSimViewModel.Instance.IsRunning || Thread.CurrentThread.IsBackground is false)
                 {
-                    CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
-
-                    templetMatch.screenCapture.WindowName = WindowName.Value;
-                    templetMatch.isWantKeepFinding = IsWantKeepFind.Value ?? false;
-                    templetMatch.retryTimes = RetryTimes.Value ?? 0;
-                    templetMatch.accuracy = (double)(Accuracy.Value ?? 80) / 100;
-                    templetMatch.SetDelayTime(Delay.Value ?? 1000);
-
-                    templetMatch.Do();
-
-                    ValueListNodeInputViewModel<IStatement> selectedFlowout;
-
-                    if (templetMatch.result)
+                    if (BitmapDir.Value != null)
                     {
-                        selectedFlowout = FlowOutOption1;
-                    }
-                    else
-                    {
-                        selectedFlowout = FlowOutOption2;
-                    }
+                        CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
 
-                    foreach (var a in selectedFlowout.Values.Items)
-                    {
-                        a.Compile(new CompilerContext());
+                        templetMatch.ScreenCapture.WindowName = WindowName.Value;
+                        templetMatch.IsWantKeepFinding = IsWantKeepFind.Value ?? false;
+                        templetMatch.retryTimes = RetryTimes.Value ?? 0;
+                        templetMatch.Accuracy = (double)(Accuracy.Value ?? 80) / 100;
+                        templetMatch.SetDelayTime(Delay.Value ?? 1000);
+
+                        templetMatch.Do();
+                        Application.Current.Dispatcher.Invoke(() => (ResultPoint.Editor as PointRecordEditorViewModel).ReactiveObject.MyPoint = templetMatch.FoundPoint); // 멀티스레드에서 UI 수정
+
+                        ValueListNodeInputViewModel<IStatement> selectedFlowout;
+
+                        if (templetMatch.Result)
+                        {
+                            selectedFlowout = FlowOutOption1;
+                        }
+                        else
+                        {
+                            selectedFlowout = FlowOutOption2;
+                        }
+
+                        foreach (var a in selectedFlowout.Values.Items)
+                        {
+                            a.Compile(new CompilerContext());
+                        }
                     }
                 }
             };
@@ -125,7 +129,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             Action action = () =>
             {
                 // TODO : TextBox의 String을 받는 구조 -> 창 찾기 컨트롤의 값을 받는 구조.
-                templetMatch.screenCapture.WindowName = (this.WindowName.Editor as StringValueEditorViewModel).Value;
+                templetMatch.ScreenCapture.WindowName = (this.WindowName.Editor as StringValueEditorViewModel).Value;
             };
             return action;
         }
@@ -182,12 +186,17 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             Delay = new ValueNodeInputViewModel<int?>()
             {
                 Name = "지연시간 (1초 = 1000)",
-                Editor = delayEditor,
+                Editor = new IntegerValueEditorViewModel(1000),
                 Port = null,
             };
             this.Inputs.Add(Delay);
 
-            delayEditor.Value = 1000;
+            ResultPoint = new ValueNodeOutputViewModel<Point>()
+            {
+                Name = "Point",
+                Editor = new PointRecordEditorViewModel(),
+            };
+            this.Outputs.Add(ResultPoint);
 
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {

@@ -16,7 +16,6 @@ namespace EasyMacro.ViewModel.Node.Editors
         }
 
         public PointRecordEditorViewModelReactiveObject ReactiveObject { get; }
-        public ReactiveCommand<Unit, Unit> GetMousePos_Command { get; }
 
         private FindWindowPosition findWindowPosition;
 
@@ -26,9 +25,13 @@ namespace EasyMacro.ViewModel.Node.Editors
         {
             findWindowPosition = new FindWindowPosition("");
             Windowname = windowname;
-            ReactiveObject = new();
+            ReactiveObject = new PointRecordEditorViewModelReactiveObject();
+            ReactiveObject.GetMousePos_Command = ReactiveCommand.Create(GetMousePos_ExcuteCommand);
+            ReactiveObject.Editable = false;
+            ReactiveObject.Editable = false;
+
             Value = ReactiveObject.MyPoint = new Point(0, 0);
-            this.GetMousePos_Command = ReactiveCommand.Create(GetMousePos_ExcuteCommand);
+
         }
 
         void GetMousePos_ExcuteCommand()
@@ -57,12 +60,30 @@ namespace EasyMacro.ViewModel.Node.Editors
 
         public class PointRecordEditorViewModelReactiveObject : ReactiveObject
         {
-            private Point myPoint;
+            #region MyPoint
             public Point MyPoint
             {
                 get => myPoint;
-                set { this.RaiseAndSetIfChanged(ref myPoint, value); Console.WriteLine(value); }
+                set => this.RaiseAndSetIfChanged(ref myPoint, value);
             }
+            private Point myPoint;
+            #endregion
+
+            public bool ButtonEnable
+            {
+                get => buttonEnable;
+                set => this.RaiseAndSetIfChanged(ref buttonEnable, value);
+            }
+            private bool buttonEnable;
+
+            public bool Editable 
+            { 
+                get => editable;
+                set => this.RaiseAndSetIfChanged(ref editable, value);
+            }
+            private bool editable;
+
+            public ReactiveCommand<Unit, Unit> GetMousePos_Command { get; internal set; }
         }
     }
 }

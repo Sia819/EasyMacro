@@ -78,7 +78,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Port = null
             };
             this.Inputs.Add(MyPoint);
-            
+
             Delay = new ValueNodeInputViewModel<int?>()
             {
                 Name = "지연시간",

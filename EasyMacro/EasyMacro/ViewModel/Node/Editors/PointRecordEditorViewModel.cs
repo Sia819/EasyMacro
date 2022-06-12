@@ -41,7 +41,7 @@ namespace EasyMacro.ViewModel.Node.Editors
 
         private void mouseCallback(PInvoke.POINT point)
         {
-            if (String.IsNullOrEmpty(Windowname.Value))
+            if (Windowname is null || String.IsNullOrEmpty(Windowname.Value))
             {
                 this.Value = this.ReactiveObject.MyPoint = point;
             }

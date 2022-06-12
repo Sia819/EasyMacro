@@ -31,21 +31,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             }
         }
 
-        /// <summary>
-        /// Delay Time
-        /// </summary>
-        /// 
-        // private static ImageManagerViewModel _imgMgr;
-        // private ImageManagerViewModel imgMgr
-        // {
-        //     get
-        //     {
-        //         if (_imgMgr is null)
-        //             _imgMgr = new ImageManagerViewModel();
-        //         return _imgMgr;
-        //     }
-        // }
-
         public ValueNodeInputViewModel<string> BitmapDir { get; }
 
         public ValueNodeInputViewModel<string> WindowName { get; }
@@ -158,6 +143,12 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             (WindowName.Editor as StringValueEditorViewModel).ValueChanged.Select(_ => WinnameToApi());
             this.Inputs.Add(WindowName);
 
+            RetryTimes = new ValueNodeInputViewModel<int?>()
+            {
+                Name = "재시도 횟수",
+                Editor = new IntegerValueEditorViewModel(),
+                Port = null,
+            };
 
             IsWantKeepFind = new ValueNodeInputViewModel<bool?>()
             {
@@ -165,14 +156,14 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Editor = new CheckBoxEditorViewModel(),
                 Port = null,
             };
-            this.Inputs.Add(IsWantKeepFind);
+            IsWantKeepFind.ValueChanged.Do(isChecked => 
+            { 
+                (RetryTimes.Editor as IntegerValueEditorViewModel).Editable = !(bool)isChecked; 
+            }).Subscribe();
+            
 
-            RetryTimes = new ValueNodeInputViewModel<int?>()
-            {
-                Name = "재시도 횟수",
-                Editor = new IntegerValueEditorViewModel(),
-                Port = null,
-            };
+            
+            this.Inputs.Add(IsWantKeepFind);
             this.Inputs.Add(RetryTimes);
 
             Accuracy = new ValueNodeInputViewModel<int?>()

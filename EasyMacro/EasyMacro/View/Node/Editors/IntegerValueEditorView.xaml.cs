@@ -32,6 +32,8 @@ namespace EasyMacro.View.Node.Editors
         }
         #endregion
 
+        private int valuestate = 0;
+
         public IntegerValueEditorView()
         {
             InitializeComponent();
@@ -39,15 +41,30 @@ namespace EasyMacro.View.Node.Editors
             this.WhenActivated(d =>
             {
                 // int? 를 double? 로 TwoWayBind하기위해 Converter를 사용
-                this.Bind(ViewModel, 
-                          vm => vm.Value, 
+                this.Bind(ViewModel,
+                          vm => vm.Value,
                           v => v.valueUpDown.Value,
                           this.ViewModelToViewConverterFunc,
                           this.ViewToViewModelConverterFunc).DisposeWith(d);
                 this.OneWayBind(ViewModel, vm => vm.MinValue, v => v.valueUpDown.Minimum).DisposeWith(d);
                 this.OneWayBind(ViewModel, vm => vm.MaxValue, v => v.valueUpDown.Maximum).DisposeWith(d);
+                this.OneWayBind(ViewModel, vm => vm.Editable, v => v.valueUpDown.IsEnabled, IsEnabledChanged2).DisposeWith(d);
             });
+        }
 
+        // IsEnabled == false가 될 때, UpDown의 Value는 -1로 표시
+        private bool IsEnabledChanged2(bool enabled)
+        {
+            if (enabled is false)
+            {
+                valuestate = (int)valueUpDown.Value;
+                valueUpDown.Value = -1;
+            }
+            else
+            {
+                valueUpDown.Value = valuestate;
+            }
+            return enabled;
         }
 
         private double? ViewModelToViewConverterFunc(int? viewModelValue)

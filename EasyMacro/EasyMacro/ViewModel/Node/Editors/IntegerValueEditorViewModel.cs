@@ -12,14 +12,39 @@ namespace EasyMacro.ViewModel.Node.Editors
             Splat.Locator.CurrentMutable.Register(() => new IntegerValueEditorView(), typeof(IViewFor<IntegerValueEditorViewModel>));
         }
 
-        public int MinValue { get; set; }
-        public int MaxValue { get; set; }
+        #region MinValue Property
+        public int MinValue
+        {
+            get => minValue;
+            set => this.RaiseAndSetIfChanged(ref minValue, value);
+        }
+        private int minValue;
+        #endregion
+
+        #region MaxValue Property
+        public int MaxValue
+        {
+            get => maxValue;
+            set => this.RaiseAndSetIfChanged(ref maxValue, value);
+        }
+        private int maxValue;
+        #endregion
+
+        #region Editable Property
+        public bool Editable
+        {
+            get => editable;
+            set => this.RaiseAndSetIfChanged(ref editable, value);
+        }
+        private bool editable;
+        #endregion
 
         public IntegerValueEditorViewModel(int minValue = -2147483648, int maxValue = 2147483647)
         {
             Value = 0;
             this.MinValue = (int)minValue;
             this.MaxValue = (int)maxValue;
+            this.Editable = true;
         }
 
     }

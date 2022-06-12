@@ -60,7 +60,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public ValueNodeOutputViewModel<IStatement> FlowIn { get; }
 
-        public ValueNodeOutputViewModel<Point> ResultPoint { get; }
+        public ValueNodeOutputViewModel<System.Drawing.Point> ResultPoint { get; }
 
         public ValueListNodeInputViewModel<IStatement> FlowOutOption1 { get; }
 
@@ -191,15 +191,17 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             };
             this.Inputs.Add(Delay);
 
-            ResultPoint = new CodeGenOutputViewModel<Point>(PortType.Point)
+            ResultPoint = new CodeGenOutputViewModel<System.Drawing.Point>(PortType.Point)
             {
                 Name = "Point",
                 Editor = new PointRecordEditorViewModel() 
                 { 
                     Editable = false,
                     ButtonEnable = false
-                }
+                },
+                
             };
+            ResultPoint.Value = (ResultPoint.Editor as PointRecordEditorViewModel).ValueChanged;
             this.Outputs.Add(ResultPoint);
 
             this.RunButton = new ValueNodeInputViewModel<int?>()

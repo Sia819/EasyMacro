@@ -71,7 +71,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             base.Name = "마우스 클릭";
 
-            MyPoint = new CodeGenInputViewModel<Point>(PortType.Point)
+            MyPoint = new CodeGenInputViewModel<System.Drawing.Point>(PortType.Point)
             {
                 Name = "Point",
                 Editor = new PointRecordEditorViewModel()

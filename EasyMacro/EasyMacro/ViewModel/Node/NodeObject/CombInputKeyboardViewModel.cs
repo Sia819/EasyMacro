@@ -70,7 +70,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                     {
                         combInputKeyboard.AddList((Keys)Enum.Parse(typeof(Keys), "ShiftKey"));
                     }
-                    combInputKeyboard.AddList(Input.Value);//((Keys)Enum.Parse(typeof(Keys), Input.Value));
+                    combInputKeyboard.AddList(Input.Value);
                     combInputKeyboard.Do();
 
                     foreach (var a in FlowOut.Values.Items)
@@ -86,11 +86,10 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             base.Name = "조합 키 입력";
 
-            //TODO : 나머지 구현
             Input = new ValueNodeInputViewModel<Keys>()
             {
                 Name = "입력 키",
-                Editor = new KeyboardRecordEditorViewModel(),//new StringValueEditorViewModel(),
+                Editor = new KeyboardRecordEditorViewModel(),
                 Port = null,
             };
             this.Inputs.Add(Input);

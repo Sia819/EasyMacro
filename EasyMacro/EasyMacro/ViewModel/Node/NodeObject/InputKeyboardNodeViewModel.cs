@@ -38,7 +38,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public ValueNodeInputViewModel<int?> KeyboardPressType { get; }
 
-        public ValueNodeInputViewModel<string> PressKey { get; }
+        public ValueNodeInputViewModel<Keys> PressKey { get; }
 
         public ValueNodeOutputViewModel<IStatement> FlowIn { get; }
 
@@ -55,9 +55,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 if (CodeSimViewModel.Instance.IsRunning || Thread.CurrentThread.IsBackground is false)
                 {
                     CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
-                    //TODO : 키 지정방식 수정 필요, 작동 안됨
 
-                    inputKeyboard.Key = (Keys)Enum.Parse(typeof(Keys), PressKey.Value);
+                    inputKeyboard.Key = PressKey.Value;
 
                     // RadioButtoKeyboardPressTypen Index to MouseClickTypes Convert
                     switch ((this.KeyboardPressType.Editor as RadioButtonEditorViewModel).GetRadioSelectedIndex)
@@ -97,10 +96,10 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.Inputs.Add(KeyboardPressType);
 
             // 입력할 키를 파싱하는 TextBox Editor 추가
-            PressKey = new ValueNodeInputViewModel<string>()
+            PressKey = new ValueNodeInputViewModel<Keys>()
             {
                 Name = "입력 키",
-                Editor = new StringValueEditorViewModel(),
+                Editor = new KeyboardRecordEditorViewModel(),
                 Port = null
             };
             this.Inputs.Add(PressKey);

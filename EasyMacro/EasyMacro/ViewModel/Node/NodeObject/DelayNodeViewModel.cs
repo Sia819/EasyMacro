@@ -69,7 +69,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             base.Name = "지연시키기";
 
-            //TODO : 나머지 구현
             Delay = new ValueNodeInputViewModel<int?>()
             {
                 Name = "지연시간 (1초 = 1000)",

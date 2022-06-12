@@ -12,7 +12,7 @@ namespace EasyMacro.ViewModel.Node.Editors
     public class KeyRecordEditorViewModel : ValueEditorViewModel<Keys>
     {
         static KeyRecordEditorViewModel()
-        {   //TODO : KeyRecordEditorView 개발
+        {
             Splat.Locator.CurrentMutable.Register(() => new PointRecordEditorView(), typeof(IViewFor<KeyRecordEditorViewModel>));
         }
 

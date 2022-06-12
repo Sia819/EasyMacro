@@ -10,14 +10,11 @@ namespace EasyMacroAPI.Command
     public class CombInputKeyboard : IAction
     {
         #region Public Propertes
-
-        // TODO : Windows Forms 라이브러리 키 열거형만 쓸거면 나중에, Model폴더 내 Keys 열거형을 따로 선언하는 방법이 선호됨.
         public List<Keys> Keys { get; set; }
 
         public MacroTypes MacroType => MacroTypes.CombInputKeyboard;
 
         private InputKeyboard inputKeyboard;
-
         #endregion
 
         public CombInputKeyboard()
@@ -30,12 +27,7 @@ namespace EasyMacroAPI.Command
         {
             Keys.Add(key);
         }
-        /*
-        public CombInputKeyboard(Keys[] keys)
-        {
-            this.Keys = keys;
-        }
-        */
+
         public void Do()
         {
             for(int i = 0; i < Keys.Count; i++)

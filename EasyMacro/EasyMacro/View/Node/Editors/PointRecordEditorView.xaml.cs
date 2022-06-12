@@ -37,7 +37,9 @@ namespace EasyMacro.View.Node.Editors
             {
                 this.OneWayBind(ViewModel, vm => vm.GetMousePos_Command, v => v.recordButton.Command)
                     .DisposeWith(d);
-                this.OneWayBind(ViewModel, vm => vm.ReactiveObject.MyPoint, v => v.TextBox_TextBlock.Text)
+                this.OneWayBind(ViewModel, vm => vm.ReactiveObject.MyPoint, v => v.X_UpDown.Value, (point) => point.X)
+                    .DisposeWith(d);
+                this.OneWayBind(ViewModel, vm => vm.ReactiveObject.MyPoint, v => v.Y_UpDown.Value, (point) => point.Y)
                     .DisposeWith(d);
             });
         }

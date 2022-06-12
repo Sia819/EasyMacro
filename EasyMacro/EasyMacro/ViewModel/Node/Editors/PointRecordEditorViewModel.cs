@@ -21,13 +21,9 @@ namespace EasyMacro.ViewModel.Node.Editors
         private FindWindowPosition findWindowPosition;
 
         private ValueNodeInputViewModel<string> Windowname;
-        private IntegerValueEditorViewModel X;
-        private IntegerValueEditorViewModel Y;
 
-        public PointRecordEditorViewModel(IntegerValueEditorViewModel X, IntegerValueEditorViewModel Y, ValueNodeInputViewModel<string> windowname = null)
+        public PointRecordEditorViewModel(ValueNodeInputViewModel<string> windowname = null)
         {
-            this.X = X;
-            this.Y = Y;
             findWindowPosition = new FindWindowPosition("");
             Windowname = windowname;
             ReactiveObject = new();
@@ -40,23 +36,20 @@ namespace EasyMacro.ViewModel.Node.Editors
             HookLib.GlobalMouseKeyHook.StartMouseHook();
             // 마우스 오른쪽 키가 눌려졌을 때, 등록한 콜백함수가 호출됨.
             HookLib.GlobalMouseKeyHook.AddMouseHotkey(HookLib.GlobalMouseKeyHook.mouse_button.Right,
-                                                            new HookLib.GlobalMouseKeyHook.MouseHotkeyDelegate(mouseCallback));
+                                                      new HookLib.GlobalMouseKeyHook.MouseHotkeyDelegate(mouseCallback));
         }
 
         private void mouseCallback(PInvoke.POINT point)
         {
-            this.Value = this.ReactiveObject.MyPoint = point;
-            if(Windowname is not null && Windowname.Value != "")
+            if (String.IsNullOrEmpty(Windowname.Value))
             {
-                findWindowPosition.WindowName = Windowname.Value;
-                findWindowPosition.Do();
-                this.X.Value = point.x - findWindowPosition.rect.Left;
-                this.Y.Value = point.y - findWindowPosition.rect.Top;
+                this.Value = this.ReactiveObject.MyPoint = point;
             }
             else
             {
-                this.X.Value = point.x;
-                this.Y.Value = point.y;
+                findWindowPosition.WindowName = Windowname.Value;
+                findWindowPosition.Do();
+                this.Value = this.ReactiveObject.MyPoint = new Point(point.x - findWindowPosition.rect.Left, point.y - findWindowPosition.rect.Top);
             }
             HookLib.GlobalMouseKeyHook.StopMouseHook();
             HookLib.GlobalMouseKeyHook.RemoveMouseHotkey(HookLib.GlobalMouseKeyHook.mouse_button.Right);

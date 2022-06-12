@@ -32,18 +32,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             }
         }
 
-        /// <summary>
-        /// Delay Time
-        /// </summary>
-        public ValueNodeInputViewModel<int?> X { get; }
-
-        public IntegerValueEditorViewModel XValueEditor = new IntegerValueEditorViewModel();
-
-        public ValueNodeInputViewModel<int?> Y { get; }
-
-        public IntegerValueEditorViewModel YValueEditor = new IntegerValueEditorViewModel();
-
-        public ValueNodeInputViewModel<Point> Point { get; }
+        public ValueNodeInputViewModel<Point> MyPoint { get; }
 
         public ValueNodeInputViewModel<int?> Delay { get; }
 
@@ -63,8 +52,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 {
                     CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
 
-                    mouseClick.X = (int)X.Value;
-                    mouseClick.Y = (int)Y.Value;
+                    mouseClick.X = (int)MyPoint.Value.X;
+                    mouseClick.Y = (int)MyPoint.Value.Y;
                     mouseClick.Delay = (int)Delay.Value;
                     mouseClick.Do();
 
@@ -81,30 +70,14 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             base.Name = "마우스 클릭";
 
-            X = new ValueNodeInputViewModel<int?>()
-            {
-                Name = "X좌표",
-                Editor = XValueEditor,
-                Port = null
-            };
-            this.Inputs.Add(X);
-
-            Y = new ValueNodeInputViewModel<int?>()
-            {
-                Name = "Y좌표",
-                Editor = YValueEditor,
-                Port = null
-            };
-            this.Inputs.Add(Y);
-
-            Point = new ValueNodeInputViewModel<Point>()
+            MyPoint = new ValueNodeInputViewModel<Point>()
             {
                 Name = "Point",
-                Editor = new PointRecordEditorViewModel(XValueEditor, YValueEditor),
+                Editor = new PointRecordEditorViewModel(),
                 Port = null
             };
-            this.Inputs.Add(Point);
-
+            this.Inputs.Add(MyPoint);
+            
             Delay = new ValueNodeInputViewModel<int?>()
             {
                 Name = "지연시간",
@@ -133,9 +106,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Name = "",
                 Value = this.RunButton.ValueChanged.Select(_ => new NodeCompile(this.Func())
                 {
-                    Log = Observable.Merge(X.ValueChanged.Select(x => $"MouseMove - ({x.Value}, {this.Y.Value}, {this.Delay.Value})"),
-                                            Y.ValueChanged.Select(y => $"MouseMove - ({this.X.Value}, {y.Value}, , {this.Delay.Value})"),
-                                            Delay.ValueChanged.Select(delay => $"MouseMove - ({this.X.Value}, {this.Y.Value}, , {delay ?? 0})"))
+                    Log = Observable.Merge(MyPoint.ValueChanged.Select(point => $"MouseMove - ({point.X}, {point.Y}, {this.Delay.Value})"),
+                                           Delay.ValueChanged.Select(delay => $"MouseMove - ({this.MyPoint.Value.X}, {this.MyPoint.Value.Y}, {delay ?? 0})"))
                 })
             };
             this.Outputs.Add(FlowIn);

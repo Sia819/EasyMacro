@@ -1,5 +1,6 @@
 ﻿using EasyMacro.Model.Node.Compiler;
 using EasyMacro.ViewModel.Node.Editors;
+using System.Windows;
 
 namespace EasyMacro.Model.Node
 {
@@ -26,11 +27,11 @@ namespace EasyMacro.Model.Node
 
             string code = "";
 
-            currentIndexEditor.Value = 0;
+            Application.Current.Dispatcher.Invoke(() => currentIndexEditor.Value = 0);
 
             for(int i = 0; i < UpperBound; i++)
             {
-                currentIndexEditor.Value = currentIndexEditor.Value + 1;
+                Application.Current.Dispatcher.Invoke(() => currentIndexEditor.Value = currentIndexEditor.Value + 1);
                 LoopBody.Compile(context);
             }
             LoopEnd.Compile(context);

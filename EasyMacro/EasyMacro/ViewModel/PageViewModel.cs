@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Windows;
 using DynamicData;
 using EasyMacro.Model.Node;
 using EasyMacro.ViewModel.Node;
@@ -16,6 +16,13 @@ using NodeNetwork.Toolkit.Layout.ForceDirected;
 using NodeNetwork.Toolkit.NodeList;
 using NodeNetwork.ViewModels;
 using ReactiveUI;
+using ExtendedXmlSerializer;
+using ExtendedXmlSerializer.ExtensionModel;
+using ExtendedXmlSerializer.Configuration;
+using System.Text;
+using System.Xml;
+using ExtendedXmlSerializer.ExtensionModel.Xml;
+using System.Windows;
 
 namespace EasyMacro.ViewModel
 {
@@ -37,7 +44,7 @@ namespace EasyMacro.ViewModel
         public static PageViewModel Instance => _instance ??= new PageViewModel();
 
         #region Network
-        private readonly ObservableAsPropertyHelper<NetworkViewModel> _network;
+        private ObservableAsPropertyHelper<NetworkViewModel> _network;
         public NetworkViewModel Network => _network.Value;
         #endregion
 
@@ -58,6 +65,7 @@ namespace EasyMacro.ViewModel
 
         private PageViewModel()
         {
+            System.Windows.MessageBox.Show("2");
             this.WhenAnyValue(vm => vm.NetworkBreadcrumbBar.ActiveItem).Cast<NetworkBreadcrumb>()
                 .Select(b => b?.Network)
                 .ToProperty(this, vm => vm.Network, out _network);
@@ -143,32 +151,63 @@ namespace EasyMacro.ViewModel
             HookLib.GlobalKeyboardHook.AddKeyboardHotkey(EasyMacroAPI.Model.Keys.F10, EasyMacroAPI.Model.KeyModifiers.None, StopMacro);
         }
 
+        private PageViewModel(object obj) : this()
+        {
+            System.Windows.MessageBox.Show("1");
+        }
+
         public void Save()
         {
             IEnumerable<ReactiveObject> nodes = PageViewModel.Instance.Network.Nodes.Items;
+            List<IExtendedXmlCustomSerializer> nodesSerialize = new List<IExtendedXmlCustomSerializer>();
             
-            //IEnumerable<NodeViewModel> nodes = PageViewModel.Instance.Network.Nodes.Items;
+            IExtendedXmlSerializer serializer;
+            serializer = new ConfigurationContainer().Type<StartNodeViewModel>()
+                                                     .CustomSerializer<StartNodeViewModel>(typeof(StartNodeViewModel))
+                                                     .Type<DelayNodeViewModel>()
+                                                     .CustomSerializer<DelayNodeViewModel>(typeof(DelayNodeViewModel))
+                                                     .Create();
 
-            IFormatter formatter = new BinaryFormatter();
-            Stream stream = new FileStream("MyFile.bin", FileMode.Create, FileAccess.Write, FileShare.None);
-            formatter.Serialize(stream, nodes);
-            stream.Close();
+            foreach (var node in nodes)
+            {
+                IExtendedXmlCustomSerializer serializeObject = node as IExtendedXmlCustomSerializer;
+                if (serializeObject is null) { throw new Exception("해당 노드가 NodeSerialize를 구현하지 않았습니다!!"); }
+                nodesSerialize.Add(serializeObject);
+            }
+
+            string xmlData = serializer.Serialize(nodesSerialize);
+
+            using (XmlTextWriter wr = new XmlTextWriter($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\{"TestSave.xml"}", Encoding.UTF8))
+            {
+                wr.Formatting = Formatting.Indented;
+                XmlDocument document = new XmlDocument();
+                document.LoadXml(xmlData);
+                document.WriteContentTo(wr);
+                wr.Flush();
+            }
         }
 
         public void Load()
         {
+            object obj = null;
+            PageViewModel instance = new PageViewModel(obj);
+            _instance.eventNode.Position = new Point(100, 50);
+            
+            // TODO : 여기에 저장된 파일을 로드하는 코드 작성
+
+            // Change-Refresh View
+            _instance = ((Application.Current.MainWindow as EasyMacro.View.MainWindow).mainFrame.Content as View.NodeEditPage).ViewModel = instance;
+
 
         }
 
         public void StartMacro(EasyMacroAPI.Model.Keys keys, EasyMacroAPI.Model.KeyModifiers keyModifiers)
         {
-            //MessageBox.Show("F9");
             CodeSimViewModel.Instance.RunScript_ExcuteCommand();
         }
 
         public void StopMacro(EasyMacroAPI.Model.Keys keys, EasyMacroAPI.Model.KeyModifiers keyModifiers)
         {
-            //MessageBox.Show("F10");
             CodeSimViewModel.Instance.TerminateThread();
         }
 

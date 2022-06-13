@@ -4,6 +4,7 @@ using EasyMacro.Model.Node.Compiler;
 using EasyMacro.View.Node;
 using EasyMacro.ViewModel.Node.Editors;
 using EasyMacroAPI.Command;
+using ExtendedXmlSerializer.ExtensionModel.Xml;
 using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
 using NodeNetwork.Views;
@@ -11,10 +12,12 @@ using ReactiveUI;
 using System;
 using System.Reactive.Linq;
 using System.Threading;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class DelayNodeViewModel : CodeGenNodeViewModel
+    public class DelayNodeViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
     {
         static DelayNodeViewModel()
         {
@@ -63,6 +66,20 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 }
             };
             return action;
+        }
+
+        public object Deserialize(XElement xElement)
+        {
+            DelayNodeViewModel instance = (DelayNodeViewModel)NodeSerializer.Deserialize(ref xElement, new DelayNodeViewModel());
+            return instance;
+        }
+
+        public void Serializer(XmlWriter xmlWriter, object obj)
+        {
+            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+
+            DelayNodeViewModel instance = obj as DelayNodeViewModel;
+            xmlWriter.WriteElementString(nameof(Delay), instance.Delay.Value.ToString());
         }
 
         public DelayNodeViewModel() : base(NodeType.Function)

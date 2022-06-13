@@ -43,11 +43,12 @@
     </mah:MetroWindow.RightWindowCommands>
 
     <!-- 내용 -->
-    <Frame Grid.Row="1"
-               x:Name="mainFrame"
+    <Frame x:FieldModifier="public"
+           Grid.Row="1"
+           x:Name="mainFrame"
            LoadCompleted="mainFrame_LoadCompleted"
-            DataContextChanged="mainFrame_DataContextChanged"
-               NavigationUIVisibility="Hidden">
+           DataContextChanged="mainFrame_DataContextChanged"
+           NavigationUIVisibility="Hidden">
     </Frame>
     <!---->
     

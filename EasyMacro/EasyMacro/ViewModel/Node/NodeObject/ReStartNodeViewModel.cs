@@ -32,18 +32,13 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         public bool IsCanExcute { get; set; } = true;
         
         Action Func()
-        { //TODO : 스레드로 변경시 수정
+        {
             Action action = () =>
             {
                 if (CodeSimViewModel.Instance.IsRunning || Thread.CurrentThread.IsBackground is false)
                 {
                     CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
-                    StartNodeViewModel eventNode = PageViewModel.Instance.eventNode;
-                    Application.Current.MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.SystemIdle, new Action(() =>
-                    {
-                        CodeSimViewModel.Instance.ReStart = true;
-                    }
-                    ));
+                    CodeSimViewModel.Instance.ReStart = true; // 무한반복
                 }
             };
             return action;

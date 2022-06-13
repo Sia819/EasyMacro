@@ -5,10 +5,13 @@ using NodeNetwork.Toolkit.ValueNode;
 using EasyMacro.View.Node;
 using ReactiveUI;
 using NodeNetwork.ViewModels;
+using ExtendedXmlSerializer.ExtensionModel.Xml;
+using System.Xml.Linq;
+using System.Xml;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class StartNodeViewModel : CodeGenNodeViewModel
+    public class StartNodeViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
     {
         static StartNodeViewModel()
         {
@@ -28,6 +31,17 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             };
 
             this.Inputs.Add(OnClickFlow);
+        }
+
+        public object Deserialize(XElement xElement)
+        {
+            StartNodeViewModel instance = (StartNodeViewModel)NodeSerializer.Deserialize(ref xElement, new StartNodeViewModel());
+            return instance;
+        }
+
+        public void Serializer(XmlWriter xmlWriter, object obj)
+        {
+            NodeSerializer.Serializer(ref xmlWriter, ref obj);
         }
     }
 }

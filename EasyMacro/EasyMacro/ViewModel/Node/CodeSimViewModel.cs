@@ -74,14 +74,14 @@ namespace EasyMacro.ViewModel.Node
 
         void nodeFlowThread_Excute()
         {
+            IsRunning = true;
             ReStart = true;
-            while (ReStart)
+            while (ReStart) // Restart Node가 연결된 경우 ReStart변수가 루프 내 에서 true로 변경됨.
             {
                 ReStart = false;
-                IsRunning = true;
                 Code.Compile(new CompilerContext());
-                IsRunning = false;
             }
+            IsRunning = false;
         }
 
         public void Print(string msg)

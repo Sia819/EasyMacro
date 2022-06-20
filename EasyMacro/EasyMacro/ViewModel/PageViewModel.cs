@@ -65,7 +65,6 @@ namespace EasyMacro.ViewModel
 
         private PageViewModel()
         {
-            System.Windows.MessageBox.Show("2");
             this.WhenAnyValue(vm => vm.NetworkBreadcrumbBar.ActiveItem).Cast<NetworkBreadcrumb>()
                 .Select(b => b?.Network)
                 .ToProperty(this, vm => vm.Network, out _network);
@@ -78,11 +77,8 @@ namespace EasyMacro.ViewModel
             eventNode = new StartNodeViewModel { CanBeRemovedByUser = false };
             Network.Nodes.Add(eventNode);
 
-            //NodeList.AddNodeType(() => new StartNodeViewModel());
-            //NodeList.AddNodeType(() => new IntLiteralNode());
-            //NodeList.AddNodeType(() => new PrintNode());
-            //NodeList.AddNodeType(() => new TextLiteralNode());
-
+            
+            // ListPanel에 추가하여 보여질 노드들
             NodeList.AddNodeType(() => new ReStartNodeViewModel());
             NodeList.AddNodeType(() => new ForLoopNode());
             NodeList.AddNodeType(() => new DelayNodeViewModel());
@@ -94,6 +90,11 @@ namespace EasyMacro.ViewModel
             NodeList.AddNodeType(() => new MouseClickNodeViewModel());
             NodeList.AddNodeType(() => new MouseMoveNodeViewModel());
             NodeList.AddNodeType(() => new TempletMatchNodeViewModel());
+            // TODO : 지원하지 않는 노드
+            // NodeList.AddNodeType(() => new StartNodeViewModel());
+            // NodeList.AddNodeType(() => new IntLiteralNode());
+            // NodeList.AddNodeType(() => new PrintNode());
+            // NodeList.AddNodeType(() => new TextLiteralNode());
 
             var codeObservable = eventNode.OnClickFlow.Values.Connect().Select(_ => new StatementSequence(eventNode.OnClickFlow.Values.Items));
             codeObservable.BindTo(this, vm => vm.CodePreview.Code);
@@ -147,13 +148,14 @@ namespace EasyMacro.ViewModel
             // 핫키 등록
             HookLib.GlobalKeyboardHook.StartKeyboardHook();
             HookLib.GlobalKeyboardHook.AddKeyboardHotkey(EasyMacroAPI.Model.Keys.F9, EasyMacroAPI.Model.KeyModifiers.None, StartMacro);
-            //HookLib.GlobalKeyboardHook.AddKeyboardHotkey(EasyMacroAPI.Model.Keys.F9, EasyMacroAPI.Model.KeyModifiers.Control | EasyMacroAPI.Model.KeyModifiers.Alt, StartMacro);
             HookLib.GlobalKeyboardHook.AddKeyboardHotkey(EasyMacroAPI.Model.Keys.F10, EasyMacroAPI.Model.KeyModifiers.None, StopMacro);
+            //HookLib.GlobalKeyboardHook.AddKeyboardHotkey(EasyMacroAPI.Model.Keys.F9, EasyMacroAPI.Model.KeyModifiers.Control | EasyMacroAPI.Model.KeyModifiers.Alt, StartMacro);
+
         }
 
         private PageViewModel(object obj) : this()
         {
-            System.Windows.MessageBox.Show("1");
+            // 강제적으로 부른 생성자
         }
 
         public void Save()
@@ -175,7 +177,7 @@ namespace EasyMacro.ViewModel
                 nodesSerialize.Add(serializeObject);
             }
 
-            string xmlData = serializer.Serialize(nodesSerialize);
+            string xmlData = serializer.Serialize(nodesSerialize);// TODO : 모든 노드는 IExtendedXmlCustomSerializer를 구현해야하며, 모든 속성을 저장해야함.
 
             using (XmlTextWriter wr = new XmlTextWriter($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\{"TestSave.xml"}", Encoding.UTF8))
             {

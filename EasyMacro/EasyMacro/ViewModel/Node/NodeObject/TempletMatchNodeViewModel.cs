@@ -5,6 +5,7 @@ using EasyMacro.View.Node;
 using EasyMacro.ViewModel.Node.Editors;
 using EasyMacroAPI.Command;
 using NodeNetwork.Toolkit.ValueNode;
+using NodeNetwork.ViewModels;
 using ReactiveUI;
 using System;
 using System.Reactive.Linq;
@@ -121,6 +122,10 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public TempletMatchNodeViewModel() : base(NodeType.Function)
         {
+            var controlFlowGroupIn = new EndpointGroup("");
+            var controlFlowGroupOut1 = new EndpointGroup(controlFlowGroupIn);
+            var controlFlowGroupOut2 = new EndpointGroup(controlFlowGroupOut1);
+
             base.Name = "이미지 찾기";
 
             //TODO : 구조변경
@@ -132,7 +137,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             };
             BitmapDir.ValueChanged.Select(_ => ImgBindToApi()).Do(action => action.Invoke()).Subscribe();
 
-            this.Inputs.Add(BitmapDir);
+            
 
             WindowName = new ValueNodeInputViewModel<string>()
             {
@@ -141,7 +146,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Port = null
             };
             (WindowName.Editor as StringValueEditorViewModel).ValueChanged.Select(_ => WinnameToApi());
-            this.Inputs.Add(WindowName);
+            
 
             RetryTimes = new ValueNodeInputViewModel<int?>()
             {
@@ -161,10 +166,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 (RetryTimes.Editor as IntegerValueEditorViewModel).Editable = !(bool)isChecked; 
             }).Subscribe();
             
-
             
-            this.Inputs.Add(IsWantKeepFind);
-            this.Inputs.Add(RetryTimes);
 
             Accuracy = new ValueNodeInputViewModel<int?>()
             {
@@ -172,7 +174,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Editor = new IntegerValueEditorViewModel(1, 100) { Value = 80 },
                 Port = null,
             };
-            this.Inputs.Add(Accuracy);
+            
 
             Delay = new ValueNodeInputViewModel<int?>()
             {
@@ -180,20 +182,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Editor = new IntegerValueEditorViewModel(1000),
                 Port = null,
             };
-            this.Inputs.Add(Delay);
-
-            ResultPoint = new CodeGenOutputViewModel<System.Drawing.Point>(PortType.Point)
-            {
-                Name = "Point",
-                Editor = new PointRecordEditorViewModel() 
-                { 
-                    Editable = false,
-                    ButtonEnable = false
-                },
-                
-            };
-            ResultPoint.Value = (ResultPoint.Editor as PointRecordEditorViewModel).ValueChanged;
-            this.Outputs.Add(ResultPoint);
+            
 
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {
@@ -208,7 +197,11 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                     )
                 }
             };
-            this.Inputs.Add(this.RunButton);
+            
+
+            
+            
+            
 
             FlowIn = new CodeGenOutputViewModel<IStatement>(PortType.Execution)
             {
@@ -217,23 +210,50 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 {
                     Log = Observable.Merge(BitmapDir.ValueChanged.Select(dir => $"TempletMatch - ({dir}), ({this.WindowName.Value})"),
                                            WindowName.ValueChanged.Select(windowname => $"TempletMatch - ({this.BitmapDir.Value}), ({windowname})"))
-                })
+                }),
+                Group = controlFlowGroupIn
             };
-            this.Outputs.Add(FlowIn);
 
             FlowOutOption1 = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
             {
                 Name = "이미지 찾기 성공",
-                MaxConnections = 1
+                MaxConnections = 1,
+                Group = controlFlowGroupOut1
             };
-            this.Inputs.Add(FlowOutOption1);
+
+            ResultPoint = new CodeGenOutputViewModel<System.Drawing.Point>(PortType.Point)
+            {
+                Name = "Point",
+                Editor = new PointRecordEditorViewModel()
+                {
+                    Editable = false,
+                    ButtonEnable = false
+                },
+                Group = controlFlowGroupOut1
+            };
+            ResultPoint.Value = (ResultPoint.Editor as PointRecordEditorViewModel).ValueChanged;
 
             FlowOutOption2 = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
             {
                 Name = "이미지 찾기 실패",
-                MaxConnections = 1
+                MaxConnections = 1,
+                Group = controlFlowGroupOut2
             };
-            this.Inputs.Add(FlowOutOption2);
+
+            this.Inputs.Add(BitmapDir);         // ComboBox
+            this.Inputs.Add(WindowName);        // 
+            this.Inputs.Add(IsWantKeepFind);
+            this.Inputs.Add(RetryTimes);
+            this.Inputs.Add(Accuracy);
+            this.Inputs.Add(Delay);
+            this.Inputs.Add(this.RunButton); // 
+            
+            this.Outputs.Add(FlowIn);        // Flow 들어옴
+
+            this.Inputs.Add(FlowOutOption1); // 찾기 성공
+            this.Outputs.Add(ResultPoint);   // 반환 포인터
+
+            this.Inputs.Add(FlowOutOption2); // 찾기 실패
         }
     }
 }

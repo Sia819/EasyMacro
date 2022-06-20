@@ -40,12 +40,16 @@ namespace EasyMacro.View.Node.Editors
                 this.OneWayBind(ViewModel, vm => vm.ButtonEnable, v => v.recordButton.Visibility)
                     .DisposeWith(d);
 
-                this.OneWayBind(ViewModel, vm => vm.Value, v => v.X_UpDown.Value, (point) => point.X)
+                this.Bind(ViewModel, vm => vm.Value, v => v.X_UpDown.Value, 
+                          (point) => point.X, 
+                          (x) => new System.Drawing.Point((int)x, (int)Y_UpDown.Value))
                     .DisposeWith(d);
                 this.OneWayBind(ViewModel, vm => vm.Editable, v => v.X_UpDown.IsEnabled)
                     .DisposeWith(d);
 
-                this.OneWayBind(ViewModel, vm => vm.Value, v => v.Y_UpDown.Value, (point) => point.Y)
+                this.Bind(ViewModel, vm => vm.Value, v => v.Y_UpDown.Value, 
+                          (point) => point.Y, 
+                          (y) => new System.Drawing.Point((int)X_UpDown.Value, (int)y))
                     .DisposeWith(d);
                 this.OneWayBind(ViewModel, vm => vm.Editable, v => v.Y_UpDown.IsEnabled)
                     .DisposeWith(d);

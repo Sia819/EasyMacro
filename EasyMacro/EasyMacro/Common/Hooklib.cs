@@ -128,7 +128,6 @@ namespace HookLib
 
         public static void StartKeyboardHook()
         {
-
             if (hookHandle is not null) return;
             if (callbackDelegate is null) callbackDelegate = new WindowsHookDelegate(KeyboardCallBack);
             if (registeredHotkey == null) registeredHotkey = new();

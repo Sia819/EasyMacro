@@ -49,7 +49,6 @@ namespace EasyMacro.ViewModel.Node.Editors
             Editable = true;
 
             Value = new Point(0, 0);
-
         }
 
         void GetMousePos_ExcuteCommand()
@@ -72,7 +71,7 @@ namespace EasyMacro.ViewModel.Node.Editors
                 findWindowPosition.Do();
                 this.Value = new Point(point.x - findWindowPosition.rect.Left, point.y - findWindowPosition.rect.Top);
             }
-            HookLib.GlobalMouseKeyHook.StopMouseHook();
+            
             HookLib.GlobalMouseKeyHook.RemoveMouseHotkey(HookLib.GlobalMouseKeyHook.mouse_button.Right);
         }
 

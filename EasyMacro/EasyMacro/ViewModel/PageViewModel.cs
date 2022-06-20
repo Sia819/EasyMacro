@@ -156,6 +156,9 @@ namespace EasyMacro.ViewModel
         private PageViewModel(object obj) : this()
         {
             // 강제적으로 부른 생성자
+
+
+
         }
 
         public void Save()
@@ -192,6 +195,9 @@ namespace EasyMacro.ViewModel
         public void Load()
         {
             object obj = null;
+
+
+
             PageViewModel instance = new PageViewModel(obj);
             _instance.eventNode.Position = new Point(100, 50);
             

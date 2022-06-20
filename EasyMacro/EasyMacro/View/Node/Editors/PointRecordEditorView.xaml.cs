@@ -41,19 +41,21 @@ namespace EasyMacro.View.Node.Editors
                     .DisposeWith(d);
 
                 this.Bind(ViewModel, vm => vm.Value, v => v.X_UpDown.Value, 
-                          (point) => point.X, 
-                          (x) => new System.Drawing.Point((int)x, (int)Y_UpDown.Value))
-                    .DisposeWith(d);
-                this.OneWayBind(ViewModel, vm => vm.Editable, v => v.X_UpDown.IsEnabled)
+                          (point) => { Y_UpDown.Value = point.Y; return point.X; },                                 // ViewModel -> View
+                          (x) => new System.Drawing.Point((int?)X_UpDown.Value ?? 0, (int?)Y_UpDown.Value ?? 0))    // View -> ViewModel
                     .DisposeWith(d);
 
-                this.Bind(ViewModel, vm => vm.Value, v => v.Y_UpDown.Value, 
-                          (point) => point.Y, 
-                          (y) => new System.Drawing.Point((int)X_UpDown.Value, (int)y))
+                this.Bind(ViewModel, vm => vm.Value, v => v.Y_UpDown.Value,
+                          (point) => { X_UpDown.Value = point.X; return point.Y; },                                 // ViewModel -> View
+                          (y) => new System.Drawing.Point((int?)X_UpDown.Value ?? 0, (int?)Y_UpDown.Value ?? 0))    // View -> ViewModel
+                    .DisposeWith(d);
+
+                this.OneWayBind(ViewModel, vm => vm.Editable, v => v.X_UpDown.IsEnabled)
                     .DisposeWith(d);
                 this.OneWayBind(ViewModel, vm => vm.Editable, v => v.Y_UpDown.IsEnabled)
                     .DisposeWith(d);
             });
+
         }
     }
 }

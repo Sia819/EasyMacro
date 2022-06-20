@@ -33,15 +33,17 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.Inputs.Add(OnClickFlow);
         }
 
+        public void Serializer(XmlWriter xmlWriter, object obj)
+        {
+            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+        }
+
         public object Deserialize(XElement xElement)
         {
             StartNodeViewModel instance = (StartNodeViewModel)NodeSerializer.Deserialize(ref xElement, new StartNodeViewModel());
             return instance;
         }
 
-        public void Serializer(XmlWriter xmlWriter, object obj)
-        {
-            NodeSerializer.Serializer(ref xmlWriter, ref obj);
-        }
+        
     }
 }

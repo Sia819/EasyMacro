@@ -40,6 +40,7 @@ namespace EasyMacro.View.Node.Editors
                 this.OneWayBind(ViewModel, vm => vm.ButtonEnable, v => v.recordButton.Visibility)
                     .DisposeWith(d);
 
+                // ReactiveUI Bind의 경우, VM의 프로퍼티에 다중 바인딩이 불가능 // vm.Value가 변경되었을 때, 최초로 등록된 바인딩만 통지를 받음
                 this.Bind(ViewModel, vm => vm.Value, v => v.X_UpDown.Value, 
                           (point) => { Y_UpDown.Value = point.Y; return point.X; },                                 // ViewModel -> View
                           (x) => new System.Drawing.Point((int?)X_UpDown.Value ?? 0, (int?)Y_UpDown.Value ?? 0))    // View -> ViewModel
@@ -55,7 +56,6 @@ namespace EasyMacro.View.Node.Editors
                 this.OneWayBind(ViewModel, vm => vm.Editable, v => v.Y_UpDown.IsEnabled)
                     .DisposeWith(d);
             });
-
         }
     }
 }

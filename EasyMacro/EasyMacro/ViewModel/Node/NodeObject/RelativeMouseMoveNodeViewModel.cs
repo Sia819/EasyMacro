@@ -38,7 +38,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         /// Delay Time
         /// </summary>
         /// 
-        public ValueNodeInputViewModel<string> WindowName { get; }
+        public ValueNodeInputViewModel<IntPtr> hWnd { get; }
 
         public ValueNodeInputViewModel<Point> MyPoint { get; }
 
@@ -58,7 +58,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 {
                     CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
 
-                    relativeMouseMove.ChangeWindowName(WindowName.Value);
+                    relativeMouseMove.ChangeWindow(hWnd.Value);
                     relativeMouseMove.X = (int)MyPoint.Value.X;
                     relativeMouseMove.Y = (int)MyPoint.Value.Y;
 
@@ -77,18 +77,27 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             base.Name = "마우스 상대좌표 이동";
 
-            WindowName = new ValueNodeInputViewModel<string>()
+            hWnd = new ValueNodeInputViewModel<IntPtr>()
             {
                 Port = null,
                 Name = "프로세스 이름",
-                Editor = new StringValueEditorViewModel()
+                Editor = new FindWindowEditorViewModel()//new StringValueEditorViewModel()
             };
-            this.Inputs.Add(WindowName);
+            hWnd.ValueChanged.Do((i) =>
+            {
+                if (i != IntPtr.Zero)
+                {
+                    PInvoke.User32.GetWindowRect(i, out PInvoke.RECT rect);
+                    (MyPoint.Editor as PointRecordEditorViewModel).Value = new Point(rect.left, rect.top);
+                }
+            }).Subscribe();
+
+            this.Inputs.Add(hWnd);
 
             MyPoint = new ValueNodeInputViewModel<Point>()
             {
                 Name = "Point",
-                Editor = new PointRecordEditorViewModel(WindowName),
+                Editor = new PointRecordEditorViewModel(hWnd.Value),
                 Port = null
             };
             this.Inputs.Add(MyPoint);
@@ -96,7 +105,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.RunButton = new ValueNodeInputViewModel<int?>()
             {
                 Port = null,
-                
+
                 Editor = new RunButtonViewModel()
                 {
                     RunScript = ReactiveCommand.Create
@@ -113,8 +122,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Name = "",
                 Value = this.RunButton.ValueChanged.Select(_ => new NodeCompile(this.Func())
                 {
-                    Log = Observable.Merge(WindowName.ValueChanged.Select(windowName => $"InputMouse - ({windowName}, {this.MyPoint.Value.X}, {this.MyPoint.Value.Y})"),
-                                            MyPoint.ValueChanged.Select(point => $"InputMouse - ({WindowName.Value}, {point.X}, {point.Y}"))
+                    Log = Observable.Merge(hWnd.ValueChanged.Select(windowName => $"InputMouse - ({windowName}, {this.MyPoint.Value.X}, {this.MyPoint.Value.Y})"),
+                                            MyPoint.ValueChanged.Select(point => $"InputMouse - ({hWnd.Value}, {point.X}, {point.Y}"))
                 })
             };
             this.Outputs.Add(FlowIn);

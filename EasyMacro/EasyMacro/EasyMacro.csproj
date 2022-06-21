@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resource\WinAim.cur" />
+    <None Remove="Resource\WinIcon1.bmp" />
+    <None Remove="Resource\WinIcon2.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\EasyMacroAPI\EasyMacroAPI.csproj" />
   </ItemGroup>
 
@@ -17,14 +23,25 @@
     <PackageReference Include="ExtendedXmlSerializer" Version="3.7.6" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-    <PackageReference Include="MoonSharp" Version="2.0.0" />
     <PackageReference Include="MvvmLightLibsStd10" Version="5.4.1.1" />
     <PackageReference Include="NodeNetwork" Version="6.0.0" />
     <PackageReference Include="NodeNetworkToolkit" Version="6.0.0" />
+    <PackageReference Include="PInvoke.Gdi32" Version="0.7.104" />
     <PackageReference Include="PInvoke.User32" Version="0.7.104" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" />
     <PackageReference Include="ReactiveUI" Version="13.2.18" />
-    <PackageReference Include="ReactiveUI.Fody" Version="13.2.18" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\WinAim.cur">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Resource Include="Resource\WinIcon1.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resource\WinIcon2.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

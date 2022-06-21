@@ -42,12 +42,10 @@ namespace EasyMacro.ViewModel.Node.Editors
             Value = 0;
             this.RadioGroupInstanceHash = RandomString(10); // 현재 그룹명의 해시, 해시 길이
             MyList = new ObservableCollection<MyListItem>(); // 더비 벨류
-            
         }
 
         public class MyListItem
         {
-            
             public MyListItem(bool isChecked, string clickType, string groupHash)
             {
                 this.IsChecked = isChecked;

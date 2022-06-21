@@ -38,12 +38,21 @@ namespace EasyMacro.ViewModel.Node.Editors
 
         private FindWindowPosition findWindowPosition;
 
-        private ValueNodeInputViewModel<string> Windowname;
+        private IntPtr hwnd;
 
-        public PointRecordEditorViewModel(ValueNodeInputViewModel<string> windowname = null)
+        public PointRecordEditorViewModel(IntPtr hwnd)
         {
-            findWindowPosition = new FindWindowPosition("");
-            Windowname = windowname;
+            findWindowPosition = new FindWindowPosition(hwnd);
+            
+            GetMousePos_Command = ReactiveCommand.Create(GetMousePos_ExcuteCommand);
+            ButtonEnable = true;
+            Editable = true;
+
+            Value = new Point(0, 0);
+        }
+        public PointRecordEditorViewModel()
+        {
+            findWindowPosition = null;
             GetMousePos_Command = ReactiveCommand.Create(GetMousePos_ExcuteCommand);
             ButtonEnable = true;
             Editable = true;
@@ -61,15 +70,15 @@ namespace EasyMacro.ViewModel.Node.Editors
 
         private void mouseCallback(PInvoke.POINT point)
         {
-            if (Windowname is null || String.IsNullOrEmpty(Windowname.Value))
+            if (findWindowPosition is null)
             {
                 this.Value = point;
             }
             else
             {
-                findWindowPosition.WindowName = Windowname.Value;
+                findWindowPosition.TargetWindow = hwnd;
                 findWindowPosition.Do();
-                this.Value = new Point(point.x - findWindowPosition.rect.Left, point.y - findWindowPosition.rect.Top);
+                this.Value = new Point(point.x - findWindowPosition.ClientRect.Left, point.y - findWindowPosition.ClientRect.Top);
             }
             
             HookLib.GlobalMouseKeyHook.RemoveMouseHotkey(HookLib.GlobalMouseKeyHook.mouse_button.Right);

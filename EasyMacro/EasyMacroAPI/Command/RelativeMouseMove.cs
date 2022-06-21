@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using EasyMacroAPI.Common;
 using EasyMacroAPI.Model;
@@ -27,17 +28,22 @@ namespace EasyMacroAPI.Command
             findWindowPosition.WindowName = windowName;
         }
 
+        public void ChangeWindow(IntPtr windowName)
+        {
+            findWindowPosition.TargetWindow = windowName;
+        }
+
 
         public void Do()
         {
             findWindowPosition.Do();
-            int relativeX = findWindowPosition.rect.Left + X;
-            int relativeY = findWindowPosition.rect.Top + Y;
+            int relativeX = findWindowPosition.ClientRect.Left + X;
+            int relativeY = findWindowPosition.ClientRect.Top + Y;
 
-            if (relativeX > findWindowPosition.rect.Right)
-                relativeX = findWindowPosition.rect.Right;
-            if (relativeY > findWindowPosition.rect.Bottom)
-                relativeY = findWindowPosition.rect.Bottom;
+            if (relativeX > findWindowPosition.ClientRect.Right)
+                relativeX = findWindowPosition.ClientRect.Right;
+            if (relativeY > findWindowPosition.ClientRect.Bottom)
+                relativeY = findWindowPosition.ClientRect.Bottom;
 
             WinAPI.SetCursorPos(relativeX, relativeY);
         }

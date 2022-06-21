@@ -58,8 +58,8 @@ namespace EasyMacroAPI.Command
             else
             {
                 findWindowPostion.Do();
-                X = findWindowPostion.rect.Left;
-                Y = findWindowPostion.rect.Top;
+                X = findWindowPostion.ClientRect.Left;
+                Y = findWindowPostion.ClientRect.Top;
             }
             GetCursorPos(out point);
             X = point.X - X;

@@ -13,10 +13,23 @@ namespace EasyMacroAPI.Command
 {
     public class FindWindowPosition : IAction
     {
+        [DllImport("user32.dll")]
+        public static extern bool GetWindowRect(IntPtr hwnd, ref Rect rectangle);
+
         public MacroTypes MacroType => MacroTypes.FindWindowPosition;
 
-        //[DllImport("user32.dll", CharSet = CharSet.Auto)]
-        //public static extern IntPtr FindWindow(string strClassName, string strWindowName);
+        public IntPtr TargetWindow { get; set; }
+
+        #region Property - ClientRect
+        public Rect ClientRect
+        {
+            get => clientRect;
+            set => clientRect = value;
+        }
+        private Rect clientRect;
+        #endregion
+
+        public string WindowName { get; set; }
 
         public struct Rect
         {
@@ -26,25 +39,25 @@ namespace EasyMacroAPI.Command
             public int Bottom { get; set; }
         }
 
-        [DllImport("user32.dll")]
-        public static extern bool GetWindowRect(IntPtr hwnd, ref Rect rectangle);
-
-        public string WindowName { get; set; }
-
-        public Rect rect = new Rect();
-
         public FindWindowPosition(string windowName)
         {
-            WindowName = windowName;
+            if (windowName is not null && windowName != "")
+            {
+                ClientRect = new Rect();
+                Process[] processes = Process.GetProcessesByName(WindowName);
+                Process lol = processes[0];
+                TargetWindow = lol.MainWindowHandle;
+            }
+        }
+
+        public FindWindowPosition(IntPtr target)
+        {
+            TargetWindow = target;
         }
 
         public void Do()
         {
-            Process[] processes = Process.GetProcessesByName(WindowName);
-            Process lol = processes[0];
-            IntPtr ptr = lol.MainWindowHandle;
-            rect = new Rect();
-            GetWindowRect(ptr, ref rect);
+            GetWindowRect(TargetWindow, ref clientRect);
         }
     }
 }

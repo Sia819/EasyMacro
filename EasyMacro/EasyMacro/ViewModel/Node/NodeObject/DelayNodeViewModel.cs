@@ -4,6 +4,7 @@ using EasyMacro.Model.Node.Compiler;
 using EasyMacro.View.Node;
 using EasyMacro.ViewModel.Node.Editors;
 using EasyMacroAPI.Command;
+using ExtendedXmlSerializer;
 using ExtendedXmlSerializer.ExtensionModel.Xml;
 using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
@@ -80,6 +81,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         public object Deserialize(XElement xElement)
         {
             DelayNodeViewModel instance = (DelayNodeViewModel)NodeSerializer.Deserialize(ref xElement, new DelayNodeViewModel());
+            (instance.Delay.Editor as IntegerValueEditorViewModel).Value = (int)xElement.Member(nameof(Delay));
             return instance;
         }
         

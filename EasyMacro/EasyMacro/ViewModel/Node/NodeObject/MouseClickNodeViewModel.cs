@@ -4,6 +4,8 @@ using EasyMacro.Model.Node.Compiler;
 using EasyMacro.View.Node;
 using EasyMacro.ViewModel.Node.Editors;
 using EasyMacroAPI.Command;
+using ExtendedXmlSerializer;
+using ExtendedXmlSerializer.ExtensionModel.Xml;
 using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
 using NodeNetwork.Views;
@@ -12,10 +14,13 @@ using System;
 using System.Drawing;
 using System.Reactive.Linq;
 using System.Threading;
+using System.Xml;
+using System.Xml.Linq;
+using System.Drawing;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class MouseClickNodeViewModel : CodeGenNodeViewModel
+    public class MouseClickNodeViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
     {
         static MouseClickNodeViewModel()
         {
@@ -67,11 +72,30 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return action;
         }
 
+        public void Serializer(XmlWriter xmlWriter, object obj)
+        {
+            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+
+            MouseClickNodeViewModel instance = obj as MouseClickNodeViewModel;
+
+            xmlWriter.WriteElementString(nameof(MyPoint.Value.X), instance.MyPoint.Value.X.ToString());
+            xmlWriter.WriteElementString(nameof(MyPoint.Value.Y), instance.MyPoint.Value.Y.ToString());
+            xmlWriter.WriteElementString(nameof(Delay), instance.Delay.Value.ToString());
+        }
+
+        public object Deserialize(XElement xElement)
+        {
+            MouseClickNodeViewModel instance = (MouseClickNodeViewModel)NodeSerializer.Deserialize(ref xElement, new MouseClickNodeViewModel());
+            (instance.MyPoint.Editor as PointRecordEditorViewModel).Value = new Point((int)xElement.Member(nameof(MyPoint.Value.X)), (int)xElement.Member(nameof(MyPoint.Value.Y)));
+            (instance.Delay.Editor as IntegerValueEditorViewModel).Value = (int)xElement.Member(nameof(Delay));
+            return instance;
+        }
+
         public MouseClickNodeViewModel() : base(NodeType.Function)
         {
             base.Name = "마우스 클릭";
 
-            MyPoint = new CodeGenInputViewModel<System.Drawing.Point>(PortType.Point)
+            MyPoint = new CodeGenInputViewModel<Point>(PortType.Point)
             {
                 Name = "Point",
                 Editor = new PointRecordEditorViewModel()

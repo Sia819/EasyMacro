@@ -4,10 +4,13 @@ using NodeNetwork.Toolkit.Group.AddEndpointDropPanel;
 using NodeNetwork.ViewModels;
 using EasyMacro.View.Node;
 using ReactiveUI;
+using System.Xml;
+using System.Xml.Linq;
+using ExtendedXmlSerializer.ExtensionModel.Xml;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class GroupSubnetIONodeViewModel : CodeGenNodeViewModel
+    public class GroupSubnetIONodeViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
     {
         static GroupSubnetIONodeViewModel()
         {
@@ -35,6 +38,17 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         }
         private CodeNodeGroupIOBinding _ioBinding;
         #endregion
+
+        public void Serializer(XmlWriter xmlWriter, object obj)
+        {
+            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+        }
+
+        public object Deserialize(XElement xElement)
+        {
+            GroupSubnetIONodeViewModel instance = (GroupSubnetIONodeViewModel)NodeSerializer.Deserialize(ref xElement, new GroupSubnetIONodeViewModel(Subnet, _isEntranceNode, _isExitNode));
+            return instance;
+        }
 
         public AddEndpointDropPanelViewModel AddEndpointDropPanelVM { get; set; }
 

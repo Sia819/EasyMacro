@@ -4,6 +4,8 @@ using EasyMacro.Model.Node.Compiler;
 using EasyMacro.View.Node;
 using EasyMacro.ViewModel.Node.Editors;
 using EasyMacroAPI.Command;
+using ExtendedXmlSerializer;
+using ExtendedXmlSerializer.ExtensionModel.Xml;
 using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
 using ReactiveUI;
@@ -11,10 +13,12 @@ using System;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Windows;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class TempletMatchNodeViewModel : CodeGenNodeViewModel
+    public class TempletMatchNodeViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
     {
         static TempletMatchNodeViewModel()
         {
@@ -118,6 +122,22 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 templetMatch.ScreenCapture.WindowName = (this.WindowName.Editor as StringValueEditorViewModel).Value;
             };
             return action;
+        }
+
+        public void Serializer(XmlWriter xmlWriter, object obj)
+        {
+            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+
+            TempletMatchNodeViewModel instance = obj as TempletMatchNodeViewModel;
+
+            xmlWriter.WriteElementString(nameof(BitmapDir), instance.BitmapDir.Value.ToString());
+        }
+
+        public object Deserialize(XElement xElement)
+        {
+            TempletMatchNodeViewModel instance = (TempletMatchNodeViewModel)NodeSerializer.Deserialize(ref xElement, new TempletMatchNodeViewModel());
+            (instance.BitmapDir.Editor as IntegerValueEditorViewModel).Value = (int)xElement.Member(nameof(BitmapDir));
+            return instance;
         }
 
         public TempletMatchNodeViewModel() : base(NodeType.Function)

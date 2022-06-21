@@ -5,6 +5,8 @@ using EasyMacro.View.Node;
 using EasyMacro.ViewModel.Node.Editors;
 using EasyMacroAPI.Command;
 using EasyMacroAPI.Model;
+using ExtendedXmlSerializer;
+using ExtendedXmlSerializer.ExtensionModel.Xml;
 using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
 using NodeNetwork.Views;
@@ -12,11 +14,13 @@ using ReactiveUI;
 using System;
 using System.Reactive.Linq;
 using System.Threading;
+using System.Xml;
+using System.Xml.Linq;
 using static EasyMacro.ViewModel.Node.Editors.RadioButtonEditorViewModel;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class InputKeyboardNodeViewModel : CodeGenNodeViewModel
+    public class InputKeyboardNodeViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
     {
         static InputKeyboardNodeViewModel()
         {
@@ -76,6 +80,34 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 }
             };
             return action;
+        }
+
+        public void Serializer(XmlWriter xmlWriter, object obj)
+        {
+            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+
+            InputKeyboardNodeViewModel instance = obj as InputKeyboardNodeViewModel;
+
+            int selectedNum;
+
+            switch ((this.KeyboardPressType.Editor as RadioButtonEditorViewModel).GetRadioSelectedIndex)
+            {
+                case 0: selectedNum = 0; break;
+                case 1: selectedNum = 1; break;
+
+                default: selectedNum = 0; break; // RadioButton에서 아무것도 선택되지 않음.
+            }
+
+            xmlWriter.WriteElementString(nameof(KeyboardPressType), selectedNum.ToString());
+            xmlWriter.WriteElementString(nameof(PressKey), instance.PressKey.Value.ToString());
+        }
+
+        public object Deserialize(XElement xElement)
+        {
+            InputKeyboardNodeViewModel instance = (InputKeyboardNodeViewModel)NodeSerializer.Deserialize(ref xElement, new InputKeyboardNodeViewModel());
+            (instance.KeyboardPressType.Editor as RadioButtonEditorViewModel).MyList[(int)xElement.Member(nameof(KeyboardPressType))].IsChecked = true;
+            (instance.PressKey.Editor as KeyboardRecordEditorViewModel).Value = (Keys)Enum.Parse(typeof(Keys), xElement.Member(nameof(PressKey)).ToString());
+            return instance;
         }
 
         public InputKeyboardNodeViewModel() : base(NodeType.Function)

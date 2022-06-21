@@ -4,16 +4,20 @@ using EasyMacro.Model.Node.Compiler;
 using EasyMacro.View.Node;
 using EasyMacro.ViewModel.Node.Editors;
 using EasyMacroAPI.Command;
+using ExtendedXmlSerializer;
+using ExtendedXmlSerializer.ExtensionModel.Xml;
 using NodeNetwork.Toolkit.ValueNode;
 using ReactiveUI;
 using System;
 using System.Drawing;
 using System.Reactive.Linq;
 using System.Threading;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class MouseMoveNodeViewModel : CodeGenNodeViewModel
+    public class MouseMoveNodeViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
     {
         static MouseMoveNodeViewModel()
         {
@@ -60,6 +64,23 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 }
             };
             return action;
+        }
+
+        public void Serializer(XmlWriter xmlWriter, object obj)
+        {
+            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+
+            MouseMoveNodeViewModel instance = obj as MouseMoveNodeViewModel;
+
+            xmlWriter.WriteElementString(nameof(MyPoint.Value.X), instance.MyPoint.Value.X.ToString());
+            xmlWriter.WriteElementString(nameof(MyPoint.Value.Y), instance.MyPoint.Value.Y.ToString());
+        }
+
+        public object Deserialize(XElement xElement)
+        {
+            MouseMoveNodeViewModel instance = (MouseMoveNodeViewModel)NodeSerializer.Deserialize(ref xElement, new MouseMoveNodeViewModel());
+            (instance.MyPoint.Editor as PointRecordEditorViewModel).Value = new Point((int)xElement.Member(nameof(MyPoint.Value.X)), (int)xElement.Member(nameof(MyPoint.Value.Y)));
+            return instance;
         }
 
         public MouseMoveNodeViewModel() : base(NodeType.Function)

@@ -5,15 +5,19 @@ using EasyMacro.View.Node;
 using EasyMacro.ViewModel.Node.Editors;
 using EasyMacroAPI.Command;
 using EasyMacroAPI.Model;
+using ExtendedXmlSerializer;
+using ExtendedXmlSerializer.ExtensionModel.Xml;
 using NodeNetwork.Toolkit.ValueNode;
 using ReactiveUI;
 using System;
 using System.Reactive.Linq;
 using System.Threading;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class CombInputKeyboardViewModel : CodeGenNodeViewModel
+    public class CombInputKeyboardViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
     {
         static CombInputKeyboardViewModel()
         {
@@ -80,6 +84,28 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 }
             };
             return action;
+        }
+
+        public void Serializer(XmlWriter xmlWriter, object obj)
+        {
+            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+
+            CombInputKeyboardViewModel instance = obj as CombInputKeyboardViewModel;
+
+            xmlWriter.WriteElementString(nameof(Input), instance.Input.Value.ToString());
+            xmlWriter.WriteElementString(nameof(Alt), instance.Alt.Value.ToString());
+            xmlWriter.WriteElementString(nameof(Ctrl), instance.Ctrl.Value.ToString());
+            xmlWriter.WriteElementString(nameof(Shift), instance.Shift.Value.ToString());
+        }
+
+        public object Deserialize(XElement xElement)
+        {
+            CombInputKeyboardViewModel instance = (CombInputKeyboardViewModel)NodeSerializer.Deserialize(ref xElement, new CombInputKeyboardViewModel());
+            (instance.Input.Editor as KeyboardRecordEditorViewModel).Value = (Keys)Enum.Parse(typeof(Keys),xElement.Member(nameof(Input)).ToString());
+            (instance.Alt.Editor as CheckBoxEditorViewModel).Value = (bool)xElement.Member(nameof(Alt));
+            (instance.Ctrl.Editor as CheckBoxEditorViewModel).Value = (bool)xElement.Member(nameof(Ctrl));
+            (instance.Shift.Editor as CheckBoxEditorViewModel).Value = (bool)xElement.Member(nameof(Shift));
+            return instance;
         }
 
         public CombInputKeyboardViewModel() : base(NodeType.Function)

@@ -9,10 +9,14 @@ using NodeNetwork.ViewModels;
 using EasyMacro.View.Node;
 using ReactiveUI;
 using EasyMacro.ViewModel.Node.Editors;
+using ExtendedXmlSerializer.ExtensionModel.Xml;
+using System.Xml;
+using System.Xml.Linq;
+using ExtendedXmlSerializer;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class ForLoopNode : CodeGenNodeViewModel
+    public class ForLoopNode : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
     {
         static ForLoopNode()
         {
@@ -30,6 +34,22 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         public ValueNodeOutputViewModel<ITypedExpression<int>> CurrentIndex { get; }
 
         public IntegerValueEditorViewModel currentIndexEditor = new IntegerValueEditorViewModel(0);
+
+        public void Serializer(XmlWriter xmlWriter, object obj)
+        {
+            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+
+            ForLoopNode instance = obj as ForLoopNode;
+
+            xmlWriter.WriteElementString(nameof(LastIndex), instance.LastIndex.Value.ToString());
+        }
+
+        public object Deserialize(XElement xElement)
+        {
+            ForLoopNode instance = (ForLoopNode)NodeSerializer.Deserialize(ref xElement, new ForLoopNode());
+            (instance.LastIndex.Editor as IntegerValueEditorViewModel).Value = (int)xElement.Member(nameof(LastIndex));
+            return instance;
+        }
 
         public ForLoopNode() : base(NodeType.FlowControl)
         {

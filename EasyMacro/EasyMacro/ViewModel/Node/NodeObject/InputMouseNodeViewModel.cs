@@ -4,6 +4,8 @@ using EasyMacro.Model.Node.Compiler;
 using EasyMacro.View.Node;
 using EasyMacro.ViewModel.Node.Editors;
 using EasyMacroAPI.Command;
+using ExtendedXmlSerializer;
+using ExtendedXmlSerializer.ExtensionModel.Xml;
 using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
 using NodeNetwork.Views;
@@ -12,11 +14,13 @@ using System;
 using System.Drawing;
 using System.Reactive.Linq;
 using System.Threading;
+using System.Xml;
+using System.Xml.Linq;
 using static EasyMacro.ViewModel.Node.Editors.RadioButtonEditorViewModel;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class InputMouseNodeViewModel : CodeGenNodeViewModel
+    public class InputMouseNodeViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
     {
         static InputMouseNodeViewModel()
         {
@@ -75,6 +79,34 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 }
             };
             return action;
+        }
+
+        public void Serializer(XmlWriter xmlWriter, object obj)
+        {
+            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+
+            InputMouseNodeViewModel instance = obj as InputMouseNodeViewModel;
+
+            int selectedNum;
+
+            switch ((this.MouseClickType.Editor as RadioButtonEditorViewModel).GetRadioSelectedIndex)
+            {
+                case 0: selectedNum = 0; break;
+                case 1: selectedNum = 1; break;
+                case 2: selectedNum = 2; break;
+                case 3: selectedNum = 3; break;
+
+                default: selectedNum = 0; break; // RadioButton에서 아무것도 선택되지 않음.
+            }
+
+            xmlWriter.WriteElementString(nameof(MouseClickType), selectedNum.ToString());
+        }
+
+        public object Deserialize(XElement xElement)
+        {
+            InputMouseNodeViewModel instance = (InputMouseNodeViewModel)NodeSerializer.Deserialize(ref xElement, new InputMouseNodeViewModel());
+            (instance.MouseClickType.Editor as RadioButtonEditorViewModel).MyList[(int)xElement.Member(nameof(MouseClickType))].IsChecked = true;
+            return instance;
         }
 
         public InputMouseNodeViewModel() : base(NodeType.Function)

@@ -4,6 +4,8 @@ using EasyMacro.Model.Node.Compiler;
 using EasyMacro.View.Node;
 using EasyMacro.ViewModel.Node.Editors;
 using EasyMacroAPI.Command;
+using ExtendedXmlSerializer;
+using ExtendedXmlSerializer.ExtensionModel.Xml;
 using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
 using NodeNetwork.Views;
@@ -12,11 +14,13 @@ using System;
 using System.Drawing;
 using System.Reactive.Linq;
 using System.Threading;
+using System.Xml;
+using System.Xml.Linq;
 using static EasyMacro.ViewModel.Node.Editors.RadioButtonEditorViewModel;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class RelativeMouseMoveNodeViewModel : CodeGenNodeViewModel
+    public class RelativeMouseMoveNodeViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
     {
         static RelativeMouseMoveNodeViewModel()
         {
@@ -71,6 +75,22 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 }
             };
             return action;
+        }
+
+        public void Serializer(XmlWriter xmlWriter, object obj)
+        {
+            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+
+            RelativeMouseMoveNodeViewModel instance = obj as RelativeMouseMoveNodeViewModel;
+
+            xmlWriter.WriteElementString(nameof(hWnd), instance.hWnd.Value.ToString());
+        }
+
+        public object Deserialize(XElement xElement)
+        {
+            RelativeMouseMoveNodeViewModel instance = (RelativeMouseMoveNodeViewModel)NodeSerializer.Deserialize(ref xElement, new RelativeMouseMoveNodeViewModel());
+            (instance.hWnd.Editor as RadioButtonEditorViewModel).MyList[(int)xElement.Member(nameof(hWnd))].IsChecked = true;
+            return instance;
         }
 
         public RelativeMouseMoveNodeViewModel() : base(NodeType.Function)

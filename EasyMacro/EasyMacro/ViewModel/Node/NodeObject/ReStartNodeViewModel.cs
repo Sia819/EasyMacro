@@ -4,6 +4,7 @@ using EasyMacro.Model.Node.Compiler;
 using EasyMacro.View.Node;
 using EasyMacro.ViewModel.Node.Editors;
 using EasyMacroAPI.Command;
+using ExtendedXmlSerializer.ExtensionModel.Xml;
 using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
 using NodeNetwork.Views;
@@ -13,10 +14,12 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class ReStartNodeViewModel : CodeGenNodeViewModel
+    public class ReStartNodeViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
     {
         static ReStartNodeViewModel()
         {
@@ -42,6 +45,17 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 }
             };
             return action;
+        }
+
+        public void Serializer(XmlWriter xmlWriter, object obj)
+        {
+            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+        }
+
+        public object Deserialize(XElement xElement)
+        {
+            ReStartNodeViewModel instance = (ReStartNodeViewModel)NodeSerializer.Deserialize(ref xElement, new ReStartNodeViewModel());
+            return instance;
         }
 
         public ReStartNodeViewModel() : base(NodeType.EventNode)

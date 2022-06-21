@@ -35,18 +35,18 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public IntegerValueEditorViewModel currentIndexEditor = new IntegerValueEditorViewModel(0);
 
-        public void Serializer(XmlWriter xmlWriter, object obj)
+        public override void Serializer(XmlWriter xmlWriter, object obj)
         {
-            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+            NodeSerializer.SerializerOfNodeViewModel(ref xmlWriter, ref obj);
 
             ForLoopNode instance = obj as ForLoopNode;
 
             xmlWriter.WriteElementString(nameof(LastIndex), instance.LastIndex.Value.ToString());
         }
 
-        public object Deserialize(XElement xElement)
+        public override object Deserialize(XElement xElement)
         {
-            ForLoopNode instance = (ForLoopNode)NodeSerializer.Deserialize(ref xElement, new ForLoopNode());
+            ForLoopNode instance = (ForLoopNode)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new ForLoopNode());
             (instance.LastIndex.Editor as IntegerValueEditorViewModel).Value = (int)xElement.Member(nameof(LastIndex));
             return instance;
         }

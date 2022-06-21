@@ -19,7 +19,7 @@ using System.Xml.Linq;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class ReStartNodeViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
+    public class ReStartNodeViewModel : CodeGenNodeViewModel
     {
         static ReStartNodeViewModel()
         {
@@ -47,14 +47,14 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return action;
         }
 
-        public void Serializer(XmlWriter xmlWriter, object obj)
+        public override void Serializer(XmlWriter xmlWriter, object obj)
         {
-            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+            NodeSerializer.SerializerOfNodeViewModel(ref xmlWriter, ref obj);
         }
 
-        public object Deserialize(XElement xElement)
+        public override object Deserialize(XElement xElement)
         {
-            ReStartNodeViewModel instance = (ReStartNodeViewModel)NodeSerializer.Deserialize(ref xElement, new ReStartNodeViewModel());
+            ReStartNodeViewModel instance = (ReStartNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new ReStartNodeViewModel());
             return instance;
         }
 

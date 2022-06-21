@@ -20,7 +20,7 @@ using static EasyMacro.ViewModel.Node.Editors.RadioButtonEditorViewModel;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class RelativeMouseMoveNodeViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
+    public class RelativeMouseMoveNodeViewModel : CodeGenNodeViewModel
     {
         static RelativeMouseMoveNodeViewModel()
         {
@@ -77,9 +77,9 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return action;
         }
 
-        public void Serializer(XmlWriter xmlWriter, object obj)
+        public override void Serializer(XmlWriter xmlWriter, object obj)
         {
-            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+            NodeSerializer.SerializerOfNodeViewModel(ref xmlWriter, ref obj);
 
             RelativeMouseMoveNodeViewModel instance = obj as RelativeMouseMoveNodeViewModel;
             FindWindowEditorViewModel findWindowEditor = (instance.hWnd.Editor as FindWindowEditorViewModel);
@@ -88,9 +88,9 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             xmlWriter.WriteElementString(nameof(hWnd), instance.hWnd.Value.ToString());
         }
 
-        public object Deserialize(XElement xElement)
+        public override object Deserialize(XElement xElement)
         {
-            RelativeMouseMoveNodeViewModel instance = (RelativeMouseMoveNodeViewModel)NodeSerializer.Deserialize(ref xElement, new RelativeMouseMoveNodeViewModel());
+            RelativeMouseMoveNodeViewModel instance = (RelativeMouseMoveNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new RelativeMouseMoveNodeViewModel());
             FindWindowEditorViewModel findWindowEditor = (instance.hWnd.Editor as FindWindowEditorViewModel);
             findWindowEditor.TargetWindowTitle = xElement.Member(nameof(findWindowEditor.TargetWindowTitle)).Value;
             findWindowEditor.TargetWindowClass = xElement.Member(nameof(findWindowEditor.TargetWindowClass)).Value;

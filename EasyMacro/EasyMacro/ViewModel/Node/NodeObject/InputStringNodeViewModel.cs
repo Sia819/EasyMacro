@@ -69,18 +69,18 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return action;
         }
 
-        public void Serializer(XmlWriter xmlWriter, object obj)
+        public override void Serializer(XmlWriter xmlWriter, object obj)
         {
-            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+            NodeSerializer.SerializerOfNodeViewModel(ref xmlWriter, ref obj);
 
             InputStringNodeViewModel instance = obj as InputStringNodeViewModel;
 
             xmlWriter.WriteElementString(nameof(Input), instance.Input.Value.ToString());
         }
 
-        public object Deserialize(XElement xElement)
+        public override object Deserialize(XElement xElement)
         {
-            InputStringNodeViewModel instance = (InputStringNodeViewModel)NodeSerializer.Deserialize(ref xElement, new InputStringNodeViewModel());
+            InputStringNodeViewModel instance = (InputStringNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new InputStringNodeViewModel());
             (instance.Input.Editor as StringValueEditorViewModel).Value = (string)xElement.Member(nameof(Input));
             return instance;
         }

@@ -9,6 +9,7 @@ using ReactiveUI;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
+    /*
     public class PrintNode : CodeGenNodeViewModel
     {
         static PrintNode()
@@ -45,4 +46,5 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.Outputs.Add(Flow);
         }
     }
+    */
 }

@@ -1,5 +1,6 @@
 ﻿using EasyMacro.Model.Node;
 using EasyMacro.View.Node;
+using EasyMacro.ViewModel.Node.NodeObject;
 using ExtendedXmlSerializer.ExtensionModel.Xml;
 using NodeNetwork.ViewModels;
 using ReactiveUI;
@@ -8,7 +9,7 @@ using System.Xml.Linq;
 
 namespace EasyMacro.ViewModel.Node
 {
-    public class CodeGenNodeViewModel : NodeViewModel
+    public abstract class CodeGenNodeViewModel : NodeViewModel, INodeSerializable
     {
         static CodeGenNodeViewModel()
         {
@@ -26,6 +27,11 @@ namespace EasyMacro.ViewModel.Node
         {
             NodeType = NodeType.NotSupport;
         }
+
+        public abstract void Serializer(XmlWriter xmlWriter, object instance);
+
+        public abstract object Deserialize(XElement xElement);
+
         
     }
 }

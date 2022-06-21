@@ -86,9 +86,9 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return action;
         }
 
-        public void Serializer(XmlWriter xmlWriter, object obj)
+        public override void Serializer(XmlWriter xmlWriter, object obj)
         {
-            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+            NodeSerializer.SerializerOfNodeViewModel(ref xmlWriter, ref obj);
 
             CombInputKeyboardViewModel instance = obj as CombInputKeyboardViewModel;
 
@@ -98,9 +98,9 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             xmlWriter.WriteElementString(nameof(Shift), instance.Shift.Value.ToString());
         }
 
-        public object Deserialize(XElement xElement)
+        public override object Deserialize(XElement xElement)
         {
-            CombInputKeyboardViewModel instance = (CombInputKeyboardViewModel)NodeSerializer.Deserialize(ref xElement, new CombInputKeyboardViewModel());
+            CombInputKeyboardViewModel instance = (CombInputKeyboardViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new CombInputKeyboardViewModel());
             (instance.Input.Editor as KeyboardRecordEditorViewModel).Value = (Keys)Enum.Parse(typeof(Keys),xElement.Member(nameof(Input)).ToString());
             (instance.Alt.Editor as CheckBoxEditorViewModel).Value = (bool)xElement.Member(nameof(Alt));
             (instance.Ctrl.Editor as CheckBoxEditorViewModel).Value = (bool)xElement.Member(nameof(Ctrl));

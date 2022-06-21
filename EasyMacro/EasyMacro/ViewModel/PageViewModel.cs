@@ -19,9 +19,10 @@ using ReactiveUI;
 using ExtendedXmlSerializer;
 using ExtendedXmlSerializer.ExtensionModel;
 using ExtendedXmlSerializer.Configuration;
+using ExtendedXmlSerializer.ExtensionModel.Xml;
 using System.Text;
 using System.Xml;
-using ExtendedXmlSerializer.ExtensionModel.Xml;
+
 using System.Windows;
 
 namespace EasyMacro.ViewModel
@@ -172,45 +173,44 @@ namespace EasyMacro.ViewModel
                                                      .CustomSerializer<StartNodeViewModel>(typeof(StartNodeViewModel))
                                                      .Type<DelayNodeViewModel>()
                                                      .CustomSerializer<DelayNodeViewModel>(typeof(DelayNodeViewModel))
-                                                     .Type<CombInputKeyboardViewModel>()
-                                                     .CustomSerializer<CombInputKeyboardViewModel>(typeof(CombInputKeyboardViewModel))
-                                                     .Type<ForLoopNode>()
-                                                     .CustomSerializer<ForLoopNode>(typeof(ForLoopNode))
-                                                     // .Type<GroupNodeViewModel>()
-                                                     // .CustomSerializer<GroupNodeViewModel>(typeof(GroupNodeViewModel))
-                                                     // .Type<GroupSubnetIONodeViewModel>()
-                                                     // .CustomSerializer<GroupSubnetIONodeViewModel>(typeof(GroupSubnetIONodeViewModel))
-                                                     .Type<InputKeyboardNodeViewModel>()
-                                                     .CustomSerializer<InputKeyboardNodeViewModel>(typeof(InputKeyboardNodeViewModel))
-                                                     .Type<InputMouseNodeViewModel>()
-                                                     .CustomSerializer<InputMouseNodeViewModel>(typeof(InputMouseNodeViewModel))
-                                                     .Type<InputStringNodeViewModel>()
-                                                     .CustomSerializer<InputStringNodeViewModel>(typeof(InputStringNodeViewModel))
-                                                     .Type<MouseClickNodeViewModel>()
-                                                     .CustomSerializer<MouseClickNodeViewModel>(typeof(MouseClickNodeViewModel))
-                                                     .Type<MouseMoveNodeViewModel>()
-                                                     .CustomSerializer<MouseMoveNodeViewModel>(typeof(MouseMoveNodeViewModel))
-                                                     .Type<OutputNodeViewModel>()
-                                                     .CustomSerializer<OutputNodeViewModel>(typeof(OutputNodeViewModel))
-                                                     .Type<RelativeMouseMoveNodeViewModel>()
-                                                     .CustomSerializer<RelativeMouseMoveNodeViewModel>(typeof(RelativeMouseMoveNodeViewModel))
-                                                     .Type<ReStartNodeViewModel>()
-                                                     .CustomSerializer<ReStartNodeViewModel>(typeof(ReStartNodeViewModel))
-                                                     .Type<TempletMatchNodeViewModel>()
-                                                     .CustomSerializer<TempletMatchNodeViewModel>(typeof(TempletMatchNodeViewModel))
+                                                     //  .Type<CombInputKeyboardViewModel>()
+                                                     //  .CustomSerializer<CombInputKeyboardViewModel>(typeof(CombInputKeyboardViewModel))
+                                                     //  .Type<ForLoopNode>()
+                                                     //  .CustomSerializer<ForLoopNode>(typeof(ForLoopNode))
+                                                     //  // .Type<GroupNodeViewModel>()
+                                                     //  // .CustomSerializer<GroupNodeViewModel>(typeof(GroupNodeViewModel))
+                                                     //  // .Type<GroupSubnetIONodeViewModel>()
+                                                     //  // .CustomSerializer<GroupSubnetIONodeViewModel>(typeof(GroupSubnetIONodeViewModel))
+                                                     //  .Type<InputKeyboardNodeViewModel>()
+                                                     //  .CustomSerializer<InputKeyboardNodeViewModel>(typeof(InputKeyboardNodeViewModel))
+                                                     //  .Type<InputMouseNodeViewModel>()
+                                                     //  .CustomSerializer<InputMouseNodeViewModel>(typeof(InputMouseNodeViewModel))
+                                                     //  .Type<InputStringNodeViewModel>()
+                                                     //  .CustomSerializer<InputStringNodeViewModel>(typeof(InputStringNodeViewModel))
+                                                     //  .Type<MouseClickNodeViewModel>()
+                                                     //  .CustomSerializer<MouseClickNodeViewModel>(typeof(MouseClickNodeViewModel))
+                                                     //  .Type<MouseMoveNodeViewModel>()
+                                                     //  .CustomSerializer<MouseMoveNodeViewModel>(typeof(MouseMoveNodeViewModel))
+                                                     //  .Type<OutputNodeViewModel>()
+                                                     //  .CustomSerializer<OutputNodeViewModel>(typeof(OutputNodeViewModel))
+                                                     //  .Type<RelativeMouseMoveNodeViewModel>()
+                                                     //  .CustomSerializer<RelativeMouseMoveNodeViewModel>(typeof(RelativeMouseMoveNodeViewModel))
+                                                     //  .Type<ReStartNodeViewModel>()
+                                                     //  .CustomSerializer<ReStartNodeViewModel>(typeof(ReStartNodeViewModel))
+                                                     //  .Type<TempletMatchNodeViewModel>()
+                                                     //  .CustomSerializer<TempletMatchNodeViewModel>(typeof(TempletMatchNodeViewModel))
                                                      .Create();
 
-            IEnumerable<ReactiveObject> nodes = PageViewModel.Instance.Network.Nodes.Items;
-            List<IExtendedXmlCustomSerializer> nodesSerialize = new List<IExtendedXmlCustomSerializer>();
+            List<INodeSerializable> nodes = new List<INodeSerializable>();
 
-            foreach (var node in nodes)
+            foreach (var node in Network.Nodes.Items)
             {
-                IExtendedXmlCustomSerializer serializeObject = node as IExtendedXmlCustomSerializer;
+                INodeSerializable serializeObject = node as INodeSerializable;
                 if (serializeObject is null) { throw new Exception("해당 노드가 NodeSerialize를 구현하지 않았습니다!!"); }
-                nodesSerialize.Add(serializeObject);
+                nodes.Add(serializeObject);
             }
 
-            string xmlData = serializer.Serialize(nodesSerialize);// TODO : 모든 노드는 IExtendedXmlCustomSerializer를 구현해야하며, 모든 속성을 저장해야함.
+            var xmlData = serializer.Serialize(nodes);// TODO : 모든 노드는 IExtendedXmlCustomSerializer를 구현해야하며, 모든 속성을 저장해야함.
 
             string savepath = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\{"TestSave.xml"}";
             using (XmlTextWriter wr = new XmlTextWriter(savepath, Encoding.UTF8))
@@ -228,8 +228,12 @@ namespace EasyMacro.ViewModel
             IExtendedXmlSerializer serializer;
             serializer = new ConfigurationContainer().WithUnknownContent()
                                                      .Continue()
-                                                     .Type<StartNodeViewModel>()
-                                                     .CustomSerializer<StartNodeViewModel>(typeof(StartNodeViewModel))
+                                                     .CustomSerializer<StartNodeViewModel>(typeof(NodeSerializer))
+                                                     .CustomSerializer<DelayNodeViewModel>(typeof(NodeSerializer))
+                                                     //.Type<StartNodeViewModel>()
+                                                     //.CustomSerializer<StartNodeViewModel>(typeof(StartNodeViewModel))
+                                                     //.Type<DelayNodeViewModel>()
+                                                     //.CustomSerializer<DelayNodeViewModel>(typeof(DelayNodeViewModel))
                                                      .Create();
 
             //List<IExtendedXmlCustomSerializer> obj = null;
@@ -237,11 +241,8 @@ namespace EasyMacro.ViewModel
             string savepath = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\{"TestSave.xml"}";
             using (var reader = new StreamReader(savepath))
             {
-                //string str = reader.ReadToEnd();
-                //obj = serializer.Deserialize<List<CodeGenNodeViewModel>>(str);
-                obj = serializer.Deserialize<List<CodeGenNodeViewModel>>(reader); //
+                obj = serializer.Deserialize<List<INodeSerializable>>(reader); //
             }
-            
 
             PageViewModel instance = new PageViewModel(obj);
             _instance.eventNode.Position = new Point(100, 50);

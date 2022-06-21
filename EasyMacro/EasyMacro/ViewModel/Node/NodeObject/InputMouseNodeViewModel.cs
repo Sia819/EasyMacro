@@ -20,7 +20,7 @@ using static EasyMacro.ViewModel.Node.Editors.RadioButtonEditorViewModel;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class InputMouseNodeViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
+    public class InputMouseNodeViewModel : CodeGenNodeViewModel
     {
         static InputMouseNodeViewModel()
         {
@@ -81,9 +81,9 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return action;
         }
 
-        public void Serializer(XmlWriter xmlWriter, object obj)
+        public override void Serializer(XmlWriter xmlWriter, object obj)
         {
-            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+            NodeSerializer.SerializerOfNodeViewModel(ref xmlWriter, ref obj);
 
             InputMouseNodeViewModel instance = obj as InputMouseNodeViewModel;
 
@@ -102,9 +102,9 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             xmlWriter.WriteElementString(nameof(MouseClickType), selectedNum.ToString());
         }
 
-        public object Deserialize(XElement xElement)
+        public override object Deserialize(XElement xElement)
         {
-            InputMouseNodeViewModel instance = (InputMouseNodeViewModel)NodeSerializer.Deserialize(ref xElement, new InputMouseNodeViewModel());
+            InputMouseNodeViewModel instance = (InputMouseNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new InputMouseNodeViewModel());
             (instance.MouseClickType.Editor as RadioButtonEditorViewModel).MyList[(int)xElement.Member(nameof(MouseClickType))].IsChecked = true;
             return instance;
         }

@@ -17,8 +17,8 @@ using ReactiveUI;
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
     // 그룹 내부에서 그룹 밖으로 내보내는 노드
-    public class OutputNodeViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
-    {
+    public class OutputNodeViewModel : CodeGenNodeViewModel
+    { 
         static OutputNodeViewModel()
         {
             Splat.Locator.CurrentMutable.Register(() => new NodeView(), typeof(IViewFor<OutputNodeViewModel>));
@@ -26,14 +26,14 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public ValueNodeInputViewModel<int?> ResultInput { get; }
 
-        public void Serializer(XmlWriter xmlWriter, object obj)
+        public override void Serializer(XmlWriter xmlWriter, object obj)
         {
-            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+            NodeSerializer.SerializerOfNodeViewModel(ref xmlWriter, ref obj);
         }
 
-        public object Deserialize(XElement xElement)
+        public override object Deserialize(XElement xElement)
         {
-            OutputNodeViewModel instance = (OutputNodeViewModel)NodeSerializer.Deserialize(ref xElement, new OutputNodeViewModel());
+            OutputNodeViewModel instance = (OutputNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new OutputNodeViewModel());
             return instance;
         }
 

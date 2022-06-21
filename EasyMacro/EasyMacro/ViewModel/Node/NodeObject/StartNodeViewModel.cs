@@ -11,7 +11,7 @@ using System.Xml;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class StartNodeViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
+    public class StartNodeViewModel : CodeGenNodeViewModel, INodeSerializable, IExtendedXmlCustomSerializer
     {
         static StartNodeViewModel()
         {
@@ -33,14 +33,14 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.Inputs.Add(OnClickFlow);
         }
 
-        public void Serializer(XmlWriter xmlWriter, object obj)
+        public override void Serializer(XmlWriter xmlWriter, object obj)
         {
-            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+            NodeSerializer.SerializerOfNodeViewModel(ref xmlWriter, ref obj);
         }
 
-        public object Deserialize(XElement xElement)
+        public override object Deserialize(XElement xElement)
         {
-            StartNodeViewModel instance = (StartNodeViewModel)NodeSerializer.Deserialize(ref xElement, new StartNodeViewModel());
+            StartNodeViewModel instance = (StartNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new StartNodeViewModel());
             return instance;
         }
 

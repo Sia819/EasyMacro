@@ -39,14 +39,14 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         private CodeNodeGroupIOBinding _ioBinding;
         #endregion
 
-        public void Serializer(XmlWriter xmlWriter, object obj)
+        public override void Serializer(XmlWriter xmlWriter, object obj)
         {
-            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+            NodeSerializer.SerializerOfNodeViewModel(ref xmlWriter, ref obj);
         }
 
-        public object Deserialize(XElement xElement)
+        public override object Deserialize(XElement xElement)
         {
-            GroupSubnetIONodeViewModel instance = (GroupSubnetIONodeViewModel)NodeSerializer.Deserialize(ref xElement, new GroupSubnetIONodeViewModel(Subnet, _isEntranceNode, _isExitNode));
+            GroupSubnetIONodeViewModel instance = (GroupSubnetIONodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new GroupSubnetIONodeViewModel(Subnet, _isEntranceNode, _isExitNode));
             return instance;
         }
 

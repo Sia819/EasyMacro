@@ -1,17 +1,14 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using System.Threading;
-using System.Collections.Generic;
-using System.Xml;
-using EasyMacroAPI.Command;
-using EasyMacroAPI.CommandSerializer;
-using EasyMacroAPI.Common;
-using EasyMacroAPI.Model;
-using ExtendedXmlSerializer;
-using ExtendedXmlSerializer.ExtensionModel;
-using ExtendedXmlSerializer.Configuration;
-using System.Drawing;
+﻿// using System;
+// using System.IO;
+// using System.Text;
+// using System.Threading;
+// using System.Collections.Generic;
+// using System.Xml;
+// using EasyMacroAPI.Command;
+// using EasyMacroAPI.CommandSerializer;
+// using EasyMacroAPI.Common;
+// using EasyMacroAPI.Model;
+// using System.Drawing;
 
 namespace EasyMacroAPI
 {

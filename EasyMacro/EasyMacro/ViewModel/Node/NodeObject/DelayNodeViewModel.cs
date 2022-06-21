@@ -1,24 +1,25 @@
-﻿using DynamicData;
+﻿using System;
+using System.Reactive.Linq;
+using System.Threading;
+using System.Xml;
+using System.Xml.Linq;
+using System.Collections.Generic;
 using EasyMacro.Model.Node;
 using EasyMacro.Model.Node.Compiler;
 using EasyMacro.View.Node;
 using EasyMacro.ViewModel.Node.Editors;
 using EasyMacroAPI.Command;
-using ExtendedXmlSerializer;
-using ExtendedXmlSerializer.ExtensionModel.Xml;
 using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
 using NodeNetwork.Views;
+using DynamicData;
 using ReactiveUI;
-using System;
-using System.Reactive.Linq;
-using System.Threading;
-using System.Xml;
-using System.Xml.Linq;
+using ExtendedXmlSerializer;
+using ExtendedXmlSerializer.ExtensionModel.Xml;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class DelayNodeViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
+    public class DelayNodeViewModel : CodeGenNodeViewModel, INodeSerializable, IExtendedXmlCustomSerializer
     {
         static DelayNodeViewModel()
         {
@@ -69,22 +70,22 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return action;
         }
 
-        public void Serializer(XmlWriter xmlWriter, object obj)
+        public override void Serializer(XmlWriter xmlWriter, object obj)
         {
-            NodeSerializer.Serializer(ref xmlWriter, ref obj);
-
+            NodeSerializer.SerializerOfNodeViewModel(ref xmlWriter, ref obj);
             DelayNodeViewModel instance = obj as DelayNodeViewModel;
-
             xmlWriter.WriteElementString(nameof(Delay), instance.Delay.Value.ToString());
         }
 
-        public object Deserialize(XElement xElement)
+        public override object Deserialize(XElement xElement)
         {
-            DelayNodeViewModel instance = (DelayNodeViewModel)NodeSerializer.Deserialize(ref xElement, new DelayNodeViewModel());
-            (instance.Delay.Editor as IntegerValueEditorViewModel).Value = (int)xElement.Member(nameof(Delay));
+            DelayNodeViewModel instance = (DelayNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new DelayNodeViewModel());
+            
+            Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
+            (instance.Delay.Editor as IntegerValueEditorViewModel).Value = int.TryParse(dictionary["Delay"].Value, out int delay) ? delay : 0;
             return instance;
         }
-        
+
 
         public DelayNodeViewModel() : base(NodeType.Function)
         {

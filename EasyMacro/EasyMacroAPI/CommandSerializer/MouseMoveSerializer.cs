@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Xml;
 using System.Xml.Linq;
 using System.Globalization;
@@ -31,3 +32,4 @@ namespace EasyMacroAPI.CommandSerializer
         }
     }
 }
+*/

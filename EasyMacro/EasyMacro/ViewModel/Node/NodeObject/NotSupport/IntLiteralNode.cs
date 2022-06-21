@@ -10,6 +10,7 @@ using ReactiveUI;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
+    /*
     public class IntLiteralNode : CodeGenNodeViewModel
     {
         static IntLiteralNode()
@@ -33,4 +34,5 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.Outputs.Add(Output);
         }
     }
+    */
 }

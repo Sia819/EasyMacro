@@ -20,7 +20,7 @@ using System.Drawing;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class MouseClickNodeViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
+    public class MouseClickNodeViewModel : CodeGenNodeViewModel
     {
         static MouseClickNodeViewModel()
         {
@@ -72,9 +72,9 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return action;
         }
 
-        public void Serializer(XmlWriter xmlWriter, object obj)
+        public override void Serializer(XmlWriter xmlWriter, object obj)
         {
-            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+            NodeSerializer.SerializerOfNodeViewModel(ref xmlWriter, ref obj);
 
             MouseClickNodeViewModel instance = obj as MouseClickNodeViewModel;
 
@@ -83,9 +83,9 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             xmlWriter.WriteElementString(nameof(Delay), instance.Delay.Value.ToString());
         }
 
-        public object Deserialize(XElement xElement)
+        public override object Deserialize(XElement xElement)
         {
-            MouseClickNodeViewModel instance = (MouseClickNodeViewModel)NodeSerializer.Deserialize(ref xElement, new MouseClickNodeViewModel());
+            MouseClickNodeViewModel instance = (MouseClickNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new MouseClickNodeViewModel());
             (instance.MyPoint.Editor as PointRecordEditorViewModel).Value = new Point((int)xElement.Member(nameof(MyPoint.Value.X)), (int)xElement.Member(nameof(MyPoint.Value.Y)));
             (instance.Delay.Editor as IntegerValueEditorViewModel).Value = (int)xElement.Member(nameof(Delay));
             return instance;

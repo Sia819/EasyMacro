@@ -18,7 +18,7 @@ using System.Xml.Linq;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class TempletMatchNodeViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
+    public class TempletMatchNodeViewModel : CodeGenNodeViewModel
     {
         static TempletMatchNodeViewModel()
         {
@@ -124,18 +124,18 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return action;
         }
 
-        public void Serializer(XmlWriter xmlWriter, object obj)
+        public override void Serializer(XmlWriter xmlWriter, object obj)
         {
-            NodeSerializer.Serializer(ref xmlWriter, ref obj);
+            NodeSerializer.SerializerOfNodeViewModel(ref xmlWriter, ref obj);
 
             TempletMatchNodeViewModel instance = obj as TempletMatchNodeViewModel;
 
             xmlWriter.WriteElementString(nameof(BitmapDir), instance.BitmapDir.Value.ToString());
         }
 
-        public object Deserialize(XElement xElement)
+        public override object Deserialize(XElement xElement)
         {
-            TempletMatchNodeViewModel instance = (TempletMatchNodeViewModel)NodeSerializer.Deserialize(ref xElement, new TempletMatchNodeViewModel());
+            TempletMatchNodeViewModel instance = (TempletMatchNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new TempletMatchNodeViewModel());
             (instance.BitmapDir.Editor as IntegerValueEditorViewModel).Value = (int)xElement.Member(nameof(BitmapDir));
             return instance;
         }

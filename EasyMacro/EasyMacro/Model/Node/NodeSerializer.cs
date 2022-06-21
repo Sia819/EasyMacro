@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 namespace EasyMacro.Model.Node
 {
-    internal static class NodeSerializer
+    internal class NodeSerializer
     {
         public static void Serializer(ref XmlWriter xmlWriter, ref object obj)
         {

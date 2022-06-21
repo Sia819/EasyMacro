@@ -82,14 +82,18 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             NodeSerializer.Serializer(ref xmlWriter, ref obj);
 
             RelativeMouseMoveNodeViewModel instance = obj as RelativeMouseMoveNodeViewModel;
-
+            FindWindowEditorViewModel findWindowEditor = (instance.hWnd.Editor as FindWindowEditorViewModel);
+            xmlWriter.WriteElementString(nameof(findWindowEditor.TargetWindowTitle), findWindowEditor.TargetWindowTitle);
+            xmlWriter.WriteElementString(nameof(findWindowEditor.TargetWindowClass), findWindowEditor.TargetWindowClass);
             xmlWriter.WriteElementString(nameof(hWnd), instance.hWnd.Value.ToString());
         }
 
         public object Deserialize(XElement xElement)
         {
             RelativeMouseMoveNodeViewModel instance = (RelativeMouseMoveNodeViewModel)NodeSerializer.Deserialize(ref xElement, new RelativeMouseMoveNodeViewModel());
-            (instance.hWnd.Editor as RadioButtonEditorViewModel).MyList[(int)xElement.Member(nameof(hWnd))].IsChecked = true;
+            FindWindowEditorViewModel findWindowEditor = (instance.hWnd.Editor as FindWindowEditorViewModel);
+            findWindowEditor.TargetWindowTitle = xElement.Member(nameof(findWindowEditor.TargetWindowTitle)).Value;
+            findWindowEditor.TargetWindowClass = xElement.Member(nameof(findWindowEditor.TargetWindowClass)).Value;
             return instance;
         }
 
@@ -103,15 +107,14 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Name = "프로세스 이름",
                 Editor = new FindWindowEditorViewModel()//new StringValueEditorViewModel()
             };
-            hWnd.ValueChanged.Do((i) =>
-            {
-                if (i != IntPtr.Zero)
-                {
-                    PInvoke.User32.GetWindowRect(i, out PInvoke.RECT rect);
-                    (MyPoint.Editor as PointRecordEditorViewModel).Value = new Point(rect.left, rect.top);
-                }
-            }).Subscribe();
-
+            // hWnd.ValueChanged.Do((i) =>
+            // {
+            //     if (i != IntPtr.Zero)
+            //     {
+            //         PInvoke.User32.GetWindowRect(i, out PInvoke.RECT rect);
+            //         (MyPoint.Editor as PointRecordEditorViewModel).Value = new Point(rect.left, rect.top);
+            //     }
+            // }).Subscribe();
             this.Inputs.Add(hWnd);
 
             MyPoint = new ValueNodeInputViewModel<Point>()

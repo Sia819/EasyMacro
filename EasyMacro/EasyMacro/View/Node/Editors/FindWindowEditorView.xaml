@@ -51,10 +51,10 @@
             </Button.ContentTemplate>
         </Button>
         <StackPanel MaxWidth="200" VerticalAlignment="Center">
-            <TextBox x:Name="TargetWindowTitle"
+            <TextBox x:Name="targetWindowTitle"
                      MinWidth="100" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"
                      IsEnabled="False" Background="White" />
-            <TextBox x:Name="TargetWindowClass"
+            <TextBox x:Name="targetWindowClass"
                      MinWidth="100" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"
                      IsEnabled="False" Background="White"/>
         </StackPanel>

@@ -1,7 +1,10 @@
 ﻿using EasyMacro.Model.Node;
 using EasyMacro.View.Node;
+using ExtendedXmlSerializer.ExtensionModel.Xml;
 using NodeNetwork.ViewModels;
 using ReactiveUI;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace EasyMacro.ViewModel.Node
 {
@@ -18,5 +21,11 @@ namespace EasyMacro.ViewModel.Node
         {
             NodeType = type;
         }
+
+        public CodeGenNodeViewModel()
+        {
+            NodeType = NodeType.NotSupport;
+        }
+        
     }
 }

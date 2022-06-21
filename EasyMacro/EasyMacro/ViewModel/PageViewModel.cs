@@ -63,6 +63,8 @@ namespace EasyMacro.ViewModel
 
         public StartNodeViewModel eventNode;
 
+
+
         private PageViewModel()
         {
             this.WhenAnyValue(vm => vm.NetworkBreadcrumbBar.ActiveItem).Cast<NetworkBreadcrumb>()
@@ -77,7 +79,7 @@ namespace EasyMacro.ViewModel
             eventNode = new StartNodeViewModel { CanBeRemovedByUser = false };
             Network.Nodes.Add(eventNode);
 
-            
+
             // ListPanel에 추가하여 보여질 노드들
             NodeList.AddNodeType(() => new ReStartNodeViewModel());
             NodeList.AddNodeType(() => new ForLoopNode());
@@ -163,11 +165,10 @@ namespace EasyMacro.ViewModel
 
         public void Save()
         {
-            IEnumerable<ReactiveObject> nodes = PageViewModel.Instance.Network.Nodes.Items;
-            List<IExtendedXmlCustomSerializer> nodesSerialize = new List<IExtendedXmlCustomSerializer>();
-            
             IExtendedXmlSerializer serializer;
-            serializer = new ConfigurationContainer().Type<StartNodeViewModel>()
+            serializer = new ConfigurationContainer().WithUnknownContent()
+                                                     .Continue()
+                                                     .Type<StartNodeViewModel>()
                                                      .CustomSerializer<StartNodeViewModel>(typeof(StartNodeViewModel))
                                                      .Type<DelayNodeViewModel>()
                                                      .CustomSerializer<DelayNodeViewModel>(typeof(DelayNodeViewModel))
@@ -175,10 +176,10 @@ namespace EasyMacro.ViewModel
                                                      .CustomSerializer<CombInputKeyboardViewModel>(typeof(CombInputKeyboardViewModel))
                                                      .Type<ForLoopNode>()
                                                      .CustomSerializer<ForLoopNode>(typeof(ForLoopNode))
-                                                     .Type<GroupNodeViewModel>()
-                                                     .CustomSerializer<GroupNodeViewModel>(typeof(GroupNodeViewModel))
-                                                     .Type<GroupSubnetIONodeViewModel>()
-                                                     .CustomSerializer<GroupSubnetIONodeViewModel>(typeof(GroupSubnetIONodeViewModel))
+                                                     // .Type<GroupNodeViewModel>()
+                                                     // .CustomSerializer<GroupNodeViewModel>(typeof(GroupNodeViewModel))
+                                                     // .Type<GroupSubnetIONodeViewModel>()
+                                                     // .CustomSerializer<GroupSubnetIONodeViewModel>(typeof(GroupSubnetIONodeViewModel))
                                                      .Type<InputKeyboardNodeViewModel>()
                                                      .CustomSerializer<InputKeyboardNodeViewModel>(typeof(InputKeyboardNodeViewModel))
                                                      .Type<InputMouseNodeViewModel>()
@@ -199,6 +200,9 @@ namespace EasyMacro.ViewModel
                                                      .CustomSerializer<TempletMatchNodeViewModel>(typeof(TempletMatchNodeViewModel))
                                                      .Create();
 
+            IEnumerable<ReactiveObject> nodes = PageViewModel.Instance.Network.Nodes.Items;
+            List<IExtendedXmlCustomSerializer> nodesSerialize = new List<IExtendedXmlCustomSerializer>();
+
             foreach (var node in nodes)
             {
                 IExtendedXmlCustomSerializer serializeObject = node as IExtendedXmlCustomSerializer;
@@ -208,7 +212,8 @@ namespace EasyMacro.ViewModel
 
             string xmlData = serializer.Serialize(nodesSerialize);// TODO : 모든 노드는 IExtendedXmlCustomSerializer를 구현해야하며, 모든 속성을 저장해야함.
 
-            using (XmlTextWriter wr = new XmlTextWriter($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\{"TestSave.xml"}", Encoding.UTF8))
+            string savepath = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\{"TestSave.xml"}";
+            using (XmlTextWriter wr = new XmlTextWriter(savepath, Encoding.UTF8))
             {
                 wr.Formatting = Formatting.Indented;
                 XmlDocument document = new XmlDocument();
@@ -220,19 +225,31 @@ namespace EasyMacro.ViewModel
 
         public void Load()
         {
+            IExtendedXmlSerializer serializer;
+            serializer = new ConfigurationContainer().WithUnknownContent()
+                                                     .Continue()
+                                                     .Type<StartNodeViewModel>()
+                                                     .CustomSerializer<StartNodeViewModel>(typeof(StartNodeViewModel))
+                                                     .Create();
+
+            //List<IExtendedXmlCustomSerializer> obj = null;
             object obj = null;
-
-
+            string savepath = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\{"TestSave.xml"}";
+            using (var reader = new StreamReader(savepath))
+            {
+                //string str = reader.ReadToEnd();
+                //obj = serializer.Deserialize<List<CodeGenNodeViewModel>>(str);
+                obj = serializer.Deserialize<List<CodeGenNodeViewModel>>(reader); //
+            }
+            
 
             PageViewModel instance = new PageViewModel(obj);
             _instance.eventNode.Position = new Point(100, 50);
-            
+
             // TODO : 여기에 저장된 파일을 로드하는 코드 작성
 
             // Change-Refresh View
             _instance = ((Application.Current.MainWindow as EasyMacro.View.MainWindow).mainFrame.Content as View.NodeEditPage).ViewModel = instance;
-
-
         }
 
         public void StartMacro(EasyMacroAPI.Model.Keys keys, EasyMacroAPI.Model.KeyModifiers keyModifiers)

@@ -8,6 +8,7 @@ namespace EasyMacro.Model.Node
 {
     public enum NodeType
     {
+        NotSupport = -1,
         EventNode, 
         Function, 
         FlowControl,

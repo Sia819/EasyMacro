@@ -92,7 +92,21 @@ namespace EasyMacro.View.Node.Editors
 
             this.WhenActivated(d =>
             {
-                this.Bind(ViewModel, vm => vm.Value, v => v.TargetWindowTitle.Text,
+                this.OneWayBind(ViewModel, vm => vm.TargetWindowTitle, v => v.targetWindowTitle.Text,
+                                (winTitle) => // VM -> View
+                                {
+                                    IntPtr hWnd = User32.FindWindow(targetWindowClass.Text, winTitle);
+                                    if (hWnd != IntPtr.Zero)
+                                    {
+                                        LastWindow = hWnd;
+                                    }
+                                    else
+                                    {
+                                        // Text로 Window Handle을 찾을 수 없다고 빨간색 잉크 표시
+                                    }
+                                    return winTitle;
+                                });
+                this.Bind(ViewModel, vm => vm.Value, v => v.targetWindowTitle.Text,
                           (value) =>    // VM -> View
                           {
                               if (value != IntPtr.Zero)
@@ -112,7 +126,21 @@ namespace EasyMacro.View.Node.Editors
                               return LastWindow;
                           });
 
-                this.Bind(ViewModel, vm => vm.Value, v => v.TargetWindowClass.Text,
+                this.OneWayBind(ViewModel, vm => vm.TargetWindowClass, v => v.targetWindowClass.Text,
+                                (winClass) => // VM -> View
+                                {
+                                    IntPtr hWnd = User32.FindWindow(winClass, targetWindowTitle.Text);
+                                    if (hWnd != IntPtr.Zero)
+                                    {
+                                        LastWindow = hWnd;
+                                    }
+                                    else
+                                    {
+                                        // Text로 Window Handle을 찾을 수 없다고 빨간색 잉크 표시
+                                    }
+                                    return winClass;
+                                });
+                this.Bind(ViewModel, vm => vm.Value, v => v.targetWindowClass.Text,
                           (value) =>    // VM -> View
                           {
                               if (value != IntPtr.Zero)
@@ -231,11 +259,11 @@ namespace EasyMacro.View.Node.Editors
             try
             {
                 // Title
-                this.TargetWindowTitle.Text = User32.GetWindowText(window);
+                this.targetWindowTitle.Text = User32.GetWindowText(window);
                 // Class
                 StringBuilder ClassName = new StringBuilder(256);
                 int ret = GetClassName(window, ClassName, ClassName.Capacity);
-                this.TargetWindowClass.Text = ClassName.ToString();
+                this.targetWindowClass.Text = ClassName.ToString();
             }
             catch (Exception ex) { }
 
@@ -300,7 +328,7 @@ namespace EasyMacro.View.Node.Editors
                         // paint new window
                         ShowInvertRectTracker(LastWindow);
                     }
-                    this.TargetWindowTitle.Text += " "; // Event Raise...
+                    this.targetWindowTitle.Text += " "; // Event Raise...
                     DisplayWindowInfo(LastWindow);
                 }
             }

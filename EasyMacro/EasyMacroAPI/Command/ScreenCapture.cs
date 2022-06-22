@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Runtime.Versioning;
 using EasyMacroAPI.Model;
 
@@ -9,18 +10,15 @@ namespace EasyMacroAPI.Command
     {
         public MacroTypes MacroType => MacroTypes.ScreenCapture;
 
-        public string WindowName { get; set; }
+        public IntPtr hWnd { get; set; }
 
-        public bool IsFullScreen => (WindowName is null || WindowName == "") ? true : false;
+        public bool IsFullScreen => (hWnd == IntPtr.Zero) ? true : false;
 
         public Bitmap CapturedImage { get; private set; }
 
-        public ScreenCapture(string windowName = null)
+        public ScreenCapture(IntPtr hWnd)
         {
-            if (windowName is not null)
-            {
-                this.WindowName = windowName;
-            }
+            this.hWnd = hWnd;
         }
 
         ~ScreenCapture()
@@ -41,7 +39,7 @@ namespace EasyMacroAPI.Command
             }
             else
             {
-                CapturedImage = CaptureManager.Instance.WindowCapture(WindowName);
+                CapturedImage = CaptureManager.Instance.WindowCapture(hWnd);
             }
 
         }

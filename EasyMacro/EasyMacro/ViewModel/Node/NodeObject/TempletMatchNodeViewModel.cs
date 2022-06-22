@@ -40,7 +40,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public ValueNodeInputViewModel<string> BitmapDir { get; }
 
-        public ValueNodeInputViewModel<string> WindowName { get; }
+        //public ValueNodeInputViewModel<string> WindowName { get; }
+        public ValueNodeInputViewModel<IntPtr> hWnd { get; }
 
         public ValueNodeInputViewModel<bool?> IsWantKeepFind { get; }
 
@@ -72,10 +73,10 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
             TempletMatchNodeViewModel instance = obj as TempletMatchNodeViewModel;
 
+            FindWindowEditorViewModel findWindowEditor = (instance.hWnd.Editor as FindWindowEditorViewModel);
+            xmlWriter.WriteElementString(nameof(findWindowEditor.TargetWindowTitle), findWindowEditor.TargetWindowTitle);
+            xmlWriter.WriteElementString(nameof(findWindowEditor.TargetWindowClass), findWindowEditor.TargetWindowClass);
             xmlWriter.WriteElementString(nameof(BitmapDir), instance.BitmapDir.Value.ToString());
-
-            //프로세스 찾기
-
             xmlWriter.WriteElementString(nameof(RetryTimes), instance.RetryTimes.Value.ToString());
             xmlWriter.WriteElementString(nameof(IsWantKeepFind), instance.IsWantKeepFind.Value.ToString());
             xmlWriter.WriteElementString(nameof(Accuracy), instance.Accuracy.Value.ToString());
@@ -102,6 +103,9 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
             (instance.BitmapDir.Editor as ImageManagerSelectorViewModel).Value = dictionary["BitmapDir"].Value;
 
+            FindWindowEditorViewModel findWindowEditor = (instance.hWnd.Editor as FindWindowEditorViewModel);
+            findWindowEditor.TargetWindowTitle = dictionary["TargetWindowTitle"].Value;
+            findWindowEditor.TargetWindowClass = dictionary["TargetWindowClass"].Value;
             (instance.RetryTimes.Editor as IntegerValueEditorViewModel).Value = int.TryParse(dictionary["RetryTimes"].Value, out int retryTimes) ? retryTimes : 0;
             (instance.IsWantKeepFind.Editor as CheckBoxEditorViewModel).Value = bool.TryParse(dictionary["IsWantKeepFind"].Value, out bool IsWantKeepFind) ? IsWantKeepFind : false;
             (instance.Accuracy.Editor as IntegerValueEditorViewModel).Value = int.TryParse(dictionary["Accuracy"].Value, out int Accuracy) ? Accuracy : 80;
@@ -176,14 +180,12 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             BitmapDir.ValueChanged.Select(_ => ImgBindToApi()).Do(action => action.Invoke()).Subscribe();
 
 
-            WindowName = new ValueNodeInputViewModel<string>()
+            hWnd = new ValueNodeInputViewModel<IntPtr>()
             {
+                Port = null,
                 Name = "프로세스 이름",
-                Editor = new StringValueEditorViewModel() { },
-                Port = null
+                Editor = new FindWindowEditorViewModel()
             };
-            (WindowName.Editor as StringValueEditorViewModel).ValueChanged.Select(_ => WinnameToApi());
-
 
             RetryTimes = new ValueNodeInputViewModel<int?>()
             {
@@ -207,7 +209,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
             Accuracy = new ValueNodeInputViewModel<int?>()
             {
-                Name = "비교 정확도",
+                Name = "비교 정확도 (%)",
                 Editor = new IntegerValueEditorViewModel(1, 100) { Value = 80 },
                 Port = null,
             };
@@ -216,7 +218,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             Delay = new ValueNodeInputViewModel<int?>()
             {
                 Name = "지연시간 (1초 = 1000)",
-                Editor = new IntegerValueEditorViewModel(1000),
+                Editor = new IntegerValueEditorViewModel(0) { Value = 1000 },
                 Port = null,
             };
 
@@ -240,8 +242,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Name = "",
                 Value = this.RunButton.ValueChanged.Select(_ => new NodeCompile(this.Func())
                 {
-                    Log = Observable.Merge(BitmapDir.ValueChanged.Select(dir => $"TempletMatch - ({dir}), ({this.WindowName.Value})"),
-                                           WindowName.ValueChanged.Select(windowname => $"TempletMatch - ({this.BitmapDir.Value}), ({windowname})"))
+                    Log = Observable.Merge(BitmapDir.ValueChanged.Select(dir => $"TempletMatch - ({dir}), ({this.hWnd.Value})"),
+                                           hWnd.ValueChanged.Select(windowname => $"TempletMatch - ({this.BitmapDir.Value}), ({windowname})"))
                 }),
                 Group = controlFlowGroupIn
             };
@@ -273,7 +275,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             };
 
             this.Inputs.Add(BitmapDir);         // ComboBox
-            this.Inputs.Add(WindowName);        // 
+            this.Inputs.Add(hWnd);        // 
             this.Inputs.Add(IsWantKeepFind);
             this.Inputs.Add(RetryTimes);
             this.Inputs.Add(Accuracy);
@@ -305,7 +307,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                     {
                         CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
 
-                        templetMatch.ScreenCapture.WindowName = WindowName.Value;
+                        templetMatch.ScreenCapture.hWnd = hWnd.Value;
                         templetMatch.IsWantKeepFinding = IsWantKeepFind.Value ?? false;
                         templetMatch.retryTimes = RetryTimes.Value ?? 0;
                         templetMatch.Accuracy = (double)(Accuracy.Value ?? 80) / 100;
@@ -354,7 +356,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             Action action = () =>
             {
                 // TODO : TextBox의 String을 받는 구조 -> 창 찾기 컨트롤의 값을 받는 구조.
-                templetMatch.ScreenCapture.WindowName = (this.WindowName.Editor as StringValueEditorViewModel).Value;
+                templetMatch.ScreenCapture.hWnd = this.hWnd.Value;
             };
             return action;
         }

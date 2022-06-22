@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.Versioning;
 using EasyMacroAPI.Model;
@@ -28,7 +29,7 @@ namespace EasyMacroAPI.Command
 
         public TempletMatch()
         {
-            ScreenCapture = new ScreenCapture();
+            ScreenCapture = new ScreenCapture(IntPtr.Zero);
         }
 
         ~TempletMatch()

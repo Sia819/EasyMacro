@@ -17,13 +17,12 @@ namespace EasyMacroAPI
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         internal static extern bool PrintWindow(IntPtr hWnd, IntPtr hdcBlt, int nFlags);
 
-        public Bitmap WindowCapture(string windowName)
+        public Bitmap WindowCapture(IntPtr hWnd)
         {
-            IntPtr findwindow = FindWindow(null, windowName);
-            if (findwindow != IntPtr.Zero)
+            if (hWnd != IntPtr.Zero)
             {
                 //찾은 플레이어를 바탕으로 Graphics 정보를 가져옵니다.
-                Graphics Graphicsdata = Graphics.FromHwnd(findwindow);
+                Graphics Graphicsdata = Graphics.FromHwnd(hWnd);
 
                 //찾은 플레이어 창 크기 및 위치를 가져옵니다. 
                 Rectangle rect = Rectangle.Round(Graphicsdata.VisibleClipBounds);
@@ -36,7 +35,7 @@ namespace EasyMacroAPI
                 {
                     //찾은 플레이어의 크기만큼 화면을 캡쳐합니다.
                     IntPtr hdc = g.GetHdc();
-                    PrintWindow(findwindow, hdc, 0x2);
+                    PrintWindow(hWnd, hdc, 0x2);
                     g.ReleaseHdc(hdc);
                 }
                 return bmp;

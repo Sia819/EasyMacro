@@ -197,8 +197,8 @@ namespace EasyMacro.ViewModel
                                                      .CustomSerializer<RelativeMouseMoveNodeViewModel>(typeof(RelativeMouseMoveNodeViewModel))
                                                      .Type<ReStartNodeViewModel>()
                                                      .CustomSerializer<ReStartNodeViewModel>(typeof(ReStartNodeViewModel))
-                                                     //.Type<TempletMatchNodeViewModel>()
-                                                     //.CustomSerializer<TempletMatchNodeViewModel>(typeof(TempletMatchNodeViewModel))
+                                                     .Type<TempletMatchNodeViewModel>()
+                                                     .CustomSerializer<TempletMatchNodeViewModel>(typeof(TempletMatchNodeViewModel))
                                                      .Create();
 
             List<INodeSerializable> nodes = new List<INodeSerializable>();

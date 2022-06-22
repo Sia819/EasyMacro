@@ -10,6 +10,7 @@ using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
 using ReactiveUI;
 using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Windows;
@@ -18,7 +19,7 @@ using System.Xml.Linq;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class TempletMatchNodeViewModel : CodeGenNodeViewModel
+    public class TempletMatchNodeViewModel : CodeGenNodeViewModel, INodeSerializable, IExtendedXmlCustomSerializer
     {
         static TempletMatchNodeViewModel()
         {
@@ -131,12 +132,27 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             TempletMatchNodeViewModel instance = obj as TempletMatchNodeViewModel;
 
             xmlWriter.WriteElementString(nameof(BitmapDir), instance.BitmapDir.Value.ToString());
+
+            //프로세스 찾기
+
+            xmlWriter.WriteElementString(nameof(RetryTimes), instance.RetryTimes.Value.ToString());
+            xmlWriter.WriteElementString(nameof(IsWantKeepFind), instance.IsWantKeepFind.Value.ToString());
+            xmlWriter.WriteElementString(nameof(Accuracy), instance.Accuracy.Value.ToString());
+            xmlWriter.WriteElementString(nameof(Delay), instance.Delay.Value.ToString());
         }
 
         public override object Deserialize(XElement xElement)
         {
             TempletMatchNodeViewModel instance = (TempletMatchNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new TempletMatchNodeViewModel());
-            (instance.BitmapDir.Editor as IntegerValueEditorViewModel).Value = (int)xElement.Member(nameof(BitmapDir));
+
+            Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
+            (instance.BitmapDir.Editor as ImageManagerSelectorViewModel).Value = dictionary["BitmapDir"].Value;
+
+            
+            (instance.RetryTimes.Editor as StringValueEditorViewModel).Value = dictionary["RetryTimes"].Value;
+            (instance.IsWantKeepFind.Editor as CheckBoxEditorViewModel).Value = bool.TryParse(dictionary["IsWantKeepFind"].Value, out bool IsWantKeepFind) ? IsWantKeepFind : false;
+            (instance.Accuracy.Editor as IntegerValueEditorViewModel).Value = int.TryParse(dictionary["Accuracy"].Value, out int Accuracy) ? Accuracy : 80;
+            (instance.Delay.Editor as IntegerValueEditorViewModel).Value = int.TryParse(dictionary["Delay"].Value, out int delay) ? delay : 1000;
             return instance;
         }
 

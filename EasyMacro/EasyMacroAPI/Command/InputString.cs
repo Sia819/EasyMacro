@@ -1,11 +1,7 @@
-﻿using System.Threading;
-using EasyMacroAPI.Model;
+﻿using EasyMacroAPI.Model;
 
 namespace EasyMacroAPI.Command
 {
-    /// <summary>
-    /// summary
-    /// </summary>
     public class InputString : IAction
     {
         public MacroTypes MacroType => MacroTypes.InputString;

@@ -94,11 +94,6 @@ namespace EasyMacro.ViewModel
             NodeList.AddNodeType(() => new MouseClickNodeViewModel());
             NodeList.AddNodeType(() => new MouseMoveNodeViewModel());
             NodeList.AddNodeType(() => new TempletMatchNodeViewModel());
-            // TODO : 지원하지 않는 노드
-            // NodeList.AddNodeType(() => new StartNodeViewModel());
-            // NodeList.AddNodeType(() => new IntLiteralNode());
-            // NodeList.AddNodeType(() => new PrintNode());
-            // NodeList.AddNodeType(() => new TextLiteralNode());
 
             var codeObservable = startNode.OnClickFlow.Values.Connect().Select(_ => new StatementSequence(startNode.OnClickFlow.Values.Items));
             codeObservable.BindTo(this, vm => vm.CodePreview.Code);
@@ -153,8 +148,6 @@ namespace EasyMacro.ViewModel
             HookLib.GlobalKeyboardHook.StartKeyboardHook();
             HookLib.GlobalKeyboardHook.AddKeyboardHotkey(EasyMacroAPI.Model.Keys.F9, EasyMacroAPI.Model.KeyModifiers.None, StartMacro);
             HookLib.GlobalKeyboardHook.AddKeyboardHotkey(EasyMacroAPI.Model.Keys.F10, EasyMacroAPI.Model.KeyModifiers.None, StopMacro);
-            //HookLib.GlobalKeyboardHook.AddKeyboardHotkey(EasyMacroAPI.Model.Keys.F9, EasyMacroAPI.Model.KeyModifiers.Control | EasyMacroAPI.Model.KeyModifiers.Alt, StartMacro);
-
         }
 
         private PageViewModel(List<INodeSerializable> obj) : this()

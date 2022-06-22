@@ -63,9 +63,9 @@ namespace EasyMacro.ViewModel
         public ReactiveCommand<Unit, Unit> UngroupNodes { get; }
         public ReactiveCommand<Unit, Unit> OpenGroup { get; }
 
-        public StartNodeViewModel eventNode;
+        public StartNodeViewModel startNode;
 
-
+        public static bool IsReloading = false;
 
         private PageViewModel()
         {
@@ -78,8 +78,8 @@ namespace EasyMacro.ViewModel
                 Network = new NetworkViewModel()
             });
 
-            eventNode = new StartNodeViewModel { CanBeRemovedByUser = false };
-            Network.Nodes.Add(eventNode);
+            startNode = new StartNodeViewModel { CanBeRemovedByUser = false };
+            Network.Nodes.Add(startNode);
 
 
             // ListPanel에 추가하여 보여질 노드들
@@ -100,7 +100,7 @@ namespace EasyMacro.ViewModel
             // NodeList.AddNodeType(() => new PrintNode());
             // NodeList.AddNodeType(() => new TextLiteralNode());
 
-            var codeObservable = eventNode.OnClickFlow.Values.Connect().Select(_ => new StatementSequence(eventNode.OnClickFlow.Values.Items));
+            var codeObservable = startNode.OnClickFlow.Values.Connect().Select(_ => new StatementSequence(startNode.OnClickFlow.Values.Items));
             codeObservable.BindTo(this, vm => vm.CodePreview.Code);
             codeObservable.BindTo(this, vm => vm.CodeSim.Code);
 
@@ -157,12 +157,18 @@ namespace EasyMacro.ViewModel
 
         }
 
-        private PageViewModel(object obj) : this()
+        private PageViewModel(List<INodeSerializable> obj) : this()
         {
             // 강제적으로 부른 생성자
+            foreach (var node in obj)
+            {
+                Network.Nodes.Add((NodeViewModel)node);
+            }
 
-
-
+            startNode = Network.Nodes.Items.First() as StartNodeViewModel;
+            var codeObservable = startNode.OnClickFlow.Values.Connect().Select(_ => new StatementSequence(startNode.OnClickFlow.Values.Items));
+            codeObservable.BindTo(this, vm => vm.CodePreview.Code);
+            codeObservable.BindTo(this, vm => vm.CodeSim.Code);
         }
 
         public void Save()
@@ -172,41 +178,27 @@ namespace EasyMacro.ViewModel
             saveFileDialog.Filter = "XML File|*.xml|All files (*.*)|*.*";
             saveFileDialog.FilterIndex = 1;
             saveFileDialog.RestoreDirectory = true;
+            saveFileDialog.FileName = "Save.xml";
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 IExtendedXmlSerializer serializer;
                 serializer = new ConfigurationContainer().WithUnknownContent()
                                                          .Continue()
-                                                         .Type<StartNodeViewModel>()
                                                          .CustomSerializer<StartNodeViewModel>(typeof(StartNodeViewModel))
-                                                         .Type<DelayNodeViewModel>()
                                                          .CustomSerializer<DelayNodeViewModel>(typeof(DelayNodeViewModel))
-                                                         .Type<CombInputKeyboardViewModel>()
                                                          .CustomSerializer<CombInputKeyboardViewModel>(typeof(CombInputKeyboardViewModel))
-                                                         .Type<ForLoopNode>()
                                                          .CustomSerializer<ForLoopNode>(typeof(ForLoopNode))
-                                                         // .Type<GroupNodeViewModel>()
                                                          // .CustomSerializer<GroupNodeViewModel>(typeof(GroupNodeViewModel))
-                                                         // .Type<GroupSubnetIONodeViewModel>()
                                                          // .CustomSerializer<GroupSubnetIONodeViewModel>(typeof(GroupSubnetIONodeViewModel))
-                                                         .Type<InputKeyboardNodeViewModel>()
                                                          .CustomSerializer<InputKeyboardNodeViewModel>(typeof(InputKeyboardNodeViewModel))
-                                                         .Type<InputMouseNodeViewModel>()
                                                          .CustomSerializer<InputMouseNodeViewModel>(typeof(InputMouseNodeViewModel))
-                                                         .Type<InputStringNodeViewModel>()
                                                          .CustomSerializer<InputStringNodeViewModel>(typeof(InputStringNodeViewModel))
-                                                         .Type<MouseClickNodeViewModel>()
                                                          .CustomSerializer<MouseClickNodeViewModel>(typeof(MouseClickNodeViewModel))
-                                                         .Type<MouseMoveNodeViewModel>()
                                                          .CustomSerializer<MouseMoveNodeViewModel>(typeof(MouseMoveNodeViewModel))
-                                                         .Type<OutputNodeViewModel>()
                                                          .CustomSerializer<OutputNodeViewModel>(typeof(OutputNodeViewModel))
-                                                         .Type<RelativeMouseMoveNodeViewModel>()
                                                          .CustomSerializer<RelativeMouseMoveNodeViewModel>(typeof(RelativeMouseMoveNodeViewModel))
-                                                         .Type<ReStartNodeViewModel>()
                                                          .CustomSerializer<ReStartNodeViewModel>(typeof(ReStartNodeViewModel))
-                                                         .Type<TempletMatchNodeViewModel>()
                                                          .CustomSerializer<TempletMatchNodeViewModel>(typeof(TempletMatchNodeViewModel))
                                                          .Create();
 
@@ -241,6 +233,7 @@ namespace EasyMacro.ViewModel
             openFileDialog.FilterIndex = 1;
             openFileDialog.RestoreDirectory = true;
             openFileDialog.Multiselect = false;
+            openFileDialog.FileName = "Save.xml";
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
@@ -249,26 +242,31 @@ namespace EasyMacro.ViewModel
                                                          .Continue()
                                                          .CustomSerializer<StartNodeViewModel>(typeof(NodeSerializer))
                                                          .CustomSerializer<DelayNodeViewModel>(typeof(NodeSerializer))
-                                                         //.Type<StartNodeViewModel>()
-                                                         //.CustomSerializer<StartNodeViewModel>(typeof(StartNodeViewModel))
-                                                         //.Type<DelayNodeViewModel>()
-                                                         //.CustomSerializer<DelayNodeViewModel>(typeof(DelayNodeViewModel))
+                                                         .CustomSerializer<CombInputKeyboardViewModel>(typeof(NodeSerializer))
+                                                         .CustomSerializer<ForLoopNode>(typeof(NodeSerializer))
+                                                         // .CustomSerializer<GroupNodeViewModel>(typeof(NodeSerializer))
+                                                         // .CustomSerializer<GroupSubnetIONodeViewModel>(typeof(NodeSerializer))
+                                                         .CustomSerializer<InputKeyboardNodeViewModel>(typeof(NodeSerializer))
+                                                         .CustomSerializer<InputMouseNodeViewModel>(typeof(NodeSerializer))
+                                                         .CustomSerializer<InputStringNodeViewModel>(typeof(NodeSerializer))
+                                                         .CustomSerializer<MouseClickNodeViewModel>(typeof(NodeSerializer))
+                                                         .CustomSerializer<MouseMoveNodeViewModel>(typeof(NodeSerializer))
+                                                         .CustomSerializer<OutputNodeViewModel>(typeof(NodeSerializer))
+                                                         .CustomSerializer<RelativeMouseMoveNodeViewModel>(typeof(NodeSerializer))
+                                                         .CustomSerializer<ReStartNodeViewModel>(typeof(NodeSerializer))
+                                                         .CustomSerializer<TempletMatchNodeViewModel>(typeof(NodeSerializer))
                                                          .Create();
 
-                //List<IExtendedXmlCustomSerializer> obj = null;
-                object obj = null;
-                string savepath = openFileDialog.FileName.ToString();
+                List<INodeSerializable> obj = null;
+                string savepath = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\{"TestSave.xml"}";
                 using (var reader = new StreamReader(savepath))
                 {
                     obj = serializer.Deserialize<List<INodeSerializable>>(reader); //
                 }
+                IsReloading = true;
 
                 PageViewModel instance = new PageViewModel(obj);
-                _instance.eventNode.Position = new Point(100, 50);
-
-                // TODO : 여기에 저장된 파일을 로드하는 코드 작성
-
-                // Change-Refresh View
+                // Change-Refresh ViewModel
                 _instance = ((System.Windows.Application.Current.MainWindow as EasyMacro.View.MainWindow).mainFrame.Content as View.NodeEditPage).ViewModel = instance;
             }
         }

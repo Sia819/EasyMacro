@@ -12,9 +12,23 @@ namespace EasyMacro.ViewModel.Node.Editors
             Splat.Locator.CurrentMutable.Register(() => new FindWindowEditorView(), typeof(IViewFor<FindWindowEditorViewModel>));
         }
 
-        public string TargetWindowTitle { get; set; }
+        #region TargetWindowTitle Property
+        public string TargetWindowTitle
+        {
+            get => targetWindowTitle;
+            set => this.RaiseAndSetIfChanged(ref targetWindowTitle, value);
+        }
+        private string targetWindowTitle;
+        #endregion
 
-        public string TargetWindowClass { get; set; }
+        #region TargetWindowClass Property
+        public string TargetWindowClass
+        {
+            get => targetWindowClass;
+            set => this.RaiseAndSetIfChanged(ref targetWindowClass, value);
+        }
+        private string targetWindowClass;
+        #endregion
 
         public FindWindowEditorViewModel()
         {

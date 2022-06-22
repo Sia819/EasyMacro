@@ -11,12 +11,12 @@ using NodeNetwork.ViewModels;
 using NodeNetwork.Views;
 using ReactiveUI;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
-using static EasyMacro.ViewModel.Node.Editors.RadioButtonEditorViewModel;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
@@ -85,15 +85,20 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             FindWindowEditorViewModel findWindowEditor = (instance.hWnd.Editor as FindWindowEditorViewModel);
             xmlWriter.WriteElementString(nameof(findWindowEditor.TargetWindowTitle), findWindowEditor.TargetWindowTitle);
             xmlWriter.WriteElementString(nameof(findWindowEditor.TargetWindowClass), findWindowEditor.TargetWindowClass);
-            xmlWriter.WriteElementString(nameof(hWnd), instance.hWnd.Value.ToString());
+            xmlWriter.WriteElementString("PointX", instance.MyPoint.Value.X.ToString());
+            xmlWriter.WriteElementString("PointY", instance.MyPoint.Value.Y.ToString());
         }
 
         public override object Deserialize(XElement xElement)
         {
             RelativeMouseMoveNodeViewModel instance = (RelativeMouseMoveNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new RelativeMouseMoveNodeViewModel());
-            FindWindowEditorViewModel findWindowEditor = (instance.hWnd.Editor as FindWindowEditorViewModel);
-            findWindowEditor.TargetWindowTitle = xElement.Member(nameof(findWindowEditor.TargetWindowTitle)).Value;
-            findWindowEditor.TargetWindowClass = xElement.Member(nameof(findWindowEditor.TargetWindowClass)).Value;
+            Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
+
+            //FindWindowEditorViewModel findWindowEditor = (instance.hWnd.Editor as FindWindowEditorViewModel);
+            (instance.hWnd.Editor as FindWindowEditorViewModel).TargetWindowTitle = dictionary["TargetWindowTitle"].Value;
+            (instance.hWnd.Editor as FindWindowEditorViewModel).TargetWindowClass = dictionary["TargetWindowClass"].Value;
+            (instance.MyPoint.Editor as PointRecordEditorViewModel).Value = new Point(int.TryParse(dictionary["PointX"].Value, out int x) ? x : 0,
+                                                                                      int.TryParse(dictionary["PointY"].Value, out int y) ? y : 0);
             return instance;
         }
 
@@ -105,16 +110,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             {
                 Port = null,
                 Name = "프로세스 이름",
-                Editor = new FindWindowEditorViewModel()//new StringValueEditorViewModel()
+                Editor = new FindWindowEditorViewModel()
             };
-            // hWnd.ValueChanged.Do((i) =>
-            // {
-            //     if (i != IntPtr.Zero)
-            //     {
-            //         PInvoke.User32.GetWindowRect(i, out PInvoke.RECT rect);
-            //         (MyPoint.Editor as PointRecordEditorViewModel).Value = new Point(rect.left, rect.top);
-            //     }
-            // }).Subscribe();
             this.Inputs.Add(hWnd);
 
             MyPoint = new ValueNodeInputViewModel<Point>()

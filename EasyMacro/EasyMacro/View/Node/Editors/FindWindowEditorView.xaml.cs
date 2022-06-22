@@ -84,7 +84,8 @@ namespace EasyMacro.View.Node.Editors
         #endregion
 
         public IntPtr LastWindow { get; set; }
-
+        public string _targetWindowTitle = null;
+        public string _targetWindowClass = null;
         public FindWindowEditorView()
         {
             InitializeComponent();
@@ -104,8 +105,41 @@ namespace EasyMacro.View.Node.Editors
                                     {
                                         // Text로 Window Handle을 찾을 수 없다고 빨간색 잉크 표시
                                     }
-                                    return winTitle;
+                                    if (string.IsNullOrEmpty(winTitle) is true)
+                                    {
+                                        return _targetWindowTitle ?? "";
+                                    }
+                                    else
+                                    {
+                                        _targetWindowTitle = winTitle;
+                                        return winTitle;
+                                    }
+                                    
                                 });
+                this.OneWayBind(ViewModel, vm => vm.TargetWindowClass, v => v.targetWindowClass.Text,
+                                (winClass) => // VM -> View
+                                {
+                                    IntPtr hWnd = User32.FindWindow(winClass, targetWindowTitle.Text);
+                                    if (hWnd != IntPtr.Zero)
+                                    {
+                                        LastWindow = hWnd;
+                                    }
+                                    else
+                                    {
+                                        // Text로 Window Handle을 찾을 수 없다고 빨간색 잉크 표시
+                                    }
+                                    if (string.IsNullOrEmpty(winClass) is true)
+                                    {
+                                        return _targetWindowClass ?? "";
+                                    }
+                                    else
+                                    {
+                                        _targetWindowClass = winClass;
+                                        return winClass;
+                                    }
+                                });
+
+
                 this.Bind(ViewModel, vm => vm.Value, v => v.targetWindowTitle.Text,
                           (value) =>    // VM -> View
                           {
@@ -122,24 +156,10 @@ namespace EasyMacro.View.Node.Editors
                           },
                           (v) =>        // View -> VM
                           {
-                              Application.Current.MainWindow.Title = LastWindow.ToString();
                               return LastWindow;
                           });
 
-                this.OneWayBind(ViewModel, vm => vm.TargetWindowClass, v => v.targetWindowClass.Text,
-                                (winClass) => // VM -> View
-                                {
-                                    IntPtr hWnd = User32.FindWindow(winClass, targetWindowTitle.Text);
-                                    if (hWnd != IntPtr.Zero)
-                                    {
-                                        LastWindow = hWnd;
-                                    }
-                                    else
-                                    {
-                                        // Text로 Window Handle을 찾을 수 없다고 빨간색 잉크 표시
-                                    }
-                                    return winClass;
-                                });
+                
                 this.Bind(ViewModel, vm => vm.Value, v => v.targetWindowClass.Text,
                           (value) =>    // VM -> View
                           {
@@ -156,7 +176,6 @@ namespace EasyMacro.View.Node.Editors
                           },
                           (v) =>        // View -> VM
                           {
-                              Application.Current.MainWindow.Title = LastWindow.ToString();
                               return LastWindow;
                           });
                 

@@ -38,7 +38,6 @@
                                BorderThickness="0" 
                                UpDownButtonsWidth="20"
                                VerticalAlignment="Center" 
-                               Value="1" 
                                TextAlignment="Center" FontSize="11">
 
             </mah:NumericUpDown>

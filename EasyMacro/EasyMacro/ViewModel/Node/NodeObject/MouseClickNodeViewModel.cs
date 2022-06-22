@@ -79,8 +79,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
             MouseClickNodeViewModel instance = obj as MouseClickNodeViewModel;
 
-            xmlWriter.WriteElementString(nameof(MyPoint.Value.X), instance.MyPoint.Value.X.ToString());
-            xmlWriter.WriteElementString(nameof(MyPoint.Value.Y), instance.MyPoint.Value.Y.ToString());
+            xmlWriter.WriteElementString("PointX", instance.MyPoint.Value.X.ToString());
+            xmlWriter.WriteElementString("PointY", instance.MyPoint.Value.Y.ToString());
             xmlWriter.WriteElementString(nameof(Delay), instance.Delay.Value.ToString());
         }
 
@@ -88,9 +88,9 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             MouseClickNodeViewModel instance = (MouseClickNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new MouseClickNodeViewModel());
             Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
-            (instance.MyPoint.Editor as PointRecordEditorViewModel).Value = new Point(
-                int.TryParse(dictionary["MyPoint.Value.X"].Value, out int x) ? x : 0,
-                int.TryParse(dictionary["MyPoint.Value.Y"].Value, out int y) ? y : 0);
+
+            (instance.MyPoint.Editor as PointRecordEditorViewModel).Value = new Point(int.TryParse(dictionary["PointX"].Value, out int x) ? x : 0,
+                                                                                      int.TryParse(dictionary["PointY"].Value, out int y) ? y : 0);
             (instance.Delay.Editor as IntegerValueEditorViewModel).Value = int.TryParse(dictionary["Delay"].Value, out int Delay) ? Delay : 40;
             return instance;
         }

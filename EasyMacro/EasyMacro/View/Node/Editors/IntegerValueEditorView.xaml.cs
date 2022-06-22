@@ -32,7 +32,7 @@ namespace EasyMacro.View.Node.Editors
         }
         #endregion
 
-        private int valuestate = 0;
+        private int? valuestate = null;
 
         public IntegerValueEditorView()
         {
@@ -62,7 +62,8 @@ namespace EasyMacro.View.Node.Editors
             }
             else
             {
-                valueUpDown.Value = valuestate;
+                if (valuestate is not null)
+                    valueUpDown.Value = valuestate;
             }
             return enabled;
         }

@@ -26,6 +26,9 @@ namespace EasyMacro.Model.Node
         // NodeViewModel에 대한 Deserialize
         public static object DeserializeOfNoveViewModel(ref XElement xElement, NodeViewModel obj)
         {
+            Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
+            obj.Position = new System.Windows.Point (double.TryParse(dictionary["X"].Value, out double x) ? x : 0,
+                                                     double.TryParse(dictionary["Y"].Value, out double y) ? y : 0);
             return obj;
         }
 

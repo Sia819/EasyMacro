@@ -301,7 +301,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             {
                 if (CodeSimViewModel.Instance.IsRunning || Thread.CurrentThread.IsBackground is false)
                 {
-                    if (BitmapDir.Value != null)
+                    if (string.IsNullOrEmpty(BitmapDir.Value) is false)
                     {
                         CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
 

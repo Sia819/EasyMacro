@@ -16,7 +16,7 @@ namespace EasyMacro.ViewModel.Node.Editors
 
         public ImageManagerSelectorViewModel()
         {
-            Value = null;
+            Value = "";
         }
     }
 }

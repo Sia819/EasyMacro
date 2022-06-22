@@ -144,7 +144,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 {
                     if (allNodes.Hash == hashs)
                     {
-                        this.FlowOut.Connections.Items.ToList().Add(new ConnectionViewModel(this.Parent, this.FlowOut, allNodes.GetOutputViewModel));
+                        allNodes.Parent.Connections.Add(new ConnectionViewModel(this.Parent, this.FlowOut, allNodes.GetOutputViewModel));
                     }
                 }
             }

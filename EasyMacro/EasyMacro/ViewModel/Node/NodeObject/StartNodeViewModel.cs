@@ -22,7 +22,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             Splat.Locator.CurrentMutable.Register(() => new CodeGenNodeView(), typeof(IViewFor<StartNodeViewModel>));
         }
 
-        public ValueListNodeInputViewModel<IStatement> OnClickFlow { get; }
+        public ValueListNodeInputViewModel<IStatement> FlowOut { get; }
 
         public override NodeOutputViewModel GetOutputViewModel => null;
 
@@ -32,7 +32,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             StartNodeViewModel instance = obj as StartNodeViewModel;
 
             int count = 0;
-            foreach (var i in instance.OnClickFlow.Connections.Items)
+            foreach (var i in instance.FlowOut.Connections.Items)
             {
                 xmlWriter.WriteElementString($"ConnedtedHashs_{count}", (i.Output.Parent as CodeGenNodeViewModel).Hash);
                 count++;
@@ -67,7 +67,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 {
                     if (allNodes.Hash == hashs)
                     {
-                        allNodes.Parent.Connections.Add(new ConnectionViewModel(this.Parent, this.OnClickFlow, allNodes.GetOutputViewModel));
+                        allNodes.Parent.Connections.Add(new ConnectionViewModel(this.Parent, this.FlowOut, allNodes.GetOutputViewModel));
                     }
                 }
             }
@@ -77,13 +77,13 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             this.Name = "시작";
 
-            OnClickFlow = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
+            FlowOut = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
             {
                 Name = "Start",
                 MaxConnections = 1
             };
 
-            this.Inputs.Add(OnClickFlow);
+            this.Inputs.Add(FlowOut);
 
             if (PageViewModel.IsLoading is false)
                 this.Hash = Common.HashGen.RandomHashGen(10);

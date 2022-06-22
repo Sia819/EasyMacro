@@ -83,7 +83,7 @@ namespace EasyMacro.ViewModel
                 startNode = new StartNodeViewModel { CanBeRemovedByUser = false };
                 Network.Nodes.Add(startNode);
 
-                var codeObservable = startNode.OnClickFlow.Values.Connect().Select(_ => new StatementSequence(startNode.OnClickFlow.Values.Items));
+                var codeObservable = startNode.FlowOut.Values.Connect().Select(_ => new StatementSequence(startNode.FlowOut.Values.Items));
                 codeObservable.BindTo(this, vm => vm.CodePreview.Code);
                 codeObservable.BindTo(this, vm => vm.CodeSim.Code);
             }
@@ -163,7 +163,7 @@ namespace EasyMacro.ViewModel
             }
 
             startNode = Network.Nodes.Items.First() as StartNodeViewModel;
-            var codeObservable = startNode.OnClickFlow.Values.Connect().Select(_ => new StatementSequence(startNode.OnClickFlow.Values.Items));
+            var codeObservable = startNode.FlowOut.Values.Connect().Select(_ => new StatementSequence(startNode.FlowOut.Values.Items));
             codeObservable.BindTo(this, vm => vm.CodePreview.Code);
             codeObservable.BindTo(this, vm => vm.CodeSim.Code);
         }

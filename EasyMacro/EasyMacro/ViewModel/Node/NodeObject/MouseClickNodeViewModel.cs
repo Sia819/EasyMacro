@@ -145,7 +145,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 {
                     if (allNodes.Hash == hashs)
                     {
-                        this.FlowOut.Connections.Items.ToList().Add(new ConnectionViewModel(this.Parent, this.FlowOut, allNodes.GetOutputViewModel));
+                        allNodes.Parent.Connections.Add(new ConnectionViewModel(this.Parent, this.FlowOut, allNodes.GetOutputViewModel));
                     }
                 }
             }
@@ -155,7 +155,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 {
                     if (allNodes.Hash == hashs)
                     {
-                        this.MyPoint.Connections.Items.ToList().Add(new ConnectionViewModel(this.Parent, this.MyPoint, allNodes.GetOutputViewModel));
+                        allNodes.Parent.Connections.Add(new ConnectionViewModel(this.Parent, this.MyPoint, allNodes.GetOutputViewModel));
                     }
                 }
             }

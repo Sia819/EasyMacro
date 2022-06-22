@@ -142,7 +142,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 {
                     if (allNodes.Hash == hashs)
                     {
-                        this.FlowOutOption1.Connections.Items.ToList().Add(new ConnectionViewModel(this.Parent, this.FlowOutOption1, allNodes.GetOutputViewModel));
+                        allNodes.Parent.Connections.Add(new ConnectionViewModel(this.Parent, this.FlowOutOption1, allNodes.GetOutputViewModel));
                     }
                 }
             }
@@ -152,7 +152,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 {
                     if (allNodes.Hash == hashs)
                     {
-                        this.FlowOutOption2.Connections.Items.ToList().Add(new ConnectionViewModel(this.Parent, this.FlowOutOption2, allNodes.GetOutputViewModel));
+                        allNodes.Parent.Connections.Add(new ConnectionViewModel(this.Parent, this.FlowOutOption2, allNodes.GetOutputViewModel));
                     }
                 }
             }

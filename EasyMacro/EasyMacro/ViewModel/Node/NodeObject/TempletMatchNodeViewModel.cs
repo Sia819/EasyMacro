@@ -302,7 +302,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Application.Current.Dispatcher.BeginInvoke((Action)(() => { this.IsSelected = true; }));
                 if (CodeSimViewModel.Instance.IsRunning || Thread.CurrentThread.IsBackground is false)
                 {
-                    if (BitmapDir.Value != null)
+                    if (string.IsNullOrEmpty(BitmapDir.Value) is false)
                     {
                         CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
 

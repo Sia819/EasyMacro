@@ -109,6 +109,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
             (instance.KeyboardPressType.Editor as RadioButtonEditorViewModel).MyList[int.TryParse(dictionary["KeyboardPressType"].Value, out int KeyboardPressType) ? KeyboardPressType : 0].IsChecked = true;
             (instance.PressKey.Editor as KeyboardRecordEditorViewModel).Value = ((Keys)Enum.Parse(typeof(Keys), dictionary["PressKey"].Value));
+            (instance.PressKey.Editor as KeyboardRecordEditorViewModel).ReactiveObject.MyKey = ((Keys)Enum.Parse(typeof(Keys), dictionary["PressKey"].Value)).ToString();
             return instance;
         }
 

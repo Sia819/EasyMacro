@@ -224,6 +224,13 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.Outputs.Add(ResultPoint);   // 반환 포인터
 
             this.Inputs.Add(FlowOutOption2); // 찾기 실패
+
+            this.Hash = Common.HashGen.RandomHashGen(10);
+        }
+
+        public TempletMatchNodeViewModel(string hash) : base(NodeType.Function)
+        {
+            this.Hash = hash;
         }
 
         private Action Func()

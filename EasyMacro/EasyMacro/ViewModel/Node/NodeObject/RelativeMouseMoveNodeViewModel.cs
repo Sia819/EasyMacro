@@ -160,6 +160,13 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 MaxConnections = 1
             };
             this.Inputs.Add(FlowOut);
+
+            this.Hash = Common.HashGen.RandomHashGen(10);
+        }
+
+        public RelativeMouseMoveNodeViewModel(string hash) : base(NodeType.Function)
+        {
+            this.Hash = hash;
         }
     }
 }

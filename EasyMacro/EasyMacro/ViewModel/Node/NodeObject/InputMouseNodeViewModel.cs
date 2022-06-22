@@ -154,6 +154,13 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 MaxConnections = 1
             };
             this.Inputs.Add(FlowOut);
+
+            this.Hash = Common.HashGen.RandomHashGen(10);
+        }
+
+        public InputMouseNodeViewModel(string hash) : base(NodeType.Function)
+        {
+            this.Hash = hash;
         }
     }
 }

@@ -128,6 +128,13 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Port = null,
             };
             this.Outputs.Add(CurrentIndex);
+
+            this.Hash = Common.HashGen.RandomHashGen(10);
+        }
+
+        public ForLoopNode(string hash) : this()
+        {
+            this.Hash = hash;
         }
     }
 }

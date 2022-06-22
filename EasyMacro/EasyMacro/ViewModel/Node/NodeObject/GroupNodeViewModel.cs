@@ -61,7 +61,13 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             this.Name = "Group";
             this.Subnet = subnet;
+
+            this.Hash = Common.HashGen.RandomHashGen(10);
         }
 
+        public GroupNodeViewModel(string hash) : base(NodeType.Group)
+        {
+            this.Hash = hash;
+        }
     }
 }

@@ -64,6 +64,13 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.Subnet = subnet;
             _isEntranceNode = isEntranceNode;
             _isExitNode = isExitNode;
+
+            this.Hash = Common.HashGen.RandomHashGen(10);
+        }
+
+        public GroupSubnetIONodeViewModel(string hash) : base(NodeType.Group)
+        {
+            this.Hash = hash;
         }
     }
 }

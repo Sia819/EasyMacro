@@ -54,6 +54,13 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Editor = new IntegerValueEditorViewModel()
             };
             this.Inputs.Add(ResultInput);
+
+            this.Hash = Common.HashGen.RandomHashGen(10);
+        }
+
+        public OutputNodeViewModel(string hash)
+        {
+            this.Hash = hash;
         }
     }
 }

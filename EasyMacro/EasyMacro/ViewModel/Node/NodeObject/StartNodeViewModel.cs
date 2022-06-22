@@ -55,6 +55,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         public StartNodeViewModel(string hash) : this()
         {
             this.Hash = hash;
+            CanBeRemovedByUser = false;
         }
 
     }

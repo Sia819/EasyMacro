@@ -113,6 +113,13 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 MaxConnections = 1
             };
             this.Inputs.Add(FlowOut);
+
+            this.Hash = Common.HashGen.RandomHashGen(10);
+        }
+
+        public DelayNodeViewModel(string hash) : this()
+        {
+            this.Hash = hash;
         }
 
         Action Func()

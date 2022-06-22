@@ -110,6 +110,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             */
             Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
             (instance.Input.Editor as KeyboardRecordEditorViewModel).Value = ((Keys)Enum.Parse(typeof(Keys), dictionary["Input"].Value));
+            (instance.Input.Editor as KeyboardRecordEditorViewModel).ReactiveObject.MyKey = ((Keys)Enum.Parse(typeof(Keys), dictionary["Input"].Value)).ToString();
             (instance.Alt.Editor as CheckBoxEditorViewModel).Value = bool.TryParse(dictionary["Alt"].Value, out bool Alt) ? Alt : false;
             (instance.Ctrl.Editor as CheckBoxEditorViewModel).Value = bool.TryParse(dictionary["Ctrl"].Value, out bool Ctrl) ? Ctrl : false;
             (instance.Shift.Editor as CheckBoxEditorViewModel).Value = bool.TryParse(dictionary["Shift"].Value, out bool Shift) ? Shift : false;

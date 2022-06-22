@@ -1,7 +1,5 @@
-﻿using System;
-using EasyMacroAPI.Model;
+﻿using EasyMacroAPI.Model;
 using EasyMacroAPI.Common;
-using System.Xml.Serialization;
 using System.Drawing;
 
 namespace EasyMacroAPI.Command

@@ -1,6 +1,6 @@
-﻿using EasyMacroAPI.Model;
-using System;
+﻿using System;
 using System.Threading;
+using EasyMacroAPI.Model;
 
 namespace EasyMacroAPI.Command
 {

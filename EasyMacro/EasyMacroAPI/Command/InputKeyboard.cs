@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using EasyMacroAPI.Common;
+﻿using EasyMacroAPI.Common;
 using EasyMacroAPI.Model;
 
 namespace EasyMacroAPI.Command
@@ -17,10 +16,7 @@ namespace EasyMacroAPI.Command
 
         #endregion
 
-        public InputKeyboard()
-        {
-
-        }
+        public InputKeyboard() {  }
 
         public InputKeyboard(Keys key, KeyPressTypes presstype)
         {

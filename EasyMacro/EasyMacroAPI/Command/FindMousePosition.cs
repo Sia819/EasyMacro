@@ -1,7 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Drawing;
+using System.Runtime.InteropServices;
 using EasyMacroAPI.Model;
-using System.Windows;
-using System.Drawing;
 
 namespace EasyMacroAPI.Command
 {

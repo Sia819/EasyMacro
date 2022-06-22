@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using System.Windows.Forms;
-using EasyMacroAPI.Common;
+﻿using EasyMacroAPI.Common;
 using EasyMacroAPI.Model;
 
 namespace EasyMacroAPI.Command
@@ -24,7 +22,7 @@ namespace EasyMacroAPI.Command
 
         public void Do()
         {
-            //WinAPI.mouse_event((uint)MouseClickTypes.MOUSEEVENTF_MOVE, (uint)X, (uint)Y, 0, 0);
+            // MOUSEEVENTF_MOVE일 때만 X, Y값이 동작합니다.
             WinAPI.mouse_event((uint)MouseClickType, (uint)X, (uint)Y, 0, 0);
         }
     }

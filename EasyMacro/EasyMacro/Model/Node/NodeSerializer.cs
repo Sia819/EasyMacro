@@ -41,8 +41,10 @@ namespace EasyMacro.Model.Node
         // 모든 NodeViewModel의 하위클래스에 대한 분배기
         public object Deserialize(XElement xElement)
         {
+            Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
+            string hash = dictionary["NodeHash"].Value;
             Type type = Type.GetType("EasyMacro.ViewModel.Node.NodeObject." + xElement.Name.LocalName);
-            var obj = Activator.CreateInstance(type);
+            var obj = Activator.CreateInstance(type, hash);
             CodeGenNodeViewModel instance = obj as CodeGenNodeViewModel;
             return instance.Deserialize(xElement);
         }

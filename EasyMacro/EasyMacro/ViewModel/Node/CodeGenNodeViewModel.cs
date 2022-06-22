@@ -16,6 +16,8 @@ namespace EasyMacro.ViewModel.Node
             Splat.Locator.CurrentMutable.Register(() => new CodeGenNodeView(), typeof(IViewFor<CodeGenNodeViewModel>));
         }
 
+        public string Hash { get; protected set; }
+
         public NodeType NodeType { get; }
 
         public CodeGenNodeViewModel(NodeType type)

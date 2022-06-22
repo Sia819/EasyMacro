@@ -50,7 +50,7 @@ namespace EasyMacro.ViewModel.Node.Editors
         public RadioButtonEditorViewModel()
         {
             Value = 0;
-            this.RadioGroupInstanceHash = RandomString(10); // 현재 그룹명의 해시, 해시 길이
+            this.RadioGroupInstanceHash = Common.HashGen.RandomHashGen(10); // 현재 그룹명의 해시, 해시 길이
             MyList = new ObservableCollection<MyListItem>(); // 더비 벨류
         }
 
@@ -67,13 +67,5 @@ namespace EasyMacro.ViewModel.Node.Editors
             public string GroupHash { get; set; }
         }
 
-        private static Random random = new Random();
-
-        public static string RandomString(int length)
-        {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            return new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
-        }
     }
 }

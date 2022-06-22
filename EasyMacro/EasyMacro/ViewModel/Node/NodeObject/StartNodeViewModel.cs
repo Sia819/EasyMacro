@@ -48,10 +48,14 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             };
 
             this.Inputs.Add(OnClickFlow);
+
+            this.Hash = Common.HashGen.RandomHashGen(10);
         }
 
-        
+        public StartNodeViewModel(string hash) : this()
+        {
+            this.Hash = hash;
+        }
 
-        
     }
 }

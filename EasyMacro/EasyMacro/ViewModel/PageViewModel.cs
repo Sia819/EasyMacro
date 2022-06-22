@@ -22,6 +22,7 @@ using ExtendedXmlSerializer.Configuration;
 using ExtendedXmlSerializer.ExtensionModel.Xml;
 using System.Text;
 using System.Xml;
+using System.Windows.Forms;
 
 using System.Windows;
 
@@ -166,91 +167,110 @@ namespace EasyMacro.ViewModel
 
         public void Save()
         {
-            IExtendedXmlSerializer serializer;
-            serializer = new ConfigurationContainer().WithUnknownContent()
-                                                     .Continue()
-                                                     .Type<StartNodeViewModel>()
-                                                     .CustomSerializer<StartNodeViewModel>(typeof(StartNodeViewModel))
-                                                     .Type<DelayNodeViewModel>()
-                                                     .CustomSerializer<DelayNodeViewModel>(typeof(DelayNodeViewModel))
-                                                     .Type<CombInputKeyboardViewModel>()
-                                                     .CustomSerializer<CombInputKeyboardViewModel>(typeof(CombInputKeyboardViewModel))
-                                                     .Type<ForLoopNode>()
-                                                     .CustomSerializer<ForLoopNode>(typeof(ForLoopNode))
-                                                     // .Type<GroupNodeViewModel>()
-                                                     // .CustomSerializer<GroupNodeViewModel>(typeof(GroupNodeViewModel))
-                                                     // .Type<GroupSubnetIONodeViewModel>()
-                                                     // .CustomSerializer<GroupSubnetIONodeViewModel>(typeof(GroupSubnetIONodeViewModel))
-                                                     .Type<InputKeyboardNodeViewModel>()
-                                                     .CustomSerializer<InputKeyboardNodeViewModel>(typeof(InputKeyboardNodeViewModel))
-                                                     .Type<InputMouseNodeViewModel>()
-                                                     .CustomSerializer<InputMouseNodeViewModel>(typeof(InputMouseNodeViewModel))
-                                                     .Type<InputStringNodeViewModel>()
-                                                     .CustomSerializer<InputStringNodeViewModel>(typeof(InputStringNodeViewModel))
-                                                     .Type<MouseClickNodeViewModel>()
-                                                     .CustomSerializer<MouseClickNodeViewModel>(typeof(MouseClickNodeViewModel))
-                                                     .Type<MouseMoveNodeViewModel>()
-                                                     .CustomSerializer<MouseMoveNodeViewModel>(typeof(MouseMoveNodeViewModel))
-                                                     .Type<OutputNodeViewModel>()
-                                                     .CustomSerializer<OutputNodeViewModel>(typeof(OutputNodeViewModel))
-                                                     .Type<RelativeMouseMoveNodeViewModel>()
-                                                     .CustomSerializer<RelativeMouseMoveNodeViewModel>(typeof(RelativeMouseMoveNodeViewModel))
-                                                     .Type<ReStartNodeViewModel>()
-                                                     .CustomSerializer<ReStartNodeViewModel>(typeof(ReStartNodeViewModel))
-                                                     .Type<TempletMatchNodeViewModel>()
-                                                     .CustomSerializer<TempletMatchNodeViewModel>(typeof(TempletMatchNodeViewModel))
-                                                     .Create();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
 
-            List<INodeSerializable> nodes = new List<INodeSerializable>();
+            saveFileDialog.Filter = "XML File|*.xml|All files (*.*)|*.*";
+            saveFileDialog.FilterIndex = 1;
+            saveFileDialog.RestoreDirectory = true;
 
-            foreach (var node in Network.Nodes.Items)
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                INodeSerializable serializeObject = node as INodeSerializable;
-                if (serializeObject is null) { throw new Exception("해당 노드가 NodeSerialize를 구현하지 않았습니다!!"); }
-                nodes.Add(serializeObject);
-            }
+                IExtendedXmlSerializer serializer;
+                serializer = new ConfigurationContainer().WithUnknownContent()
+                                                         .Continue()
+                                                         .Type<StartNodeViewModel>()
+                                                         .CustomSerializer<StartNodeViewModel>(typeof(StartNodeViewModel))
+                                                         .Type<DelayNodeViewModel>()
+                                                         .CustomSerializer<DelayNodeViewModel>(typeof(DelayNodeViewModel))
+                                                         .Type<CombInputKeyboardViewModel>()
+                                                         .CustomSerializer<CombInputKeyboardViewModel>(typeof(CombInputKeyboardViewModel))
+                                                         .Type<ForLoopNode>()
+                                                         .CustomSerializer<ForLoopNode>(typeof(ForLoopNode))
+                                                         // .Type<GroupNodeViewModel>()
+                                                         // .CustomSerializer<GroupNodeViewModel>(typeof(GroupNodeViewModel))
+                                                         // .Type<GroupSubnetIONodeViewModel>()
+                                                         // .CustomSerializer<GroupSubnetIONodeViewModel>(typeof(GroupSubnetIONodeViewModel))
+                                                         .Type<InputKeyboardNodeViewModel>()
+                                                         .CustomSerializer<InputKeyboardNodeViewModel>(typeof(InputKeyboardNodeViewModel))
+                                                         .Type<InputMouseNodeViewModel>()
+                                                         .CustomSerializer<InputMouseNodeViewModel>(typeof(InputMouseNodeViewModel))
+                                                         .Type<InputStringNodeViewModel>()
+                                                         .CustomSerializer<InputStringNodeViewModel>(typeof(InputStringNodeViewModel))
+                                                         .Type<MouseClickNodeViewModel>()
+                                                         .CustomSerializer<MouseClickNodeViewModel>(typeof(MouseClickNodeViewModel))
+                                                         .Type<MouseMoveNodeViewModel>()
+                                                         .CustomSerializer<MouseMoveNodeViewModel>(typeof(MouseMoveNodeViewModel))
+                                                         .Type<OutputNodeViewModel>()
+                                                         .CustomSerializer<OutputNodeViewModel>(typeof(OutputNodeViewModel))
+                                                         .Type<RelativeMouseMoveNodeViewModel>()
+                                                         .CustomSerializer<RelativeMouseMoveNodeViewModel>(typeof(RelativeMouseMoveNodeViewModel))
+                                                         .Type<ReStartNodeViewModel>()
+                                                         .CustomSerializer<ReStartNodeViewModel>(typeof(ReStartNodeViewModel))
+                                                         .Type<TempletMatchNodeViewModel>()
+                                                         .CustomSerializer<TempletMatchNodeViewModel>(typeof(TempletMatchNodeViewModel))
+                                                         .Create();
 
-            var xmlData = serializer.Serialize(nodes);// TODO : 모든 노드는 IExtendedXmlCustomSerializer를 구현해야하며, 모든 속성을 저장해야함.
+                List<INodeSerializable> nodes = new List<INodeSerializable>();
 
-            string savepath = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\{"TestSave.xml"}";
-            using (XmlTextWriter wr = new XmlTextWriter(savepath, Encoding.UTF8))
-            {
-                wr.Formatting = Formatting.Indented;
-                XmlDocument document = new XmlDocument();
-                document.LoadXml(xmlData);
-                document.WriteContentTo(wr);
-                wr.Flush();
+                foreach (var node in Network.Nodes.Items)
+                {
+                    INodeSerializable serializeObject = node as INodeSerializable;
+                    if (serializeObject is null) { throw new Exception("해당 노드가 NodeSerialize를 구현하지 않았습니다!!"); }
+                    nodes.Add(serializeObject);
+                }
+
+                var xmlData = serializer.Serialize(nodes);// TODO : 모든 노드는 IExtendedXmlCustomSerializer를 구현해야하며, 모든 속성을 저장해야함.
+
+                string savepath = saveFileDialog.FileName.ToString();
+                using (XmlTextWriter wr = new XmlTextWriter(savepath, Encoding.UTF8))
+                {
+                    wr.Formatting = Formatting.Indented;
+                    XmlDocument document = new XmlDocument();
+                    document.LoadXml(xmlData);
+                    document.WriteContentTo(wr);
+                    wr.Flush();
+                }
             }
         }
 
         public void Load()
         {
-            IExtendedXmlSerializer serializer;
-            serializer = new ConfigurationContainer().WithUnknownContent()
-                                                     .Continue()
-                                                     .CustomSerializer<StartNodeViewModel>(typeof(NodeSerializer))
-                                                     .CustomSerializer<DelayNodeViewModel>(typeof(NodeSerializer))
-                                                     //.Type<StartNodeViewModel>()
-                                                     //.CustomSerializer<StartNodeViewModel>(typeof(StartNodeViewModel))
-                                                     //.Type<DelayNodeViewModel>()
-                                                     //.CustomSerializer<DelayNodeViewModel>(typeof(DelayNodeViewModel))
-                                                     .Create();
+            OpenFileDialog openFileDialog = new OpenFileDialog();
 
-            //List<IExtendedXmlCustomSerializer> obj = null;
-            object obj = null;
-            string savepath = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\{"TestSave.xml"}";
-            using (var reader = new StreamReader(savepath))
+            openFileDialog.Filter = "XML File|*.xml";
+            openFileDialog.FilterIndex = 1;
+            openFileDialog.RestoreDirectory = true;
+            openFileDialog.Multiselect = false;
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                obj = serializer.Deserialize<List<INodeSerializable>>(reader); //
+                IExtendedXmlSerializer serializer;
+                serializer = new ConfigurationContainer().WithUnknownContent()
+                                                         .Continue()
+                                                         .CustomSerializer<StartNodeViewModel>(typeof(NodeSerializer))
+                                                         .CustomSerializer<DelayNodeViewModel>(typeof(NodeSerializer))
+                                                         //.Type<StartNodeViewModel>()
+                                                         //.CustomSerializer<StartNodeViewModel>(typeof(StartNodeViewModel))
+                                                         //.Type<DelayNodeViewModel>()
+                                                         //.CustomSerializer<DelayNodeViewModel>(typeof(DelayNodeViewModel))
+                                                         .Create();
+
+                //List<IExtendedXmlCustomSerializer> obj = null;
+                object obj = null;
+                string savepath = openFileDialog.FileName.ToString();
+                using (var reader = new StreamReader(savepath))
+                {
+                    obj = serializer.Deserialize<List<INodeSerializable>>(reader); //
+                }
+
+                PageViewModel instance = new PageViewModel(obj);
+                _instance.eventNode.Position = new Point(100, 50);
+
+                // TODO : 여기에 저장된 파일을 로드하는 코드 작성
+
+                // Change-Refresh View
+                _instance = ((System.Windows.Application.Current.MainWindow as EasyMacro.View.MainWindow).mainFrame.Content as View.NodeEditPage).ViewModel = instance;
             }
-
-            PageViewModel instance = new PageViewModel(obj);
-            _instance.eventNode.Position = new Point(100, 50);
-
-            // TODO : 여기에 저장된 파일을 로드하는 코드 작성
-
-            // Change-Refresh View
-            _instance = ((Application.Current.MainWindow as EasyMacro.View.MainWindow).mainFrame.Content as View.NodeEditPage).ViewModel = instance;
         }
 
         public void StartMacro(EasyMacroAPI.Model.Keys keys, EasyMacroAPI.Model.KeyModifiers keyModifiers)

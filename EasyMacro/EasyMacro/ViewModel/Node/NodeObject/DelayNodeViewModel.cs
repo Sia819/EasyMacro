@@ -97,6 +97,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 Editor = new IntegerValueEditorViewModel(0) { Value = 1000 },
                 Port = null,
             };
+            (Delay.Editor as IntegerValueEditorViewModel).Value = 1000;
             this.Inputs.Add(Delay);
 
             this.RunButton = new ValueNodeInputViewModel<int?>()

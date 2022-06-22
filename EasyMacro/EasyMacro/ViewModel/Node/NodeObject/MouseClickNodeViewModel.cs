@@ -216,7 +216,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.Hash = Common.HashGen.RandomHashGen(10);
         }
 
-        public MouseClickNodeViewModel(string hash) : base(NodeType.Function)
+        public MouseClickNodeViewModel(string hash) : this()
         {
             this.Hash = hash;
         }

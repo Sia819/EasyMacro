@@ -60,7 +60,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.Hash = Common.HashGen.RandomHashGen(10);
         }
 
-        public OutputNodeViewModel(string hash)
+        public OutputNodeViewModel(string hash) : this()
         {
             this.Hash = hash;
         }

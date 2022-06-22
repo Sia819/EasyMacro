@@ -167,7 +167,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.Hash = Common.HashGen.RandomHashGen(10);
         }
 
-        public InputStringNodeViewModel(string hash) : base(NodeType.Function)
+        public InputStringNodeViewModel(string hash) : this()
         {
             this.Hash = hash;
         }

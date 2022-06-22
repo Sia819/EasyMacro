@@ -213,7 +213,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.Hash = Common.HashGen.RandomHashGen(10);
         }
 
-        public InputKeyboardNodeViewModel(string hash) : base(NodeType.Function)
+        public InputKeyboardNodeViewModel(string hash) : this()
         {
             this.Hash = hash;
         }

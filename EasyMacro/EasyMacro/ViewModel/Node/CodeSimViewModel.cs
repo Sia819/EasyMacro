@@ -59,6 +59,11 @@ namespace EasyMacro.ViewModel.Node
         {
             if (this.Code is not null && !nodeFlowThread.IsAlive)
             {
+                foreach(var item in PageViewModel.Instance.Network.Nodes.Items)
+                {
+                    item.IsSelected = false;
+                }
+
                 if ((nodeFlowThread.ThreadState & ThreadState.Unstarted) == 0)
                 {
                     nodeFlowThread = new Thread(new ThreadStart(nodeFlowThread_Excute)) { IsBackground = true };

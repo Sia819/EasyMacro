@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
+using System.Windows;
 using System.Xml;
 using System.Xml.Linq;
 using static EasyMacro.ViewModel.Node.Editors.RadioButtonEditorViewModel;
@@ -58,6 +59,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             Action action = () =>
             {
+                Application.Current.Dispatcher.BeginInvoke((Action)(() => { this.IsSelected = true; }));
                 if (CodeSimViewModel.Instance.IsRunning || Thread.CurrentThread.IsBackground is false)
                 {
                     CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
@@ -80,6 +82,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                         a.Compile(new CompilerContext());
                     }
                 }
+                Application.Current.Dispatcher.BeginInvoke((Action)(() => { this.IsSelected = false; }));
             };
             return action;
         }

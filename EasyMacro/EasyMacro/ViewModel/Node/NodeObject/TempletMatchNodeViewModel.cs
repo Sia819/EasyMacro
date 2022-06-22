@@ -299,6 +299,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             Action action = () =>
             {
+                Application.Current.Dispatcher.BeginInvoke((Action)(() => { this.IsSelected = true; }));
                 if (CodeSimViewModel.Instance.IsRunning || Thread.CurrentThread.IsBackground is false)
                 {
                     if (BitmapDir.Value != null)
@@ -331,6 +332,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                         }
                     }
                 }
+                Application.Current.Dispatcher.BeginInvoke((Action)(() => { this.IsSelected = false; }));
             };
             return action;
         }

@@ -63,6 +63,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             Action action = () =>
             {
+                System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)(() => { this.IsSelected = true; }));
                 if (CodeSimViewModel.Instance.IsRunning || Thread.CurrentThread.IsBackground is false)
                 {
                     CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
@@ -78,6 +79,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                         a.Compile(new CompilerContext());
                     }
                 }
+                System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)(() => { this.IsSelected = false; }));
             };
             return action;
         }

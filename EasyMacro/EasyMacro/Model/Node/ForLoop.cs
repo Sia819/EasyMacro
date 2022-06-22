@@ -1,5 +1,6 @@
 ﻿using EasyMacro.Model.Node.Compiler;
 using EasyMacro.ViewModel.Node.Editors;
+using System;
 using System.Windows;
 
 namespace EasyMacro.Model.Node

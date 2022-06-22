@@ -41,11 +41,13 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             Action action = () =>
             {
+                Application.Current.Dispatcher.BeginInvoke((Action)(() => { this.IsSelected = true; }));
                 if (CodeSimViewModel.Instance.IsRunning || Thread.CurrentThread.IsBackground is false)
                 {
                     CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
                     CodeSimViewModel.Instance.ReStart = true; // 무한반복
                 }
+                Application.Current.Dispatcher.BeginInvoke((Action)(() => { this.IsSelected = false; }));
             };
             return action;
         }

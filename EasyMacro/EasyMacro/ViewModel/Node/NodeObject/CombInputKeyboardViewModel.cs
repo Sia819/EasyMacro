@@ -117,6 +117,11 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return instance;
         }
 
+        public override void Connect()
+        {
+            throw new NotImplementedException();
+        }
+
         public CombInputKeyboardViewModel() : base(NodeType.Function)
         {
             base.Name = "조합 키 입력";

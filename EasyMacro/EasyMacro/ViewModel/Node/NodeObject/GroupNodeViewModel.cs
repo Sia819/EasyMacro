@@ -50,6 +50,11 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return instance;
         }
 
+        public override void Connect()
+        {
+            throw new NotImplementedException();
+        }
+
         public AddEndpointDropPanelViewModel AddEndpointDropPanelVM { get; private set; }
 
         public GroupNodeViewModel(NetworkViewModel subnet) : base(NodeType.Group)

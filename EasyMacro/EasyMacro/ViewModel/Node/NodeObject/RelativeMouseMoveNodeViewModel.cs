@@ -102,6 +102,11 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return instance;
         }
 
+        public override void Connect()
+        {
+            throw new NotImplementedException();
+        }
+
         public RelativeMouseMoveNodeViewModel() : base(NodeType.Function)
         {
             base.Name = "마우스 상대좌표 이동";

@@ -113,6 +113,11 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return instance;
         }
 
+        public override void Connect()
+        {
+            throw new NotImplementedException();
+        }
+
         public InputKeyboardNodeViewModel() : base(NodeType.Function)
         {
             // 노드의 이름

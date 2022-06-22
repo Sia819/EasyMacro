@@ -37,6 +37,11 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return instance;
         }
 
+        public override void Connect()
+        {
+            throw new NotImplementedException();
+        }
+
         public OutputNodeViewModel()
         {
             Name = "Output";

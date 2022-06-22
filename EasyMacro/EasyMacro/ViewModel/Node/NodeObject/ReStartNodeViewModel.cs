@@ -58,6 +58,10 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return instance;
         }
 
+        public override void Connect()
+        {
+            throw new NotImplementedException();
+        }
         public ReStartNodeViewModel() : base(NodeType.EventNode)
         {
             base.Name = "처음으로 돌아가기";

@@ -95,6 +95,11 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return instance;
         }
 
+        public override void Connect()
+        {
+            throw new NotImplementedException();
+        }
+
         public MouseClickNodeViewModel() : base(NodeType.Function)
         {
             base.Name = "마우스 클릭";

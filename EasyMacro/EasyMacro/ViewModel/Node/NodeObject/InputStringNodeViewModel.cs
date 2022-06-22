@@ -87,6 +87,11 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return instance;
         }
 
+        public override void Connect()
+        {
+            throw new NotImplementedException();
+        }
+
         public InputStringNodeViewModel() : base(NodeType.Function)
         {
             base.Name = "문자열 입력";

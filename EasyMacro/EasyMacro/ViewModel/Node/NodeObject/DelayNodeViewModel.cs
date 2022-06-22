@@ -37,9 +37,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             }
         }
 
-        /// <summary>
-        /// Delay Time
-        /// </summary>
         public ValueNodeInputViewModel<int?> Delay { get; }
 
         public ValueNodeOutputViewModel<IStatement> FlowIn { get; }
@@ -49,26 +46,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         public ValueNodeInputViewModel<int?> RunButton { get; }
 
         public bool IsCanExcute { get; set; } = true;
-
-        Action Func()
-        {
-            Action action = () =>
-            {
-                if (CodeSimViewModel.Instance.IsRunning || Thread.CurrentThread.IsBackground is false)
-                {
-                    CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
-
-                    delay.Time = (int)Delay.Value < 0 ? 0 : (int)Delay.Value;
-                    delay.Do();
-
-                    foreach (var a in FlowOut.Values.Items)
-                    {
-                        a.Compile(new CompilerContext());
-                    }
-                }
-            };
-            return action;
-        }
 
         public override void Serializer(XmlWriter xmlWriter, object obj)
         {
@@ -86,6 +63,10 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return instance;
         }
 
+        public override void Connect()
+        {
+            throw new NotImplementedException();
+        }
 
         public DelayNodeViewModel() : base(NodeType.Function)
         {
@@ -132,6 +113,26 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                 MaxConnections = 1
             };
             this.Inputs.Add(FlowOut);
+        }
+
+        Action Func()
+        {
+            Action action = () =>
+            {
+                if (CodeSimViewModel.Instance.IsRunning || Thread.CurrentThread.IsBackground is false)
+                {
+                    CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
+
+                    delay.Time = (int)Delay.Value < 0 ? 0 : (int)Delay.Value;
+                    delay.Do();
+
+                    foreach (var a in FlowOut.Values.Items)
+                    {
+                        a.Compile(new CompilerContext());
+                    }
+                }
+            };
+            return action;
         }
     }
 }

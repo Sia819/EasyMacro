@@ -8,6 +8,7 @@ using NodeNetwork.ViewModels;
 using ExtendedXmlSerializer.ExtensionModel.Xml;
 using System.Xml.Linq;
 using System.Xml;
+using System;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
@@ -19,6 +20,22 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         }
 
         public ValueListNodeInputViewModel<IStatement> OnClickFlow { get; }
+
+        public override void Serializer(XmlWriter xmlWriter, object obj)
+        {
+            NodeSerializer.SerializerOfNodeViewModel(ref xmlWriter, ref obj);
+        }
+
+        public override object Deserialize(XElement xElement)
+        {
+            StartNodeViewModel instance = (StartNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new StartNodeViewModel());
+            return instance;
+        }
+
+        public override void Connect()
+        {
+            throw new NotImplementedException();
+        }
 
         public StartNodeViewModel() : base(NodeType.EventNode)
         {
@@ -33,16 +50,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             this.Inputs.Add(OnClickFlow);
         }
 
-        public override void Serializer(XmlWriter xmlWriter, object obj)
-        {
-            NodeSerializer.SerializerOfNodeViewModel(ref xmlWriter, ref obj);
-        }
-
-        public override object Deserialize(XElement xElement)
-        {
-            StartNodeViewModel instance = (StartNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new StartNodeViewModel());
-            return instance;
-        }
+        
 
         
     }

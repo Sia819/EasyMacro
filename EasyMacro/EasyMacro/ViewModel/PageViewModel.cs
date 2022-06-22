@@ -256,8 +256,13 @@ namespace EasyMacro.ViewModel
                 {
                     obj = serializer.Deserialize<List<INodeSerializable>>(reader); //
                 }
-                IsReloading = true;
 
+                foreach(INodeSerializable i in obj)
+                {
+                    i.Connect();
+                }
+
+                IsReloading = true;
                 PageViewModel instance = new PageViewModel(obj);
                 // Change-Refresh ViewModel
                 _instance = ((System.Windows.Application.Current.MainWindow as EasyMacro.View.MainWindow).mainFrame.Content as View.NodeEditPage).ViewModel = instance;

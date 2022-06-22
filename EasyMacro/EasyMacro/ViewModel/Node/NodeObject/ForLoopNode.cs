@@ -14,6 +14,7 @@ using System.Xml;
 using System.Xml.Linq;
 using ExtendedXmlSerializer;
 using System.Collections.Generic;
+using System;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
@@ -52,6 +53,11 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
             (instance.LastIndex.Editor as IntegerValueEditorViewModel).Value = int.TryParse(dictionary["LastIndex"].Value, out int LastIndex) ? LastIndex : 1;
             return instance;
+        }
+
+        public override void Connect()
+        {
+            throw new NotImplementedException();
         }
 
         public ForLoopNode() : base(NodeType.FlowControl)

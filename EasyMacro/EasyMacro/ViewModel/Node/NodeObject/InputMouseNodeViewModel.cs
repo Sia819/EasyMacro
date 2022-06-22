@@ -100,6 +100,11 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return instance;
         }
 
+        public override void Connect()
+        {
+            throw new NotImplementedException();
+        }
+
         public InputMouseNodeViewModel() : base(NodeType.Function)
         {
             base.Name = "마우스 버튼 누르고/떼고있기";

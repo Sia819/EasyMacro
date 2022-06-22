@@ -32,6 +32,6 @@ namespace EasyMacro.ViewModel.Node
 
         public abstract object Deserialize(XElement xElement);
 
-        
+        public abstract void Connect();
     }
 }

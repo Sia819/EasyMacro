@@ -91,6 +91,11 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return instance;
         }
 
+        public override void Connect()
+        {
+            throw new NotImplementedException();
+        }
+
         public TempletMatchNodeViewModel() : base(NodeType.Function)
         {
             var controlFlowGroupIn = new EndpointGroup("");

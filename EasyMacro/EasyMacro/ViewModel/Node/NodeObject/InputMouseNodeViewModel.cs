@@ -52,6 +52,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public bool IsCanExcute { get; set; } = true;
 
+        public override NodeOutputViewModel GetOutputViewModel => this.FlowIn;
+
         Action Func()
         {
             Action action = () =>
@@ -100,7 +102,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return instance;
         }
 
-        public override void Connect()
+        public override void Connect(INodeSerializable instance, List<INodeSerializable> obj)
         {
             throw new NotImplementedException();
         }

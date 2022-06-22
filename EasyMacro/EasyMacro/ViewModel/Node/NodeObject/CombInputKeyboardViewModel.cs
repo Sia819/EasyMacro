@@ -8,6 +8,7 @@ using EasyMacroAPI.Model;
 using ExtendedXmlSerializer;
 using ExtendedXmlSerializer.ExtensionModel.Xml;
 using NodeNetwork.Toolkit.ValueNode;
+using NodeNetwork.ViewModels;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -54,6 +55,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         public ValueNodeInputViewModel<int?> RunButton { get; }
 
         public bool IsCanExcute { get; set; } = true;
+
+        public override NodeOutputViewModel GetOutputViewModel => this.FlowIn;
 
         Action Func()
         {
@@ -117,7 +120,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return instance;
         }
 
-        public override void Connect()
+        public override void Connect(INodeSerializable instance, List<INodeSerializable> obj)
         {
             throw new NotImplementedException();
         }

@@ -43,7 +43,7 @@ namespace EasyMacro.Model.Node
         public object Deserialize(XElement xElement)
         {
             Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
-            string hash = dictionary["NodeHash"].Value;
+            string hash = dictionary["Hash"].Value;
             Type type = Type.GetType("EasyMacro.ViewModel.Node.NodeObject." + xElement.Name.LocalName);
             var obj = Activator.CreateInstance(type, hash);
             CodeGenNodeViewModel instance = obj as CodeGenNodeViewModel;

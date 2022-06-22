@@ -9,6 +9,9 @@ using ExtendedXmlSerializer.ExtensionModel.Xml;
 using System.Xml.Linq;
 using System.Xml;
 using System;
+using System.Collections.Generic;
+using System.Collections;
+using System.Linq;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
@@ -21,20 +24,53 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public ValueListNodeInputViewModel<IStatement> OnClickFlow { get; }
 
+        public override NodeOutputViewModel GetOutputViewModel => null;
+
         public override void Serializer(XmlWriter xmlWriter, object obj)
         {
             NodeSerializer.SerializerOfNodeViewModel(ref xmlWriter, ref obj);
+            StartNodeViewModel instance = obj as StartNodeViewModel;
+
+            int count = 0;
+            foreach (var i in instance.OnClickFlow.Connections.Items)
+            {
+                xmlWriter.WriteElementString($"ConnedtedHashs_{count}", (i.Output.Parent as CodeGenNodeViewModel).Hash);
+                count++;
+            }
         }
 
         public override object Deserialize(XElement xElement)
         {
-            StartNodeViewModel instance = (StartNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new StartNodeViewModel());
+            StartNodeViewModel instance = (StartNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, this);
+            Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
+
+            bool isLast = false;
+            for (int count = 0; isLast == false; count++)
+            {
+                if (dictionary.TryGetValue($"ConnedtedHashs_{count}", out XElement element))
+                {
+                    instance.ConnedtedHashs.Add(element.Value);
+                }
+                else
+                {
+                    isLast = true;
+                }
+            }
             return instance;
         }
 
-        public override void Connect()
+        public override void Connect(INodeSerializable instance, List<INodeSerializable> obj)
         {
-            throw new NotImplementedException();
+            foreach (var hashs in this.ConnedtedHashs)
+            {
+                foreach (CodeGenNodeViewModel allNodes in obj)
+                {
+                    if (allNodes.Hash == hashs)
+                    {
+                        allNodes.Parent.Connections.Add(new ConnectionViewModel(this.Parent, this.OnClickFlow, allNodes.GetOutputViewModel));
+                    }
+                }
+            }
         }
 
         public StartNodeViewModel() : base(NodeType.EventNode)
@@ -44,12 +80,13 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             OnClickFlow = new CodeGenListInputViewModel<IStatement>(PortType.Execution)
             {
                 Name = "Start",
-                MaxConnections = 1
+                MaxConnections = 2
             };
 
             this.Inputs.Add(OnClickFlow);
 
-            this.Hash = Common.HashGen.RandomHashGen(10);
+            if (PageViewModel.IsLoading is false)
+                this.Hash = Common.HashGen.RandomHashGen(10);
         }
 
         public StartNodeViewModel(string hash) : this()

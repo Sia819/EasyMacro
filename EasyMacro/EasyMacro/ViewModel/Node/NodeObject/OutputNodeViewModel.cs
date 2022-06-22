@@ -26,6 +26,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public ValueNodeInputViewModel<int?> ResultInput { get; }
 
+        public override NodeOutputViewModel GetOutputViewModel => null;
+
         public override void Serializer(XmlWriter xmlWriter, object obj)
         {
             NodeSerializer.SerializerOfNodeViewModel(ref xmlWriter, ref obj);
@@ -37,7 +39,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return instance;
         }
 
-        public override void Connect()
+        public override void Connect(INodeSerializable instance, List<INodeSerializable> obj)
         {
             throw new NotImplementedException();
         }

@@ -59,6 +59,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public ValueNodeInputViewModel<int?> RunButton { get; }
 
+        public override NodeOutputViewModel GetOutputViewModel => this.FlowIn;
+
         public bool IsCanExcute { get; set; } = true;
 
         public override void Serializer(XmlWriter xmlWriter, object obj)
@@ -91,7 +93,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return instance;
         }
 
-        public override void Connect()
+        public override void Connect(INodeSerializable instance, List<INodeSerializable> obj)
         {
             throw new NotImplementedException();
         }

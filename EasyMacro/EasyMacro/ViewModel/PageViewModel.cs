@@ -65,7 +65,7 @@ namespace EasyMacro.ViewModel
 
         public StartNodeViewModel startNode;
 
-        public static bool IsReloading = false;
+        public static bool IsLoading = false;
 
         private PageViewModel()
         {
@@ -78,9 +78,15 @@ namespace EasyMacro.ViewModel
                 Network = new NetworkViewModel()
             });
 
-            startNode = new StartNodeViewModel { CanBeRemovedByUser = false };
-            Network.Nodes.Add(startNode);
+            if (IsLoading is false)
+            {
+                startNode = new StartNodeViewModel { CanBeRemovedByUser = false };
+                Network.Nodes.Add(startNode);
 
+                var codeObservable = startNode.OnClickFlow.Values.Connect().Select(_ => new StatementSequence(startNode.OnClickFlow.Values.Items));
+                codeObservable.BindTo(this, vm => vm.CodePreview.Code);
+                codeObservable.BindTo(this, vm => vm.CodeSim.Code);
+            }
 
             // ListPanel에 추가하여 보여질 노드들
             NodeList.AddNodeType(() => new ReStartNodeViewModel());
@@ -95,9 +101,7 @@ namespace EasyMacro.ViewModel
             NodeList.AddNodeType(() => new MouseMoveNodeViewModel());
             NodeList.AddNodeType(() => new TempletMatchNodeViewModel());
 
-            var codeObservable = startNode.OnClickFlow.Values.Connect().Select(_ => new StatementSequence(startNode.OnClickFlow.Values.Items));
-            codeObservable.BindTo(this, vm => vm.CodePreview.Code);
-            codeObservable.BindTo(this, vm => vm.CodeSim.Code);
+            
 
             ForceDirectedLayouter layouter = new ForceDirectedLayouter();
             AutoLayout = ReactiveCommand.Create(() => layouter.Layout(new Configuration { Network = Network }, 10000));
@@ -252,18 +256,22 @@ namespace EasyMacro.ViewModel
 
                 List<INodeSerializable> obj = null;
                 string savepath = openFileDialog.FileName;
+
+                IsLoading = true;
+
                 using (var reader = new StreamReader(savepath))
                 {
                     obj = serializer.Deserialize<List<INodeSerializable>>(reader); //
                 }
 
-                foreach(INodeSerializable i in obj)
-                {
-                    i.Connect();
-                }
-
-                IsReloading = true;
                 PageViewModel instance = new PageViewModel(obj);
+
+                foreach (INodeSerializable i in obj)
+                {
+                    i.Connect(i, obj);
+                }
+                
+                
                 // Change-Refresh ViewModel
                 _instance = ((System.Windows.Application.Current.MainWindow as EasyMacro.View.MainWindow).mainFrame.Content as View.NodeEditPage).ViewModel = instance;
             }

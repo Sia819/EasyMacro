@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    internal interface INodeSerializable
+    public interface INodeSerializable
     {
         public string Hash { get; }
-        public void Connect();
+        public void Connect(INodeSerializable instance, List<INodeSerializable> obj);
     }
 }

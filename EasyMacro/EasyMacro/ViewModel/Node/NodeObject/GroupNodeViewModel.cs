@@ -7,6 +7,7 @@ using ReactiveUI;
 using ExtendedXmlSerializer.ExtensionModel.Xml;
 using System.Xml;
 using System.Xml.Linq;
+using System.Collections.Generic;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
@@ -39,6 +40,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         private CodeNodeGroupIOBinding _ioBinding;
         #endregion
 
+        public override NodeOutputViewModel GetOutputViewModel => null;
+
         public override void Serializer(XmlWriter xmlWriter, object obj)
         {
             NodeSerializer.SerializerOfNodeViewModel(ref xmlWriter, ref obj);
@@ -50,7 +53,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             return instance;
         }
 
-        public override void Connect()
+        public override void Connect(INodeSerializable instance, List<INodeSerializable> obj)
         {
             throw new NotImplementedException();
         }

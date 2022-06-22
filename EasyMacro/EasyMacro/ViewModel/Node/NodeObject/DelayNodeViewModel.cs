@@ -17,6 +17,7 @@ using ReactiveUI;
 using ExtendedXmlSerializer;
 using ExtendedXmlSerializer.ExtensionModel.Xml;
 using System.Linq;
+using System.Windows;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
@@ -161,6 +162,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         {
             Action action = () =>
             {
+                Application.Current.Dispatcher.BeginInvoke((Action)(() => { this.IsSelected = true; }));
                 if (CodeSimViewModel.Instance.IsRunning || Thread.CurrentThread.IsBackground is false)
                 {
                     CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
@@ -173,6 +175,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                         a.Compile(new CompilerContext());
                     }
                 }
+                Application.Current.Dispatcher.BeginInvoke((Action)(() => { this.IsSelected = false; }));
             };
             return action;
         }

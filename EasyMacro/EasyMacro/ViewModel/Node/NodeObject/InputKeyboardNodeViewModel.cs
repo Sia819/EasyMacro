@@ -64,7 +64,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                     inputKeyboard.Key = PressKey.Value;
 
                     // RadioButtoKeyboardPressTypen Index to MouseClickTypes Convert
-                    switch ((this.KeyboardPressType.Editor as RadioButtonEditorViewModel).GetRadioSelectedIndex)
+                    switch ((this.KeyboardPressType.Editor as RadioButtonEditorViewModel).RadioSelectedIndex)
                     {
                         case 0: inputKeyboard.KeyPressTypes = KeyPressTypes.KEY_DOWN; break;
                         case 1: inputKeyboard.KeyPressTypes = KeyPressTypes.KEY_UP; break;
@@ -91,7 +91,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
             int selectedNum;
 
-            switch ((this.KeyboardPressType.Editor as RadioButtonEditorViewModel).GetRadioSelectedIndex)
+            switch ((this.KeyboardPressType.Editor as RadioButtonEditorViewModel).RadioSelectedIndex)
             {
                 case 0: selectedNum = 0; break;
                 case 1: selectedNum = 1; break;

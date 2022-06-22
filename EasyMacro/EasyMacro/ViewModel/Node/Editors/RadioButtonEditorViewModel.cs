@@ -22,7 +22,7 @@ namespace EasyMacro.ViewModel.Node.Editors
 
         public string RadioGroupInstanceHash { get; set; }
 
-        public int GetRadioSelectedIndex
+        public int RadioSelectedIndex
         {
             get
             {
@@ -34,6 +34,16 @@ namespace EasyMacro.ViewModel.Node.Editors
                     }
                 }
                 return 0; // 아무것도 선택되지 않았을 때, 첫번째 인덱스
+            }
+            set
+            {
+                for (int i = 0; i < MyList.Count; i++)
+                {
+                    MyList[i].IsChecked = false;
+                }
+
+                MyList[value].IsChecked = true;
+                this.RaisePropertyChanged("MyList");
             }
         }
 

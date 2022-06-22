@@ -258,7 +258,7 @@ namespace EasyMacro.ViewModel
                                                          .Create();
 
                 List<INodeSerializable> obj = null;
-                string savepath = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\{"TestSave.xml"}";
+                string savepath = openFileDialog.FileName;
                 using (var reader = new StreamReader(savepath))
                 {
                     obj = serializer.Deserialize<List<INodeSerializable>>(reader); //

@@ -61,7 +61,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                     CodeSimViewModel.Instance.Print((FlowIn.CurrentValue as NodeCompile).CurrentValue);
 
                     // RadioButton Index to MouseClickTypes Convert
-                    switch ((this.MouseClickType.Editor as RadioButtonEditorViewModel).GetRadioSelectedIndex)
+                    switch ((this.MouseClickType.Editor as RadioButtonEditorViewModel).RadioSelectedIndex)
                     {
                         case 0: inputMouse.MouseClickType = EasyMacroAPI.Model.MouseClickTypes.LBDOWN; break;
                         case 1: inputMouse.MouseClickType = EasyMacroAPI.Model.MouseClickTypes.LBUP; break;
@@ -87,20 +87,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             NodeSerializer.SerializerOfNodeViewModel(ref xmlWriter, ref obj);
 
             InputMouseNodeViewModel instance = obj as InputMouseNodeViewModel;
-
-            int selectedNum;
-
-            switch ((this.MouseClickType.Editor as RadioButtonEditorViewModel).GetRadioSelectedIndex)
-            {
-                case 0: selectedNum = 0; break;
-                case 1: selectedNum = 1; break;
-                case 2: selectedNum = 2; break;
-                case 3: selectedNum = 3; break;
-
-                default: selectedNum = 0; break; // RadioButton에서 아무것도 선택되지 않음.
-            }
-
-            xmlWriter.WriteElementString(nameof(MouseClickType), selectedNum.ToString());
+            
+            xmlWriter.WriteElementString(nameof(MouseClickType), (instance.MouseClickType.Editor as RadioButtonEditorViewModel).RadioSelectedIndex.ToString());
         }
 
         public override object Deserialize(XElement xElement)
@@ -108,7 +96,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             InputMouseNodeViewModel instance = (InputMouseNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new InputMouseNodeViewModel());
 
             Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
-            (instance.MouseClickType.Editor as RadioButtonEditorViewModel).MyList[int.TryParse(dictionary["MouseClickType"].Value, out int MouseClickType) ? MouseClickType : 0].IsChecked = true;
+            (instance.MouseClickType.Editor as RadioButtonEditorViewModel).RadioSelectedIndex = int.TryParse(dictionary["MouseClickType"].Value, out int MouseClickType) ? MouseClickType : 0;
             return instance;
         }
 

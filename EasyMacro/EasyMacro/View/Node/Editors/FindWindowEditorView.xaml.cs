@@ -93,7 +93,7 @@ namespace EasyMacro.View.Node.Editors
 
             this.WhenActivated(d =>
             {
-                this.OneWayBind(ViewModel, vm => vm.TargetWindowTitle, v => v.targetWindowTitle.Text,
+                this.Bind(ViewModel, vm => vm.TargetWindowTitle, v => v.targetWindowTitle.Text,
                                 (winTitle) => // VM -> View
                                 {
                                     IntPtr hWnd = User32.FindWindow(targetWindowClass.Text, winTitle);
@@ -115,8 +115,9 @@ namespace EasyMacro.View.Node.Editors
                                         return winTitle;
                                     }
                                     
-                                });
-                this.OneWayBind(ViewModel, vm => vm.TargetWindowClass, v => v.targetWindowClass.Text,
+                                },
+                                (winTitle) => winTitle);
+                this.Bind(ViewModel, vm => vm.TargetWindowClass, v => v.targetWindowClass.Text,
                                 (winClass) => // VM -> View
                                 {
                                     IntPtr hWnd = User32.FindWindow(winClass, targetWindowTitle.Text);
@@ -137,7 +138,8 @@ namespace EasyMacro.View.Node.Editors
                                         _targetWindowClass = winClass;
                                         return winClass;
                                     }
-                                });
+                                },
+                                (winClass) => winClass);
 
 
                 this.Bind(ViewModel, vm => vm.Value, v => v.targetWindowTitle.Text,

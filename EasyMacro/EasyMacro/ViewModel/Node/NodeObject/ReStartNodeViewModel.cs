@@ -19,7 +19,7 @@ using System.Xml.Linq;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class ReStartNodeViewModel : CodeGenNodeViewModel
+    public class ReStartNodeViewModel : CodeGenNodeViewModel, INodeSerializable, IExtendedXmlCustomSerializer
     {
         static ReStartNodeViewModel()
         {

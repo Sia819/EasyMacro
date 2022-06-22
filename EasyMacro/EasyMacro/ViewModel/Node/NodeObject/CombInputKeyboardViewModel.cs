@@ -10,6 +10,7 @@ using ExtendedXmlSerializer.ExtensionModel.Xml;
 using NodeNetwork.Toolkit.ValueNode;
 using ReactiveUI;
 using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Xml;
@@ -17,7 +18,7 @@ using System.Xml.Linq;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class CombInputKeyboardViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
+    public class CombInputKeyboardViewModel : CodeGenNodeViewModel, INodeSerializable, IExtendedXmlCustomSerializer
     {
         static CombInputKeyboardViewModel()
         {
@@ -101,10 +102,17 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         public override object Deserialize(XElement xElement)
         {
             CombInputKeyboardViewModel instance = (CombInputKeyboardViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new CombInputKeyboardViewModel());
+            /*
             (instance.Input.Editor as KeyboardRecordEditorViewModel).Value = (Keys)Enum.Parse(typeof(Keys),xElement.Member(nameof(Input)).ToString());
             (instance.Alt.Editor as CheckBoxEditorViewModel).Value = (bool)xElement.Member(nameof(Alt));
             (instance.Ctrl.Editor as CheckBoxEditorViewModel).Value = (bool)xElement.Member(nameof(Ctrl));
             (instance.Shift.Editor as CheckBoxEditorViewModel).Value = (bool)xElement.Member(nameof(Shift));
+            */
+            Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
+            (instance.Input.Editor as KeyboardRecordEditorViewModel).Value = ((Keys)Enum.Parse(typeof(Keys), dictionary["Input"].Value));
+            (instance.Alt.Editor as CheckBoxEditorViewModel).Value = bool.TryParse(dictionary["Alt"].Value, out bool Alt) ? Alt : false;
+            (instance.Ctrl.Editor as CheckBoxEditorViewModel).Value = bool.TryParse(dictionary["Ctrl"].Value, out bool Ctrl) ? Ctrl : false;
+            (instance.Shift.Editor as CheckBoxEditorViewModel).Value = bool.TryParse(dictionary["Shift"].Value, out bool Shift) ? Shift : false;
             return instance;
         }
 

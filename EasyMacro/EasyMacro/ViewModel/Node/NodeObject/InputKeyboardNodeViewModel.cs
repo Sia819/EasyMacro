@@ -12,6 +12,7 @@ using NodeNetwork.ViewModels;
 using NodeNetwork.Views;
 using ReactiveUI;
 using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Xml;
@@ -20,7 +21,7 @@ using static EasyMacro.ViewModel.Node.Editors.RadioButtonEditorViewModel;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class InputKeyboardNodeViewModel : CodeGenNodeViewModel
+    public class InputKeyboardNodeViewModel : CodeGenNodeViewModel, INodeSerializable, IExtendedXmlCustomSerializer
     {
         static InputKeyboardNodeViewModel()
         {
@@ -105,8 +106,9 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         public override object Deserialize(XElement xElement)
         {
             InputKeyboardNodeViewModel instance = (InputKeyboardNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new InputKeyboardNodeViewModel());
-            (instance.KeyboardPressType.Editor as RadioButtonEditorViewModel).MyList[(int)xElement.Member(nameof(KeyboardPressType))].IsChecked = true;
-            (instance.PressKey.Editor as KeyboardRecordEditorViewModel).Value = (Keys)Enum.Parse(typeof(Keys), xElement.Member(nameof(PressKey)).ToString());
+            Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
+            (instance.KeyboardPressType.Editor as RadioButtonEditorViewModel).MyList[int.TryParse(dictionary["KeyboardPressType"].Value, out int KeyboardPressType) ? KeyboardPressType : 0].IsChecked = true;
+            (instance.PressKey.Editor as KeyboardRecordEditorViewModel).Value = ((Keys)Enum.Parse(typeof(Keys), dictionary["PressKey"].Value));
             return instance;
         }
 

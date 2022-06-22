@@ -13,10 +13,11 @@ using ExtendedXmlSerializer.ExtensionModel.Xml;
 using System.Xml;
 using System.Xml.Linq;
 using ExtendedXmlSerializer;
+using System.Collections.Generic;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class ForLoopNode : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
+    public class ForLoopNode : CodeGenNodeViewModel, INodeSerializable, IExtendedXmlCustomSerializer
     {
         static ForLoopNode()
         {
@@ -47,7 +48,9 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         public override object Deserialize(XElement xElement)
         {
             ForLoopNode instance = (ForLoopNode)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new ForLoopNode());
-            (instance.LastIndex.Editor as IntegerValueEditorViewModel).Value = (int)xElement.Member(nameof(LastIndex));
+
+            Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
+            (instance.LastIndex.Editor as IntegerValueEditorViewModel).Value = int.TryParse(dictionary["LastIndex"].Value, out int LastIndex) ? LastIndex : 1;
             return instance;
         }
 

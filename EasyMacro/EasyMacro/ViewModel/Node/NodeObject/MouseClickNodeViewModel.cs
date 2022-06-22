@@ -17,10 +17,11 @@ using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using System.Drawing;
+using System.Collections.Generic;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class MouseClickNodeViewModel : CodeGenNodeViewModel
+    public class MouseClickNodeViewModel : CodeGenNodeViewModel, INodeSerializable, IExtendedXmlCustomSerializer
     {
         static MouseClickNodeViewModel()
         {
@@ -86,8 +87,11 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         public override object Deserialize(XElement xElement)
         {
             MouseClickNodeViewModel instance = (MouseClickNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new MouseClickNodeViewModel());
-            (instance.MyPoint.Editor as PointRecordEditorViewModel).Value = new Point((int)xElement.Member(nameof(MyPoint.Value.X)), (int)xElement.Member(nameof(MyPoint.Value.Y)));
-            (instance.Delay.Editor as IntegerValueEditorViewModel).Value = (int)xElement.Member(nameof(Delay));
+            Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
+            (instance.MyPoint.Editor as PointRecordEditorViewModel).Value = new Point(
+                int.TryParse(dictionary["MyPoint.Value.X"].Value, out int x) ? x : 0,
+                int.TryParse(dictionary["MyPoint.Value.Y"].Value, out int y) ? y : 0);
+            (instance.Delay.Editor as IntegerValueEditorViewModel).Value = int.TryParse(dictionary["Delay"].Value, out int Delay) ? Delay : 40;
             return instance;
         }
 

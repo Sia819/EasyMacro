@@ -9,6 +9,7 @@ using ExtendedXmlSerializer.ExtensionModel.Xml;
 using NodeNetwork.Toolkit.ValueNode;
 using ReactiveUI;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Reactive.Linq;
 using System.Threading;
@@ -17,7 +18,7 @@ using System.Xml.Linq;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class MouseMoveNodeViewModel : CodeGenNodeViewModel
+    public class MouseMoveNodeViewModel : CodeGenNodeViewModel, INodeSerializable, IExtendedXmlCustomSerializer
     {
         static MouseMoveNodeViewModel()
         {
@@ -79,7 +80,10 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         public override object Deserialize(XElement xElement)
         {
             MouseMoveNodeViewModel instance = (MouseMoveNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new MouseMoveNodeViewModel());
-            (instance.MyPoint.Editor as PointRecordEditorViewModel).Value = new Point((int)xElement.Member(nameof(MyPoint.Value.X)), (int)xElement.Member(nameof(MyPoint.Value.Y)));
+            Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
+            (instance.MyPoint.Editor as PointRecordEditorViewModel).Value = new Point(
+                int.TryParse(dictionary["MyPoint.Value.X"].Value, out int x) ? x : 0,
+                int.TryParse(dictionary["MyPoint.Value.Y"].Value, out int y) ? y : 0);
             return instance;
         }
 

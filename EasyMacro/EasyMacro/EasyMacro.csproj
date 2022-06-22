@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EasyMacroAPI\EasyMacroAPI.csproj" />
-    <ProjectReference Include="E:\github\home\src\ExtendedXmlSerializer\ExtendedXmlSerializer.csproj" />
+
   </ItemGroup>
 
   <ItemGroup>

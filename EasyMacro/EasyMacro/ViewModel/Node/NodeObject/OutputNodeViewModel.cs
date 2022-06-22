@@ -17,7 +17,7 @@ using ReactiveUI;
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
     // 그룹 내부에서 그룹 밖으로 내보내는 노드
-    public class OutputNodeViewModel : CodeGenNodeViewModel
+    public class OutputNodeViewModel : CodeGenNodeViewModel, INodeSerializable, IExtendedXmlCustomSerializer
     { 
         static OutputNodeViewModel()
         {

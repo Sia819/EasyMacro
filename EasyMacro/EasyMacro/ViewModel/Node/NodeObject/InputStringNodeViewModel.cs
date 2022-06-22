@@ -11,6 +11,7 @@ using NodeNetwork.ViewModels;
 using NodeNetwork.Views;
 using ReactiveUI;
 using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Xml;
@@ -18,7 +19,7 @@ using System.Xml.Linq;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class InputStringNodeViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
+    public class InputStringNodeViewModel : CodeGenNodeViewModel, INodeSerializable, IExtendedXmlCustomSerializer
     {
         static InputStringNodeViewModel()
         {
@@ -81,7 +82,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         public override object Deserialize(XElement xElement)
         {
             InputStringNodeViewModel instance = (InputStringNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new InputStringNodeViewModel());
-            (instance.Input.Editor as StringValueEditorViewModel).Value = (string)xElement.Member(nameof(Input));
+            Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
+            (instance.Input.Editor as StringValueEditorViewModel).Value = dictionary["Input"].Value;
             return instance;
         }
 

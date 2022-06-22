@@ -11,6 +11,7 @@ using NodeNetwork.ViewModels;
 using NodeNetwork.Views;
 using ReactiveUI;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Reactive.Linq;
 using System.Threading;
@@ -20,7 +21,7 @@ using static EasyMacro.ViewModel.Node.Editors.RadioButtonEditorViewModel;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class InputMouseNodeViewModel : CodeGenNodeViewModel
+    public class InputMouseNodeViewModel : CodeGenNodeViewModel, INodeSerializable, IExtendedXmlCustomSerializer
     {
         static InputMouseNodeViewModel()
         {
@@ -105,7 +106,9 @@ namespace EasyMacro.ViewModel.Node.NodeObject
         public override object Deserialize(XElement xElement)
         {
             InputMouseNodeViewModel instance = (InputMouseNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new InputMouseNodeViewModel());
-            (instance.MouseClickType.Editor as RadioButtonEditorViewModel).MyList[(int)xElement.Member(nameof(MouseClickType))].IsChecked = true;
+
+            Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
+            (instance.MouseClickType.Editor as RadioButtonEditorViewModel).MyList[int.TryParse(dictionary["MouseClickType"].Value, out int MouseClickType) ? MouseClickType : 0].IsChecked = true;
             return instance;
         }
 

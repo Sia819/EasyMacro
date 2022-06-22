@@ -20,7 +20,7 @@ using static EasyMacro.ViewModel.Node.Editors.RadioButtonEditorViewModel;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class RelativeMouseMoveNodeViewModel : CodeGenNodeViewModel
+    public class RelativeMouseMoveNodeViewModel : CodeGenNodeViewModel, INodeSerializable, IExtendedXmlCustomSerializer
     {
         static RelativeMouseMoveNodeViewModel()
         {

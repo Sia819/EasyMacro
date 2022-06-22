@@ -10,7 +10,7 @@ using ExtendedXmlSerializer.ExtensionModel.Xml;
 
 namespace EasyMacro.ViewModel.Node.NodeObject
 {
-    public class GroupSubnetIONodeViewModel : CodeGenNodeViewModel, IExtendedXmlCustomSerializer
+    public class GroupSubnetIONodeViewModel : CodeGenNodeViewModel, INodeSerializable, IExtendedXmlCustomSerializer
     {
         static GroupSubnetIONodeViewModel()
         {

@@ -17,10 +17,11 @@ namespace EasyMacro.Model.Node
         // NodeViewModel에 대한 Serializer
         public static void SerializerOfNodeViewModel(ref XmlWriter xmlWriter, ref object obj)
         {
-            NodeViewModel instance = obj as NodeViewModel;
+            CodeGenNodeViewModel instance = obj as CodeGenNodeViewModel;
 
             xmlWriter.WriteElementString(nameof(instance.Position.X), instance.Position.X.ToString());
             xmlWriter.WriteElementString(nameof(instance.Position.Y), instance.Position.Y.ToString());
+            xmlWriter.WriteElementString(nameof(instance.Hash), instance.Hash);
         }
 
         // NodeViewModel에 대한 Deserialize

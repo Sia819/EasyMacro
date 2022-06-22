@@ -13,6 +13,7 @@ using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Xml;
@@ -54,6 +55,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public override NodeOutputViewModel GetOutputViewModel => this.FlowIn;
 
+        public List<string> pointList = new List<string>();
+
         public bool IsCanExcute { get; set; } = true;
 
         Action Func()
@@ -89,11 +92,24 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             xmlWriter.WriteElementString(nameof(findWindowEditor.TargetWindowClass), findWindowEditor.TargetWindowClass);
             xmlWriter.WriteElementString("PointX", instance.MyPoint.Value.X.ToString());
             xmlWriter.WriteElementString("PointY", instance.MyPoint.Value.Y.ToString());
+
+            int count = 0;
+            foreach (var i in instance.FlowOut.Connections.Items)
+            {
+                xmlWriter.WriteElementString($"ConnedtedHashs_{count}", (i.Output.Parent as CodeGenNodeViewModel).Hash);
+                count++;
+            }
+            count = 0;
+            foreach (var i in instance.MyPoint.Connections.Items)
+            {
+                xmlWriter.WriteElementString($"PointConnedtedHashs_{count}", (i.Output.Parent as CodeGenNodeViewModel).Hash);
+                count++;
+            }
         }
 
         public override object Deserialize(XElement xElement)
         {
-            RelativeMouseMoveNodeViewModel instance = (RelativeMouseMoveNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new RelativeMouseMoveNodeViewModel());
+            RelativeMouseMoveNodeViewModel instance = (RelativeMouseMoveNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, this);
             Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
 
             //FindWindowEditorViewModel findWindowEditor = (instance.hWnd.Editor as FindWindowEditorViewModel);
@@ -101,12 +117,56 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             (instance.hWnd.Editor as FindWindowEditorViewModel).TargetWindowClass = dictionary["TargetWindowClass"].Value;
             (instance.MyPoint.Editor as PointRecordEditorViewModel).Value = new Point(int.TryParse(dictionary["PointX"].Value, out int x) ? x : 0,
                                                                                       int.TryParse(dictionary["PointY"].Value, out int y) ? y : 0);
+
+            bool isLast = false;
+            for (int count = 0; isLast == false; count++)
+            {
+                if (dictionary.TryGetValue($"ConnedtedHashs_{count}", out XElement element))
+                {
+                    instance.ConnedtedHashs.Add(element.Value);
+                }
+                else
+                {
+                    isLast = true;
+                }
+            }
+            isLast = false;
+            for (int count = 0; isLast == false; count++)
+            {
+                if (dictionary.TryGetValue($"PointConnedtedHashs_{count}", out XElement element))
+                {
+                    instance.ConnedtedHashs.Add(element.Value);
+                }
+                else
+                {
+                    isLast = true;
+                }
+            }
             return instance;
         }
 
         public override void Connect(INodeSerializable instance, List<INodeSerializable> obj)
         {
-            throw new NotImplementedException();
+            foreach (var hashs in this.ConnedtedHashs)
+            {
+                foreach (CodeGenNodeViewModel allNodes in obj)
+                {
+                    if (allNodes.Hash == hashs)
+                    {
+                        this.FlowOut.Connections.Items.ToList().Add(new ConnectionViewModel(this.Parent, this.FlowOut, allNodes.GetOutputViewModel));
+                    }
+                }
+            }
+            foreach (var hashs in this.pointList)
+            {
+                foreach (CodeGenNodeViewModel allNodes in obj)
+                {
+                    if (allNodes.Hash == hashs)
+                    {
+                        this.MyPoint.Connections.Items.ToList().Add(new ConnectionViewModel(this.Parent, this.MyPoint, allNodes.GetOutputViewModel));
+                    }
+                }
+            }
         }
 
         public RelativeMouseMoveNodeViewModel() : base(NodeType.Function)

@@ -286,7 +286,10 @@ namespace EasyMacro.View.Node.Editors
                 int ret = GetClassName(window, ClassName, ClassName.Capacity);
                 this.targetWindowClass.Text = ClassName.ToString();
             }
-            catch (Exception ex) { }
+            catch (Exception ex) 
+            {
+                Console.WriteLine(ex.ToString());
+            }
 
 
             // Rect

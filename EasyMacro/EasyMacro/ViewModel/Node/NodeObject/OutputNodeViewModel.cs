@@ -35,7 +35,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public override object Deserialize(XElement xElement)
         {
-            OutputNodeViewModel instance = (OutputNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new OutputNodeViewModel());
+            OutputNodeViewModel instance = (OutputNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, this);
             return instance;
         }
 

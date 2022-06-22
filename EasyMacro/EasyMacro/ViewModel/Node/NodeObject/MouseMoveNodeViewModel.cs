@@ -12,6 +12,7 @@ using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Xml;
@@ -47,6 +48,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public override NodeOutputViewModel GetOutputViewModel => this.FlowIn;
 
+        public List<string> pointList = new List<string>();
+
         public bool IsCanExcute { get; set; } = true;
 
         Action Func()
@@ -78,21 +81,78 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
             xmlWriter.WriteElementString(nameof(MyPoint.Value.X), instance.MyPoint.Value.X.ToString());
             xmlWriter.WriteElementString(nameof(MyPoint.Value.Y), instance.MyPoint.Value.Y.ToString());
+
+            int count = 0;
+            foreach (var i in instance.FlowOut.Connections.Items)
+            {
+                xmlWriter.WriteElementString($"ConnedtedHashs_{count}", (i.Output.Parent as CodeGenNodeViewModel).Hash);
+                count++;
+            }
+            count = 0;
+            foreach (var i in instance.MyPoint.Connections.Items)
+            {
+                xmlWriter.WriteElementString($"PointConnedtedHashs_{count}", (i.Output.Parent as CodeGenNodeViewModel).Hash);
+                count++;
+            }
         }
 
         public override object Deserialize(XElement xElement)
         {
-            MouseMoveNodeViewModel instance = (MouseMoveNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new MouseMoveNodeViewModel());
+            MouseMoveNodeViewModel instance = (MouseMoveNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, this);
             Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
             (instance.MyPoint.Editor as PointRecordEditorViewModel).Value = new Point(
                 int.TryParse(dictionary["MyPoint.Value.X"].Value, out int x) ? x : 0,
                 int.TryParse(dictionary["MyPoint.Value.Y"].Value, out int y) ? y : 0);
+
+            bool isLast = false;
+            for (int count = 0; isLast == false; count++)
+            {
+                if (dictionary.TryGetValue($"ConnedtedHashs_{count}", out XElement element))
+                {
+                    instance.ConnedtedHashs.Add(element.Value);
+                }
+                else
+                {
+                    isLast = true;
+                }
+            }
+            isLast = false;
+            for (int count = 0; isLast == false; count++)
+            {
+                if (dictionary.TryGetValue($"PointConnedtedHashs_{count}", out XElement element))
+                {
+                    instance.ConnedtedHashs.Add(element.Value);
+                }
+                else
+                {
+                    isLast = true;
+                }
+            }
             return instance;
         }
 
         public override void Connect(INodeSerializable instance, List<INodeSerializable> obj)
         {
-            throw new NotImplementedException();
+            foreach (var hashs in this.ConnedtedHashs)
+            {
+                foreach (CodeGenNodeViewModel allNodes in obj)
+                {
+                    if (allNodes.Hash == hashs)
+                    {
+                        this.FlowOut.Connections.Items.ToList().Add(new ConnectionViewModel(this.Parent, this.FlowOut, allNodes.GetOutputViewModel));
+                    }
+                }
+            }
+            foreach (var hashs in this.pointList)
+            {
+                foreach (CodeGenNodeViewModel allNodes in obj)
+                {
+                    if (allNodes.Hash == hashs)
+                    {
+                        this.MyPoint.Connections.Items.ToList().Add(new ConnectionViewModel(this.Parent, this.MyPoint, allNodes.GetOutputViewModel));
+                    }
+                }
+            }
         }
 
         public MouseMoveNodeViewModel() : base(NodeType.Function)

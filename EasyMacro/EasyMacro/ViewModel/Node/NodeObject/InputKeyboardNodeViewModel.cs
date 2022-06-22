@@ -13,6 +13,7 @@ using NodeNetwork.Views;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Xml;
@@ -101,21 +102,50 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
             xmlWriter.WriteElementString(nameof(KeyboardPressType), selectedNum.ToString());
             xmlWriter.WriteElementString(nameof(PressKey), instance.PressKey.Value.ToString());
+
+            int count = 0;
+            foreach (var i in instance.FlowOut.Connections.Items)
+            {
+                xmlWriter.WriteElementString($"ConnedtedHashs_{count}", (i.Output.Parent as CodeGenNodeViewModel).Hash);
+                count++;
+            }
         }
 
         public override object Deserialize(XElement xElement)
         {
-            InputKeyboardNodeViewModel instance = (InputKeyboardNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new InputKeyboardNodeViewModel());
+            InputKeyboardNodeViewModel instance = (InputKeyboardNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, this);
             Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
             (instance.KeyboardPressType.Editor as RadioButtonEditorViewModel).MyList[int.TryParse(dictionary["KeyboardPressType"].Value, out int KeyboardPressType) ? KeyboardPressType : 0].IsChecked = true;
             (instance.PressKey.Editor as KeyboardRecordEditorViewModel).Value = ((Keys)Enum.Parse(typeof(Keys), dictionary["PressKey"].Value));
             (instance.PressKey.Editor as KeyboardRecordEditorViewModel).ReactiveObject.MyKey = ((Keys)Enum.Parse(typeof(Keys), dictionary["PressKey"].Value)).ToString();
+
+            bool isLast = false;
+            for (int count = 0; isLast == false; count++)
+            {
+                if (dictionary.TryGetValue($"ConnedtedHashs_{count}", out XElement element))
+                {
+                    instance.ConnedtedHashs.Add(element.Value);
+                }
+                else
+                {
+                    isLast = true;
+                }
+            }
             return instance;
         }
 
         public override void Connect(INodeSerializable instance, List<INodeSerializable> obj)
         {
-            throw new NotImplementedException();
+            foreach (var hashs in this.ConnedtedHashs)
+            {
+                foreach (CodeGenNodeViewModel allNodes in obj)
+                {
+                    if (allNodes.Hash == hashs)
+                    {
+                        this.FlowOut.Connections.Items.ToList().Add(new ConnectionViewModel(this.Parent, this.FlowOut, allNodes.GetOutputViewModel));
+                    }
+                }
+            }
         }
 
         public InputKeyboardNodeViewModel() : base(NodeType.Function)

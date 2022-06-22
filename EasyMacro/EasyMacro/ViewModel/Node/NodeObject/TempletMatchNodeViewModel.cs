@@ -11,6 +11,7 @@ using NodeNetwork.ViewModels;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Windows;
@@ -61,6 +62,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public override NodeOutputViewModel GetOutputViewModel => this.FlowIn;
 
+        public List<string> ConnedtedHashs2 = new List<string>();
+
         public bool IsCanExcute { get; set; } = true;
 
         public override void Serializer(XmlWriter xmlWriter, object obj)
@@ -77,11 +80,24 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             xmlWriter.WriteElementString(nameof(IsWantKeepFind), instance.IsWantKeepFind.Value.ToString());
             xmlWriter.WriteElementString(nameof(Accuracy), instance.Accuracy.Value.ToString());
             xmlWriter.WriteElementString(nameof(Delay), instance.Delay.Value.ToString());
+
+            int count = 0;
+            foreach (var i in instance.FlowOutOption1.Connections.Items)
+            {
+                xmlWriter.WriteElementString($"ConnedtedHashs1_{count}", (i.Output.Parent as CodeGenNodeViewModel).Hash);
+                count++;
+            }
+            count = 0;
+            foreach (var i in instance.FlowOutOption2.Connections.Items)
+            {
+                xmlWriter.WriteElementString($"ConnedtedHashs2_{count}", (i.Output.Parent as CodeGenNodeViewModel).Hash);
+                count++;
+            }
         }
 
         public override object Deserialize(XElement xElement)
         {
-            TempletMatchNodeViewModel instance = (TempletMatchNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new TempletMatchNodeViewModel());
+            TempletMatchNodeViewModel instance = (TempletMatchNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, this);
 
             Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
             (instance.BitmapDir.Editor as ImageManagerSelectorViewModel).Value = dictionary["BitmapDir"].Value;
@@ -90,12 +106,56 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             (instance.IsWantKeepFind.Editor as CheckBoxEditorViewModel).Value = bool.TryParse(dictionary["IsWantKeepFind"].Value, out bool IsWantKeepFind) ? IsWantKeepFind : false;
             (instance.Accuracy.Editor as IntegerValueEditorViewModel).Value = int.TryParse(dictionary["Accuracy"].Value, out int Accuracy) ? Accuracy : 80;
             (instance.Delay.Editor as IntegerValueEditorViewModel).Value = int.TryParse(dictionary["Delay"].Value, out int delay) ? delay : 1000;
+
+            bool isLast = false;
+            for (int count = 0; isLast == false; count++)
+            {
+                if (dictionary.TryGetValue($"ConnedtedHashs1_{count}", out XElement element))
+                {
+                    instance.ConnedtedHashs.Add(element.Value);
+                }
+                else
+                {
+                    isLast = true;
+                }
+            }
+            isLast = false;
+            for (int count = 0; isLast == false; count++)
+            {
+                if (dictionary.TryGetValue($"ConnedtedHashs2_{count}", out XElement element))
+                {
+                    instance.ConnedtedHashs2.Add(element.Value);
+                }
+                else
+                {
+                    isLast = true;
+                }
+            }
             return instance;
         }
 
         public override void Connect(INodeSerializable instance, List<INodeSerializable> obj)
         {
-            throw new NotImplementedException();
+            foreach (var hashs in this.ConnedtedHashs)
+            {
+                foreach (CodeGenNodeViewModel allNodes in obj)
+                {
+                    if (allNodes.Hash == hashs)
+                    {
+                        this.FlowOutOption1.Connections.Items.ToList().Add(new ConnectionViewModel(this.Parent, this.FlowOutOption1, allNodes.GetOutputViewModel));
+                    }
+                }
+            }
+            foreach (var hashs in this.ConnedtedHashs2)
+            {
+                foreach (CodeGenNodeViewModel allNodes in obj)
+                {
+                    if (allNodes.Hash == hashs)
+                    {
+                        this.FlowOutOption2.Connections.Items.ToList().Add(new ConnectionViewModel(this.Parent, this.FlowOutOption2, allNodes.GetOutputViewModel));
+                    }
+                }
+            }
         }
 
         public TempletMatchNodeViewModel() : base(NodeType.Function)
@@ -298,9 +358,5 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             };
             return action;
         }
-
-        
-
-        
     }
 }

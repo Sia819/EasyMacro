@@ -49,7 +49,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public override object Deserialize(XElement xElement)
         {
-            GroupSubnetIONodeViewModel instance = (GroupSubnetIONodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new GroupSubnetIONodeViewModel(Subnet, _isEntranceNode, _isExitNode));
+            GroupSubnetIONodeViewModel instance = (GroupSubnetIONodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, this);
             return instance;
         }
 

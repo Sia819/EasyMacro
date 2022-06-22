@@ -39,6 +39,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public override NodeOutputViewModel GetOutputViewModel => this.FlowIn;
 
+        public List<string> ConnedtedHashs2 = new List<string>();
+
         public override void Serializer(XmlWriter xmlWriter, object obj)
         {
             NodeSerializer.SerializerOfNodeViewModel(ref xmlWriter, ref obj);
@@ -46,20 +48,78 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             ForLoopNode instance = obj as ForLoopNode;
 
             xmlWriter.WriteElementString(nameof(LastIndex), instance.LastIndex.Value.ToString());
+
+            int count = 0;
+            foreach (var i in instance.LoopBodyFlow.Connections.Items)
+            {
+                xmlWriter.WriteElementString($"ConnedtedHashs1_{count}", (i.Output.Parent as CodeGenNodeViewModel).Hash);
+                count++;
+            }
+            count = 0;
+            foreach (var i in instance.LoopEndFlow.Connections.Items)
+            {
+                xmlWriter.WriteElementString($"ConnedtedHashs2_{count}", (i.Output.Parent as CodeGenNodeViewModel).Hash);
+                count++;
+            }
         }
 
         public override object Deserialize(XElement xElement)
         {
-            ForLoopNode instance = (ForLoopNode)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new ForLoopNode());
+            ForLoopNode instance = (ForLoopNode)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, this);
 
             Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
             (instance.LastIndex.Editor as IntegerValueEditorViewModel).Value = int.TryParse(dictionary["LastIndex"].Value, out int LastIndex) ? LastIndex : 1;
+
+            bool isLast = false;
+            for (int count = 0; isLast == false; count++)
+            {
+                if (dictionary.TryGetValue($"ConnedtedHashs1_{count}", out XElement element))
+                {
+                    instance.ConnedtedHashs.Add(element.Value);
+                }
+                else
+                {
+                    isLast = true;
+                }
+            }
+            isLast = false;
+            for (int count = 0; isLast == false; count++)
+            {
+                if (dictionary.TryGetValue($"ConnedtedHashs2_{count}", out XElement element))
+                {
+                    instance.ConnedtedHashs2.Add(element.Value);
+                }
+                else
+                {
+                    isLast = true;
+                }
+            }
             return instance;
         }
 
         public override void Connect(INodeSerializable instance, List<INodeSerializable> obj)
         {
-            throw new NotImplementedException();
+            foreach (var hashs in this.ConnedtedHashs)
+            {
+                foreach (CodeGenNodeViewModel allNodes in obj)
+                {
+                    if (allNodes.Hash == hashs)
+                    {
+                        this.LoopBodyFlow.Connections.Items.ToList().Add(new ConnectionViewModel(this.Parent, this.LoopBodyFlow, allNodes.GetOutputViewModel));
+                    }
+                }
+            }
+
+            foreach (var hashs in this.ConnedtedHashs2)
+            {
+                foreach (CodeGenNodeViewModel allNodes in obj)
+                {
+                    if (allNodes.Hash == hashs)
+                    {
+                        this.LoopEndFlow.Connections.Items.ToList().Add(new ConnectionViewModel(this.Parent, this.LoopEndFlow, allNodes.GetOutputViewModel));
+                    }
+                }
+            }
         }
 
         public ForLoopNode() : base(NodeType.FlowControl)

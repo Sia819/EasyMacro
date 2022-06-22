@@ -57,14 +57,33 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             NodeSerializer.SerializerOfNodeViewModel(ref xmlWriter, ref obj);
             DelayNodeViewModel instance = obj as DelayNodeViewModel;
             xmlWriter.WriteElementString(nameof(Delay), instance.Delay.Value.ToString());
+
+            int count = 0;
+            foreach (var i in instance.FlowOut.Connections.Items)
+            {
+                xmlWriter.WriteElementString($"ConnedtedHashs_{count}", (i.Output.Parent as CodeGenNodeViewModel).Hash);
+                count++;
+            }
         }
 
         public override object Deserialize(XElement xElement)
         {
             DelayNodeViewModel instance = (DelayNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, this);
-            
             Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
             (instance.Delay.Editor as IntegerValueEditorViewModel).Value = int.TryParse(dictionary["Delay"].Value, out int delay) ? delay : 0;
+
+            bool isLast = false;
+            for (int count = 0; isLast == false; count++)
+            {
+                if (dictionary.TryGetValue($"ConnedtedHashs_{count}", out XElement element))
+                {
+                    instance.ConnedtedHashs.Add(element.Value);
+                }
+                else
+                {
+                    isLast = true;
+                }
+            }
             return instance;
         }
 

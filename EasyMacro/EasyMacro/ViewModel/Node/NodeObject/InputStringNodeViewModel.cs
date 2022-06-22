@@ -12,6 +12,7 @@ using NodeNetwork.Views;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Xml;
@@ -78,19 +79,48 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             InputStringNodeViewModel instance = obj as InputStringNodeViewModel;
 
             xmlWriter.WriteElementString(nameof(Input), instance.Input.Value.ToString());
+
+            int count = 0;
+            foreach (var i in instance.FlowOut.Connections.Items)
+            {
+                xmlWriter.WriteElementString($"ConnedtedHashs_{count}", (i.Output.Parent as CodeGenNodeViewModel).Hash);
+                count++;
+            }
         }
 
         public override object Deserialize(XElement xElement)
         {
-            InputStringNodeViewModel instance = (InputStringNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new InputStringNodeViewModel());
+            InputStringNodeViewModel instance = (InputStringNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, this);
             Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
             (instance.Input.Editor as StringValueEditorViewModel).Value = dictionary["Input"].Value;
+
+            bool isLast = false;
+            for (int count = 0; isLast == false; count++)
+            {
+                if (dictionary.TryGetValue($"ConnedtedHashs_{count}", out XElement element))
+                {
+                    instance.ConnedtedHashs.Add(element.Value);
+                }
+                else
+                {
+                    isLast = true;
+                }
+            }
             return instance;
         }
 
         public override void Connect(INodeSerializable instance, List<INodeSerializable> obj)
         {
-            throw new NotImplementedException();
+            foreach (var hashs in this.ConnedtedHashs)
+            {
+                foreach (CodeGenNodeViewModel allNodes in obj)
+                {
+                    if (allNodes.Hash == hashs)
+                    {
+                        this.FlowOut.Connections.Items.ToList().Add(new ConnectionViewModel(this.Parent, this.FlowOut, allNodes.GetOutputViewModel));
+                    }
+                }
+            }
         }
 
         public InputStringNodeViewModel() : base(NodeType.Function)

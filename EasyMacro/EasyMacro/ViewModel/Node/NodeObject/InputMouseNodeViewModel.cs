@@ -13,6 +13,7 @@ using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Xml;
@@ -91,20 +92,49 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             InputMouseNodeViewModel instance = obj as InputMouseNodeViewModel;
             
             xmlWriter.WriteElementString(nameof(MouseClickType), (instance.MouseClickType.Editor as RadioButtonEditorViewModel).RadioSelectedIndex.ToString());
+
+            int count = 0;
+            foreach (var i in instance.FlowOut.Connections.Items)
+            {
+                xmlWriter.WriteElementString($"ConnedtedHashs_{count}", (i.Output.Parent as CodeGenNodeViewModel).Hash);
+                count++;
+            }
         }
 
         public override object Deserialize(XElement xElement)
         {
-            InputMouseNodeViewModel instance = (InputMouseNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new InputMouseNodeViewModel());
+            InputMouseNodeViewModel instance = (InputMouseNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, this);
 
             Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
             (instance.MouseClickType.Editor as RadioButtonEditorViewModel).RadioSelectedIndex = int.TryParse(dictionary["MouseClickType"].Value, out int MouseClickType) ? MouseClickType : 0;
+
+            bool isLast = false;
+            for (int count = 0; isLast == false; count++)
+            {
+                if (dictionary.TryGetValue($"ConnedtedHashs_{count}", out XElement element))
+                {
+                    instance.ConnedtedHashs.Add(element.Value);
+                }
+                else
+                {
+                    isLast = true;
+                }
+            }
             return instance;
         }
 
         public override void Connect(INodeSerializable instance, List<INodeSerializable> obj)
         {
-            throw new NotImplementedException();
+            foreach (var hashs in this.ConnedtedHashs)
+            {
+                foreach (CodeGenNodeViewModel allNodes in obj)
+                {
+                    if (allNodes.Hash == hashs)
+                    {
+                        this.FlowOut.Connections.Items.ToList().Add(new ConnectionViewModel(this.Parent, this.FlowOut, allNodes.GetOutputViewModel));
+                    }
+                }
+            }
         }
 
         public InputMouseNodeViewModel() : base(NodeType.Function)

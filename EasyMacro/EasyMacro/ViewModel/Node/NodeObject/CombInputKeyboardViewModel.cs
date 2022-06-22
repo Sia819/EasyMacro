@@ -12,6 +12,7 @@ using NodeNetwork.ViewModels;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Xml;
@@ -100,29 +101,53 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             xmlWriter.WriteElementString(nameof(Alt), instance.Alt.Value.ToString());
             xmlWriter.WriteElementString(nameof(Ctrl), instance.Ctrl.Value.ToString());
             xmlWriter.WriteElementString(nameof(Shift), instance.Shift.Value.ToString());
+
+            int count = 0;
+            foreach (var i in instance.FlowOut.Connections.Items)
+            {
+                xmlWriter.WriteElementString($"ConnedtedHashs_{count}", (i.Output.Parent as CodeGenNodeViewModel).Hash);
+                count++;
+            }
         }
 
         public override object Deserialize(XElement xElement)
         {
-            CombInputKeyboardViewModel instance = (CombInputKeyboardViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, new CombInputKeyboardViewModel());
-            /*
-            (instance.Input.Editor as KeyboardRecordEditorViewModel).Value = (Keys)Enum.Parse(typeof(Keys),xElement.Member(nameof(Input)).ToString());
-            (instance.Alt.Editor as CheckBoxEditorViewModel).Value = (bool)xElement.Member(nameof(Alt));
-            (instance.Ctrl.Editor as CheckBoxEditorViewModel).Value = (bool)xElement.Member(nameof(Ctrl));
-            (instance.Shift.Editor as CheckBoxEditorViewModel).Value = (bool)xElement.Member(nameof(Shift));
-            */
+            CombInputKeyboardViewModel instance = (CombInputKeyboardViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, this);
+
             Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
             (instance.Input.Editor as KeyboardRecordEditorViewModel).Value = ((Keys)Enum.Parse(typeof(Keys), dictionary["Input"].Value));
             (instance.Input.Editor as KeyboardRecordEditorViewModel).ReactiveObject.MyKey = ((Keys)Enum.Parse(typeof(Keys), dictionary["Input"].Value)).ToString();
             (instance.Alt.Editor as CheckBoxEditorViewModel).Value = bool.TryParse(dictionary["Alt"].Value, out bool Alt) ? Alt : false;
             (instance.Ctrl.Editor as CheckBoxEditorViewModel).Value = bool.TryParse(dictionary["Ctrl"].Value, out bool Ctrl) ? Ctrl : false;
             (instance.Shift.Editor as CheckBoxEditorViewModel).Value = bool.TryParse(dictionary["Shift"].Value, out bool Shift) ? Shift : false;
+
+            bool isLast = false;
+            for (int count = 0; isLast == false; count++)
+            {
+                if (dictionary.TryGetValue($"ConnedtedHashs_{count}", out XElement element))
+                {
+                    instance.ConnedtedHashs.Add(element.Value);
+                }
+                else
+                {
+                    isLast = true;
+                }
+            }
             return instance;
         }
 
         public override void Connect(INodeSerializable instance, List<INodeSerializable> obj)
         {
-            throw new NotImplementedException();
+            foreach (var hashs in this.ConnedtedHashs)
+            {
+                foreach (CodeGenNodeViewModel allNodes in obj)
+                {
+                    if (allNodes.Hash == hashs)
+                    {
+                        this.FlowOut.Connections.Items.ToList().Add(new ConnectionViewModel(this.Parent, this.FlowOut, allNodes.GetOutputViewModel));
+                    }
+                }
+            }
         }
 
         public CombInputKeyboardViewModel() : base(NodeType.Function)

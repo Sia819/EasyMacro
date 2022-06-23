@@ -51,7 +51,7 @@ namespace EasyMacroAPI
         {
             Bitmap bmp = new Bitmap(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width,
                                     System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height,
-                                    System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+                                    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             Graphics gr = Graphics.FromImage(bmp);
 
             gr.CopyFromScreen(0, 0, 0, 0, bmp.Size);

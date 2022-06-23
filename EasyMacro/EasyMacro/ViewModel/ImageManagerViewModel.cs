@@ -161,7 +161,7 @@ namespace EasyMacro.ViewModel
             {
                 using (Bitmap newBmp = new Bitmap(oldBmp))
                 {
-                    targetBmp = newBmp.Clone(new Rectangle(0, 0, newBmp.Width, newBmp.Height), PixelFormat.Format32bppRgb);
+                    targetBmp = newBmp.Clone(new Rectangle(0, 0, newBmp.Width, newBmp.Height), PixelFormat.Format32bppArgb);
                 }
             }
             return targetBmp;

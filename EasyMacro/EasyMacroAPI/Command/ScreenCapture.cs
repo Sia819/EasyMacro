@@ -12,7 +12,7 @@ namespace EasyMacroAPI.Command
 
         public IntPtr hWnd { get; set; }
 
-        public bool IsFullScreen => (hWnd == IntPtr.Zero) ? true : false;
+        public bool IsWindowCapture { get; set; }
 
         public Bitmap CapturedImage { get; private set; }
 
@@ -33,13 +33,13 @@ namespace EasyMacroAPI.Command
                 CapturedImage.Dispose();
             }
 
-            if (IsFullScreen)
+            if (IsWindowCapture)
             {
-                CapturedImage = CaptureManager.Instance.ScreenCapture();
+                CapturedImage = CaptureManager.Instance.WindowCapture(hWnd);
             }
             else
             {
-                CapturedImage = CaptureManager.Instance.WindowCapture(hWnd);
+                CapturedImage = CaptureManager.Instance.ScreenCapture();
             }
 
         }

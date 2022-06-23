@@ -9,6 +9,7 @@ using Microsoft.Win32;
 using EasyMacro.Common;
 using ReactiveUI;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace EasyMacro.ViewModel
 {
@@ -24,7 +25,7 @@ namespace EasyMacro.ViewModel
 
         public string ImageFilePath { get; set; }
 
-        public ObservableDictionary<string, ImageList> RegisterdImages { get; }
+        public ObservableCollection<ImageList> RegisterdImages { get; }
         public ReactiveCommand<Unit, Unit> ImageAddCommand { get; }
         public ReactiveCommand<string, Unit> ImageDeleteCommand { get; }
 
@@ -63,6 +64,21 @@ namespace EasyMacro.ViewModel
 
             // TODO : ImageManager Delete 구현
             //this.ImageDeleteCommand = ReactiveCommand.CreateFromObservable<Unit, string>(ImageDelCommand(path));  //ReactiveCommand.Create<string>(path => ImageDelCommand(path));
+
+            if (Directory.Exists("images"))
+            {
+                var files =  Directory.GetFiles("images");
+                foreach (var file in files)
+                {
+                    var temp = new ImageList()
+                    {
+                        Name = dictDupeRename(Path.GetFileNameWithoutExtension(file)),
+                        FilePath = file,
+                        PreviewImage = PathToBitmap(file)
+                    };
+                    RegisterdImages.Add(temp);
+                }
+            }
         }
 
         private IObservable<Unit> ImageAdd_ExcuteCommand()
@@ -108,7 +124,8 @@ namespace EasyMacro.ViewModel
                             FilePath = ImageFilePath,
                             PreviewImage = PathToBitmap(ImageFilePath)
                         };
-                        RegisterdImages.Add(temp.Name, temp);
+                        RegisterdImages.Add(temp);
+                        temp.PreviewImage.Save("images\\" + temp.Name, ImageFormat.Png);
                         return Observable.Return(Unit.Default);
                     }
                 }
@@ -149,7 +166,9 @@ namespace EasyMacro.ViewModel
                     FilePath = dlg.FileName,
                     PreviewImage = PathToBitmap(dlg.FileName)
                 };
-                RegisterdImages.Add(temp.Name, temp);
+                RegisterdImages.Add(temp);
+                if (System.IO.Directory.Exists("images") == false) Directory.CreateDirectory("images");
+                temp.PreviewImage.Save("images/" + temp.Name + ".png", ImageFormat.Png);
             }
             return Observable.Return(Unit.Default);
         }
@@ -169,12 +188,12 @@ namespace EasyMacro.ViewModel
 
         private void ImageDelCommand(string path)
         {
-            RegisterdImages.Remove(path);
+            RegisterdImages.Remove(RegisterdImages.Find(path));
         }
 
         public Bitmap CopyImg(string path)
         {
-            Bitmap cloneBitmap = (Bitmap)RegisterdImages[path].PreviewImage.Clone();
+            Bitmap cloneBitmap = (Bitmap)RegisterdImages.Find(path).PreviewImage.Clone();
             return cloneBitmap;
         }
 
@@ -192,6 +211,40 @@ namespace EasyMacro.ViewModel
                 }
             }
             return key;
+        }
+
+        
+         
+    }
+
+    public static class ObservableCollectionExtension
+    {
+        public static bool ContainsKey<T>(this ObservableCollection<T> obs, string obj)
+        {
+            var ob = obs;
+            foreach (T i in ob)
+            {
+                if (i is Tuple<string, ImageManagerViewModel.ImageList> result)
+                {
+                    if (result.Item1 == obj)
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static ImageManagerViewModel.ImageList Find<T>(this ObservableCollection<T> obs, string obj)
+        {
+            foreach (T i in obs)
+            {
+                if (i is ImageManagerViewModel.ImageList result)
+                {
+                    if (result.Name == obj)
+                        return result;
+                }
+            }
+            return null;
         }
     }
 }

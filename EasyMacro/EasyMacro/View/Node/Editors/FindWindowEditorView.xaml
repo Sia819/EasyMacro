@@ -11,6 +11,7 @@
         <Button PreviewMouseDown="Image_PreviewMouseDown"
                 PreviewMouseUp="Image_PreviewMouseUp"
                 PreviewMouseMove="Image_PreviewMouseMove"
+                PreviewMouseDoubleClick="Button_PreviewMouseDoubleClick"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Margin="0 0 10 0">

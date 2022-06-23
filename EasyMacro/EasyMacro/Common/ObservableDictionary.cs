@@ -12,7 +12,7 @@ namespace EasyMacro.Common
 	/// <typeparam name="TKey">Specifies the type of the keys in this collection.</typeparam>
 	/// <typeparam name="TValue">Specifies the type of the values in this collection.</typeparam>
 	[DebuggerDisplay("Count={Count}")]
-	public class ObservableDictionary<TKey, TValue> :
+	public class ObservableDictionary1<TKey, TValue> :
 		ICollection<KeyValuePair<TKey, TValue>>, IDictionary<TKey, TValue>,
 		INotifyCollectionChanged, INotifyPropertyChanged
 	{
@@ -27,7 +27,7 @@ namespace EasyMacro.Common
 		/// <summary>
 		/// Initializes an instance of the class.
 		/// </summary>
-		public ObservableDictionary()
+		public ObservableDictionary1()
 			: this(new Dictionary<TKey, TValue>())
 		{
 		}
@@ -36,7 +36,7 @@ namespace EasyMacro.Common
 		/// Initializes an instance of the class using another dictionary as 
 		/// the key/value store.
 		/// </summary>
-		public ObservableDictionary(IDictionary<TKey, TValue> dictionary)
+		public ObservableDictionary1(IDictionary<TKey, TValue> dictionary)
 		{
 			this.dictionary = dictionary;
 		}
@@ -62,8 +62,8 @@ namespace EasyMacro.Common
 			TValue value;
 			if (dictionary.TryGetValue(key, out value) && dictionary.Remove(key))
 			{
-				CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
-					new KeyValuePair<TKey, TValue>(key, value)));
+				//var noti = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, new KeyValuePair<TKey, TValue>(key, value));
+				//CollectionChanged(this, noti);
 				PropertyChanged(this, new PropertyChangedEventArgs("Count"));
 				PropertyChanged(this, new PropertyChangedEventArgs("Keys"));
 				PropertyChanged(this, new PropertyChangedEventArgs("Values"));

@@ -1,5 +1,6 @@
 ﻿using EasyMacro.ViewModel;
 using ReactiveUI;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
@@ -85,6 +86,18 @@ namespace EasyMacro.View.UC
                 bitmapImage.EndInit();
             }
             return bitmapImage;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            // 삭제버튼 
+            Button btn = sender as Button;
+            ImageManagerViewModel.ImageList item = btn.DataContext as ImageManagerViewModel.ImageList;
+            ViewModel.RegisterdImages.Remove(item);
+            if (Directory.Exists("images"))
+            {
+                File.Delete("images/" + item.Name + ".png");
+            }
         }
     }
 }

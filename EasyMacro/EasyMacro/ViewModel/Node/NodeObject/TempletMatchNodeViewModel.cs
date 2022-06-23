@@ -40,9 +40,8 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public ValueNodeInputViewModel<string> BitmapDir { get; }
 
-        //public ValueNodeInputViewModel<string> WindowName { get; }
-
         public ValueNodeInputViewModel<bool?> IsWindowCapture { get; }
+
         public ValueNodeInputViewModel<IntPtr> hWnd { get; }
 
         public ValueNodeInputViewModel<bool?> IsWantKeepFind { get; }
@@ -104,7 +103,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             TempletMatchNodeViewModel instance = (TempletMatchNodeViewModel)NodeSerializer.DeserializeOfNoveViewModel(ref xElement, this);
 
             Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
-            (instance.BitmapDir.Editor as ImageManagerSelectorViewModel).Value = dictionary["BitmapDir"].Value;
+            (instance.BitmapDir.Editor as ImageManagerSelectorViewModel).SelectName(dictionary["BitmapDir"].Value); // 비트맵의 이름으로 ComboBox Selected Change
 
             FindWindowEditorViewModel findWindowEditor = (instance.hWnd.Editor as FindWindowEditorViewModel);
             findWindowEditor.TargetWindowTitle = dictionary["TargetWindowTitle"].Value;
@@ -361,16 +360,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                     // dispose 작업은 ImageManagerSelectorView의 imageSelector_SelectionChanged() 에서 함.
                     templetMatch.TargetImg = (BitmapDir.Editor as ImageManagerSelectorViewModel).SelectedBitmap;
                 }
-            };
-            return action;
-        }
-
-        private Action WinnameToApi()
-        {
-            Action action = () =>
-            {
-                // TODO : TextBox의 String을 받는 구조 -> 창 찾기 컨트롤의 값을 받는 구조.
-                templetMatch.ScreenCapture.hWnd = this.hWnd.Value;
             };
             return action;
         }

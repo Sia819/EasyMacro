@@ -55,7 +55,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 
         public override void Connect(INodeSerializable instance, List<INodeSerializable> obj)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public AddEndpointDropPanelViewModel AddEndpointDropPanelVM { get; set; }

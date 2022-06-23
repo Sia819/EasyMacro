@@ -53,10 +53,11 @@
             </Grid.RowDefinitions>
             <Grid>
                 <!-- Node List가 보이는 패널 -->
-                <nodeList:NodeListView x:Name="nodeList" Margin="0,0,0,58"/>
+                <nodeList:NodeListView x:Name="nodeList" Margin="0,0,0,0"/>
 
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="10, 0, 10, 8">
                     <!-- 버튼을 둥글게, 스타일지정 -->
+                    <!--
                     <StackPanel.Resources>
                         <ResourceDictionary>
                             <ResourceDictionary.MergedDictionaries>
@@ -67,7 +68,7 @@
 
                     <Button Name="autoLayoutButton" Content="Auto-layout" />
                     <Button Name="startAutoLayoutLiveButton" Margin="0, 5, 0, 0" Content="Start live auto-layout" />
-                    <Button Name="stopAutoLayoutLiveButton" Margin="0, 5, 0, 0" Content="Stop live auto-layout" />
+                    <Button Name="stopAutoLayoutLiveButton" Margin="0, 5, 0, 0" Content="Stop live auto-layout" />-->
                 </StackPanel>
             </Grid>
             <GridSplitter Grid.Row="1" Background="DarkGray"

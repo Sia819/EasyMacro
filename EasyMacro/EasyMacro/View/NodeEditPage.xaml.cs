@@ -49,21 +49,23 @@ namespace EasyMacro.View
                 this.OneWayBind(ViewModel, vm => vm.CodeSim, v => v.codeSimView.ViewModel).DisposeWith(d);
                 this.OneWayBind(ViewModel, vm => vm.NetworkBreadcrumbBar, v => v.breadcrumbBar.ViewModel).DisposeWith(d);
 
-                this.BindCommand(ViewModel, vm => vm.AutoLayout, v => v.autoLayoutButton);
+                
 
                 this.BindCommand(ViewModel, vm => vm.GroupNodes, v => v.groupNodesButton).DisposeWith(d);
                 this.BindCommand(ViewModel, vm => vm.UngroupNodes, v => v.ungroupNodesButton).DisposeWith(d);
                 this.BindCommand(ViewModel, vm => vm.OpenGroup, v => v.openGroupButton).DisposeWith(d);
 
-                this.BindCommand(ViewModel, vm => vm.StartAutoLayoutLive, v => v.startAutoLayoutLiveButton);
-                this.WhenAnyObservable(v => v.ViewModel.StartAutoLayoutLive.IsExecuting)
-                    .Select((isRunning) => isRunning ? Visibility.Collapsed : Visibility.Visible)
-                    .BindTo(this, v => v.startAutoLayoutLiveButton.Visibility);
+                //this.BindCommand(ViewModel, vm => vm.AutoLayout, v => v.autoLayoutButton);
+                //this.BindCommand(ViewModel, vm => vm.StartAutoLayoutLive, v => v.startAutoLayoutLiveButton);
 
-                this.BindCommand(ViewModel, vm => vm.StopAutoLayoutLive, v => v.stopAutoLayoutLiveButton);
-                this.WhenAnyObservable(v => v.ViewModel.StartAutoLayoutLive.IsExecuting)
-                    .Select((isRunning) => isRunning ? Visibility.Visible : Visibility.Collapsed)
-                    .BindTo(this, v => v.stopAutoLayoutLiveButton.Visibility);
+                //this.WhenAnyObservable(v => v.ViewModel.StartAutoLayoutLive.IsExecuting)
+                //    .Select((isRunning) => isRunning ? Visibility.Collapsed : Visibility.Visible)
+                //    .BindTo(this, v => v.startAutoLayoutLiveButton.Visibility);
+
+                //this.BindCommand(ViewModel, vm => vm.StopAutoLayoutLive, v => v.stopAutoLayoutLiveButton);
+                //this.WhenAnyObservable(v => v.ViewModel.StartAutoLayoutLive.IsExecuting)
+                //    .Select((isRunning) => isRunning ? Visibility.Visible : Visibility.Collapsed)
+                //    .BindTo(this, v => v.stopAutoLayoutLiveButton.Visibility);
             });
 
             this.ViewModel = PageViewModel.Instance;

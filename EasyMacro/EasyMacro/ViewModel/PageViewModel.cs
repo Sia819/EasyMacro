@@ -50,15 +50,12 @@ namespace EasyMacro.ViewModel
         public NetworkViewModel Network => _network.Value;
         #endregion
 
-        public BreadcrumbBarViewModel NetworkBreadcrumbBar { get; } = new BreadcrumbBarViewModel();
-        public NodeListViewModel NodeList { get; } = new NodeListViewModel();
-        public CodePreviewViewModel CodePreview { get; } = new CodePreviewViewModel();
-        public CodeSimViewModel CodeSim { get; } = CodeSimViewModel.Instance;
-
+        public BreadcrumbBarViewModel NetworkBreadcrumbBar { get; }
+        public NodeListViewModel NodeList { get; }
+        public CodeSimViewModel CodeSim { get; }
         public ReactiveCommand<Unit, Unit> AutoLayout { get; }
         public ReactiveCommand<Unit, Unit> StartAutoLayoutLive { get; }
         public ReactiveCommand<Unit, Unit> StopAutoLayoutLive { get; }
-
         public ReactiveCommand<Unit, Unit> GroupNodes { get; }
         public ReactiveCommand<Unit, Unit> UngroupNodes { get; }
         public ReactiveCommand<Unit, Unit> OpenGroup { get; }
@@ -69,56 +66,39 @@ namespace EasyMacro.ViewModel
 
         private PageViewModel()
         {
+            //Initialize Properties
+            this.NetworkBreadcrumbBar = new BreadcrumbBarViewModel();
+            this.CodeSim = CodeSimViewModel.Instance;
+
             this.WhenAnyValue(vm => vm.NetworkBreadcrumbBar.ActiveItem).Cast<NetworkBreadcrumb>()
                 .Select(b => b?.Network)
                 .ToProperty(this, vm => vm.Network, out _network);
+
             NetworkBreadcrumbBar.ActivePath.Add(new NetworkBreadcrumb
             {
                 Name = "Main",
                 Network = new NetworkViewModel()
             });
 
-            if (IsLoading is false)
-            {
-                startNode = new StartNodeViewModel { CanBeRemovedByUser = false };
-                Network.Nodes.Add(startNode);
-
-                var codeObservable = startNode.FlowOut.Values.Connect().Select(_ => new StatementSequence(startNode.FlowOut.Values.Items));
-                codeObservable.BindTo(this, vm => vm.CodePreview.Code);
-                codeObservable.BindTo(this, vm => vm.CodeSim.Code);
-            }
-
-            // ListPanel에 추가하여 보여질 노드들
-            NodeList.AddNodeType(() => new ReStartNodeViewModel());
-            NodeList.AddNodeType(() => new ForLoopNode());
-            NodeList.AddNodeType(() => new DelayNodeViewModel());
-            NodeList.AddNodeType(() => new CombInputKeyboardViewModel());
-            NodeList.AddNodeType(() => new InputKeyboardNodeViewModel());
-            NodeList.AddNodeType(() => new InputStringNodeViewModel());
-            NodeList.AddNodeType(() => new InputMouseNodeViewModel());
-            NodeList.AddNodeType(() => new RelativeMouseMoveNodeViewModel());
-            NodeList.AddNodeType(() => new MouseClickNodeViewModel());
-            NodeList.AddNodeType(() => new MouseMoveNodeViewModel());
-            NodeList.AddNodeType(() => new TempletMatchNodeViewModel());
-
-            
-
+            #region Auto Layout Settings
             ForceDirectedLayouter layouter = new ForceDirectedLayouter();
             AutoLayout = ReactiveCommand.Create(() => layouter.Layout(new Configuration { Network = Network }, 10000));
             StartAutoLayoutLive = ReactiveCommand.CreateFromObservable(() =>
                 Observable.StartAsync(ct => layouter.LayoutAsync(new Configuration { Network = Network }, ct)).TakeUntil(StopAutoLayoutLive)
             );
             StopAutoLayoutLive = ReactiveCommand.Create(() => { }, StartAutoLayoutLive.IsExecuting);
+            #endregion
 
-            var grouper = new NodeGrouper
+            // Initialize Group Properties
+            NodeGrouper grouper = new NodeGrouper
             {
-                GroupNodeFactory = subnet => new GroupNodeViewModel(subnet),
+                GroupNodeFactory = (subnet) => new GroupNodeViewModel(subnet),
                 EntranceNodeFactory = () => new GroupSubnetIONodeViewModel(Network, true, false) { Name = "Group Input" },
                 ExitNodeFactory = () => new GroupSubnetIONodeViewModel(Network, false, true) { Name = "Group Output" },
                 SubNetworkFactory = () => new NetworkViewModel(),
-                IOBindingFactory = (groupNode, entranceNode, exitNode) =>
-                    new CodeNodeGroupIOBinding(groupNode, entranceNode, exitNode)
+                IOBindingFactory = (groupNode, entranceNode, exitNode) => new CodeNodeGroupIOBinding(groupNode, entranceNode, exitNode)
             };
+
             GroupNodes = ReactiveCommand.Create(() =>
             {
                 var groupBinding = (CodeNodeGroupIOBinding)grouper.MergeIntoGroup(Network, Network.SelectedNodes.Items);
@@ -148,6 +128,29 @@ namespace EasyMacro.ViewModel
                 });
             }, isGroupNodeSelected);
 
+            // ListPanel에 추가하여 보여질 노드들
+            this.NodeList = new NodeListViewModel();
+            NodeList.AddNodeType(() => new ReStartNodeViewModel());
+            NodeList.AddNodeType(() => new ForLoopNode());
+            NodeList.AddNodeType(() => new DelayNodeViewModel());
+            NodeList.AddNodeType(() => new CombInputKeyboardViewModel());
+            NodeList.AddNodeType(() => new InputKeyboardNodeViewModel());
+            NodeList.AddNodeType(() => new InputStringNodeViewModel());
+            NodeList.AddNodeType(() => new InputMouseNodeViewModel());
+            NodeList.AddNodeType(() => new RelativeMouseMoveNodeViewModel());
+            NodeList.AddNodeType(() => new MouseClickNodeViewModel());
+            NodeList.AddNodeType(() => new MouseMoveNodeViewModel());
+            NodeList.AddNodeType(() => new TempletMatchNodeViewModel());
+
+            if (IsLoading is false)
+            {
+                startNode = new StartNodeViewModel { CanBeRemovedByUser = false };
+                Network.Nodes.Add(startNode);
+
+                var codeObservable = startNode.FlowOut.Values.Connect().Select(_ => new StatementSequence(startNode.FlowOut.Values.Items));
+                codeObservable.BindTo(this, vm => vm.CodeSim.Code);
+            }
+
             // 핫키 등록
             HookLib.GlobalKeyboardHook.StartKeyboardHook();
             HookLib.GlobalKeyboardHook.AddKeyboardHotkey(EasyMacroAPI.Model.Keys.F9, EasyMacroAPI.Model.KeyModifiers.None, StartMacro);
@@ -164,7 +167,6 @@ namespace EasyMacro.ViewModel
 
             startNode = Network.Nodes.Items.First() as StartNodeViewModel;
             var codeObservable = startNode.FlowOut.Values.Connect().Select(_ => new StatementSequence(startNode.FlowOut.Values.Items));
-            codeObservable.BindTo(this, vm => vm.CodePreview.Code);
             codeObservable.BindTo(this, vm => vm.CodeSim.Code);
         }
 

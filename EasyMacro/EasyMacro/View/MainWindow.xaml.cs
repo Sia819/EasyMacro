@@ -1,5 +1,6 @@
 ﻿namespace EasyMacro.View
 {
+    using System;
     using System.Windows;
     using MahApps.Metro.Controls;
     using EasyMacro.ViewModel;
@@ -17,7 +18,7 @@
 
         private void mainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            //this.mainFrame.Source = new Uri("pack://application:,,,/View/NodeEditPage.xaml", UriKind.Absolute);
+            this.mainFrame.Source = new Uri("pack://application:,,,/View/NodeEditPage.xaml", UriKind.Absolute);
         }
 
         /// <summary> Save button in title bar clicked </summary>

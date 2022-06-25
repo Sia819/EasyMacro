@@ -6,14 +6,4 @@
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              StartupUri="View/MainWindow.xaml"
              >
-    <!-- 
-    
-    StartupUri="DebugFiles/DebugWindow.xaml"
-    StartupUri="DebugFiles/DebugWindow2.xaml"
-    -->
-    <Application.Resources>
-        <ResourceDictionary>
-            <common:ViewModelLocator x:Key="Locator"/>
-        </ResourceDictionary>
-    </Application.Resources>
 </Application>

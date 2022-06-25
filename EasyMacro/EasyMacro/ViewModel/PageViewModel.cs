@@ -25,6 +25,8 @@ using System.Xml;
 using System.Windows.Forms;
 
 using System.Windows;
+using NodeNetwork;
+using NodeNetwork.Toolkit;
 
 namespace EasyMacro.ViewModel
 {
@@ -59,10 +61,12 @@ namespace EasyMacro.ViewModel
         public ReactiveCommand<Unit, Unit> GroupNodes { get; }
         public ReactiveCommand<Unit, Unit> UngroupNodes { get; }
         public ReactiveCommand<Unit, Unit> OpenGroup { get; }
+        public string ValueLabel { get; set; }
 
         public StartNodeViewModel startNode;
 
         public static bool IsLoading = false;
+        
 
         private PageViewModel()
         {
@@ -128,6 +132,37 @@ namespace EasyMacro.ViewModel
                 });
             }, isGroupNodeSelected);
 
+
+            OutputNodeViewModel output = new OutputNodeViewModel();
+            Network.Nodes.Add(output);
+
+            // 로직작성에 제한을 둚. 어떤 제한을 둘지 함수를 작성해서 (함수타입의)속성으로 등록
+            Network.Validator = network =>
+            {
+                // 노드는 루프형식을 띄면 안됨
+                bool containsLoops = GraphAlgorithms.FindLoops(network).Any();
+                if (containsLoops)
+                {
+                    return new NetworkValidationResult(false, false, new ErrorMessageViewModel("Network contains loops!"));
+                }
+
+                // 블록은 이어져있어야 함?
+                bool containsDivisionByZero = GraphAlgorithms.GetConnectedNodesBubbling(output)
+                    .OfType<DivisionNodeViewModel>()
+                    .Any(n => n.Input2.Value == 0);
+                if (containsDivisionByZero)
+                {
+                    return new NetworkValidationResult(false, true, new ErrorMessageViewModel("Network contains division by zero!"));
+                }
+
+                // 이외는 정상작동
+                return new NetworkValidationResult(true, true, null);
+            };
+
+            output.ResultInput.ValueChanged
+                .Select(v => (Network.LatestValidation?.IsValid ?? true) ? v.ToString() : "Error")
+                .BindTo(this, vm => vm.ValueLabel);
+
             // ListPanel에 추가하여 보여질 노드들
             this.NodeList = new NodeListViewModel();
             NodeList.AddNodeType(() => new ReStartNodeViewModel());
@@ -172,55 +207,54 @@ namespace EasyMacro.ViewModel
 
         public void Save()
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-
-            saveFileDialog.Filter = "XML File|*.xml|All files (*.*)|*.*";
-            saveFileDialog.FilterIndex = 1;
-            saveFileDialog.RestoreDirectory = true;
-            saveFileDialog.FileName = "Save.xml";
-
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            SaveFileDialog saveFileDialog = new SaveFileDialog()
             {
-                IExtendedXmlSerializer serializer;
-                serializer = new ConfigurationContainer().WithUnknownContent()
-                                                         .Continue()
-                                                         .CustomSerializer<StartNodeViewModel>(typeof(StartNodeViewModel))
-                                                         .CustomSerializer<DelayNodeViewModel>(typeof(DelayNodeViewModel))
-                                                         .CustomSerializer<CombInputKeyboardViewModel>(typeof(CombInputKeyboardViewModel))
-                                                         .CustomSerializer<ForLoopNode>(typeof(ForLoopNode))
-                                                         // .CustomSerializer<GroupNodeViewModel>(typeof(GroupNodeViewModel))
-                                                         // .CustomSerializer<GroupSubnetIONodeViewModel>(typeof(GroupSubnetIONodeViewModel))
-                                                         .CustomSerializer<InputKeyboardNodeViewModel>(typeof(InputKeyboardNodeViewModel))
-                                                         .CustomSerializer<InputMouseNodeViewModel>(typeof(InputMouseNodeViewModel))
-                                                         .CustomSerializer<InputStringNodeViewModel>(typeof(InputStringNodeViewModel))
-                                                         .CustomSerializer<MouseClickNodeViewModel>(typeof(MouseClickNodeViewModel))
-                                                         .CustomSerializer<MouseMoveNodeViewModel>(typeof(MouseMoveNodeViewModel))
-                                                         .CustomSerializer<OutputNodeViewModel>(typeof(OutputNodeViewModel))
-                                                         .CustomSerializer<RelativeMouseMoveNodeViewModel>(typeof(RelativeMouseMoveNodeViewModel))
-                                                         .CustomSerializer<ReStartNodeViewModel>(typeof(ReStartNodeViewModel))
-                                                         .CustomSerializer<TempletMatchNodeViewModel>(typeof(TempletMatchNodeViewModel))
-                                                         .Create();
+                Filter = "XML File|*.xml|All files (*.*)|*.*",
+                FilterIndex = 1,
+                RestoreDirectory = true,
+                FileName = "Save.xml"
+            };
+            if (saveFileDialog.ShowDialog() != DialogResult.OK) return;
 
-                List<INodeSerializable> nodes = new List<INodeSerializable>();
+            IExtendedXmlSerializer serializer;
+            serializer = new ConfigurationContainer().WithUnknownContent()
+                                                     .Continue()
+                                                     .CustomSerializer<StartNodeViewModel>(typeof(StartNodeViewModel))
+                                                     .CustomSerializer<DelayNodeViewModel>(typeof(DelayNodeViewModel))
+                                                     .CustomSerializer<CombInputKeyboardViewModel>(typeof(CombInputKeyboardViewModel))
+                                                     .CustomSerializer<ForLoopNode>(typeof(ForLoopNode))
+                                                     // .CustomSerializer<GroupNodeViewModel>(typeof(GroupNodeViewModel))
+                                                     // .CustomSerializer<GroupSubnetIONodeViewModel>(typeof(GroupSubnetIONodeViewModel))
+                                                     .CustomSerializer<InputKeyboardNodeViewModel>(typeof(InputKeyboardNodeViewModel))
+                                                     .CustomSerializer<InputMouseNodeViewModel>(typeof(InputMouseNodeViewModel))
+                                                     .CustomSerializer<InputStringNodeViewModel>(typeof(InputStringNodeViewModel))
+                                                     .CustomSerializer<MouseClickNodeViewModel>(typeof(MouseClickNodeViewModel))
+                                                     .CustomSerializer<MouseMoveNodeViewModel>(typeof(MouseMoveNodeViewModel))
+                                                     .CustomSerializer<OutputNodeViewModel>(typeof(OutputNodeViewModel))
+                                                     .CustomSerializer<RelativeMouseMoveNodeViewModel>(typeof(RelativeMouseMoveNodeViewModel))
+                                                     .CustomSerializer<ReStartNodeViewModel>(typeof(ReStartNodeViewModel))
+                                                     .CustomSerializer<TempletMatchNodeViewModel>(typeof(TempletMatchNodeViewModel))
+                                                     .Create();
 
-                foreach (var node in Network.Nodes.Items)
-                {
-                    INodeSerializable serializeObject = node as INodeSerializable;
-                    if (serializeObject is null) { throw new Exception("해당 노드가 NodeSerialize를 구현하지 않았습니다!!"); }
-                    nodes.Add(serializeObject);
-                }
+            List<INodeSerializable> nodes = new List<INodeSerializable>();
 
-                var xmlData = serializer.Serialize(nodes);// TODO : 모든 노드는 IExtendedXmlCustomSerializer를 구현해야하며, 모든 속성을 저장해야함.
+            foreach (var node in Network.Nodes.Items)
+            {
+                INodeSerializable serializeObject = node as INodeSerializable;
+                if (serializeObject is null) { throw new Exception("해당 노드가 NodeSerialize를 구현하지 않았습니다!!"); }
+                nodes.Add(serializeObject);
+            }
 
-                string savepath = saveFileDialog.FileName.ToString();
-                using (XmlTextWriter wr = new XmlTextWriter(savepath, Encoding.UTF8))
-                {
-                    wr.Formatting = Formatting.Indented;
-                    XmlDocument document = new XmlDocument();
-                    document.LoadXml(xmlData);
-                    document.WriteContentTo(wr);
-                    wr.Flush();
-                }
+            var xmlData = serializer.Serialize(nodes);// TODO : 모든 노드는 IExtendedXmlCustomSerializer를 구현해야하며, 모든 속성을 저장해야함.
+
+            string savepath = saveFileDialog.FileName.ToString();
+            using (XmlTextWriter wr = new XmlTextWriter(savepath, Encoding.UTF8))
+            {
+                wr.Formatting = Formatting.Indented;
+                XmlDocument document = new XmlDocument();
+                document.LoadXml(xmlData);
+                document.WriteContentTo(wr);
+                wr.Flush();
             }
         }
 
@@ -272,8 +306,7 @@ namespace EasyMacro.ViewModel
                 {
                     i.Connect(i, obj);
                 }
-                
-                
+
                 // Change-Refresh ViewModel
                 _instance = ((System.Windows.Application.Current.MainWindow as EasyMacro.View.MainWindow).mainFrame.Content as View.NodeEditPage).ViewModel = instance;
             }

@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Reflection;
-using PropertyChanged;
 using static EasyMacro.Common.DebugState;
 
 namespace EasyMacro.UC
@@ -51,7 +47,7 @@ namespace EasyMacro.UC
             {
                 selectedMacro = value;
                 var target = (DataContext as EasyMacro.ViewModel.MainWindowViewModel);
-                target.SelectedMacro = value.MacroType;
+                //target.SelectedMacro = value.MacroType;
             }
         }
 

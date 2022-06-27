@@ -19,39 +19,9 @@ namespace EasyMacro.View.Node.Editors
     public partial class FindWindowEditorView : UserControl, IViewFor<FindWindowEditorViewModel>
     {
         #region DllImport
-        [DllImport("gdi32.dll")]
-        public static extern int SetROP2(IntPtr hdc, int fnDrawMode);
-        [DllImport("gdi32.dll")]
-        public static extern IntPtr CreatePen(int fnPenStyle, int nWidth, uint crColor);
-        [DllImport("gdi32.dll")]
-        public static extern IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
-        [DllImport("gdi32.dll")]
-        public static extern uint Rectangle(IntPtr hdc, int nLeftRect, int nTopRect, int nRightRect, int nBottomRect);
+
         [DllImport("user32.dll")]
         public static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
-        [DllImport("user32.dll")]
-        public static extern IntPtr GetWindowDC(IntPtr hWnd);
-        public enum RopMode : int
-        {
-            R2_NOT = 6
-        }
-
-        public enum PenStyles : int
-        {
-            PS_INSIDEFRAME = 6
-        }
-
-        public enum GetSystem_Metrics : int
-        {
-            SM_CXBORDER = 5,
-            SM_CXFULLSCREEN = 16,
-            SM_CYFULLSCREEN = 17
-        }
-
-        public enum StockObjects : int
-        {
-            NULL_BRUSH = 5
-        }
         #endregion
 
         #region Mode - DP
@@ -82,6 +52,8 @@ namespace EasyMacro.View.Node.Editors
             set => ViewModel = (FindWindowEditorViewModel)value;
         }
         #endregion
+
+        HighlightBorder hightlightBorder;
 
         //public IntPtr Value { get; set; }
         public FindWindowEditorView()
@@ -130,32 +102,18 @@ namespace EasyMacro.View.Node.Editors
 
         private static Rectangle RECTtoRectangle(RECT rect) => new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
 
-        private static void ShowInvertRectTracker(IntPtr window)
+        private void ShowInvertRectTracker(IntPtr window)
         {
             if (window != IntPtr.Zero)
             {
-                // get the coordinates from the window on the screen
                 Rectangle WindowRect = GetWindowRect(window);
-                // get the window's device context
-                IntPtr dc = GetWindowDC(window);
+                if (hightlightBorder.border.Visibility != Visibility.Visible) 
+                    hightlightBorder.border.Visibility = Visibility.Visible;
 
-                // Create an inverse pen that is the size of the window border
-                SetROP2(dc, (int)RopMode.R2_NOT);
-
-                Color color = Color.FromArgb(0, 255, 0);
-                IntPtr Pen = CreatePen((int)PenStyles.PS_INSIDEFRAME, 3 * User32.GetSystemMetrics(User32.SystemMetric.SM_CXBORDER), (uint)color.ToArgb());
-
-                // Draw the rectangle around the window
-                IntPtr OldPen = SelectObject(dc, Pen);
-                IntPtr OldBrush = SelectObject(dc, Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH));
-                Rectangle(dc, 0, 0, WindowRect.Width, WindowRect.Height);
-
-                SelectObject(dc, OldBrush);
-                SelectObject(dc, OldPen);
-
-                //release the device context, and destroy the pen
-                User32.ReleaseDC(window, dc);
-                Gdi32.DeleteObject(Pen);
+                this.hightlightBorder.Left = WindowRect.Left;
+                this.hightlightBorder.Top = WindowRect.Top;
+                this.hightlightBorder.Width = WindowRect.Width;
+                this.hightlightBorder.Height = WindowRect.Height;
             }
         }
 
@@ -181,7 +139,7 @@ namespace EasyMacro.View.Node.Editors
         {
             System.Diagnostics.Debug.Assert(hWnd != IntPtr.Zero);
             if (User32.GetWindowRect(hWnd, out RECT rect) == false)
-                throw new Exception("GetWindowRect failed");
+                return new System.Drawing.Rectangle();//throw new Exception("GetWindowRect failed");
             return RECTtoRectangle(rect);
         }
 
@@ -191,6 +149,10 @@ namespace EasyMacro.View.Node.Editors
             {
                 this.Cursor = new Cursor("Resource/WinAim.cur", true);
                 this.Mode = false;
+                if (hightlightBorder is not null)
+                    hightlightBorder.Close();
+                hightlightBorder = new HighlightBorder();
+                hightlightBorder.Show();
             }
         }
 
@@ -201,6 +163,8 @@ namespace EasyMacro.View.Node.Editors
                 ShowInvertRectTracker(ViewModel.Value);
                 Cursor = Cursors.Arrow;
                 this.Mode = true;
+                hightlightBorder.Close();
+                hightlightBorder = null;
             }
         }
 
@@ -218,7 +182,9 @@ namespace EasyMacro.View.Node.Editors
                         break;
                 }
                 // not this application
-                if (new WindowInteropHelper(Application.Current.MainWindow).Handle != FoundWindow)
+                if (new WindowInteropHelper(Application.Current.MainWindow).Handle != FoundWindow 
+                    && new WindowInteropHelper(hightlightBorder).Handle != FoundWindow)
+
                 {
                     if (FoundWindow != ViewModel.Value)
                     {

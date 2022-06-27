@@ -106,8 +106,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             (instance.BitmapDir.Editor as ImageManagerSelectorViewModel).SelectName(dictionary["BitmapDir"].Value); // 비트맵의 이름으로 ComboBox Selected Change
 
             FindWindowEditorViewModel findWindowEditor = (instance.hWnd.Editor as FindWindowEditorViewModel);
-            findWindowEditor.TargetWindowTitle = dictionary["TargetWindowTitle"].Value;
-            findWindowEditor.TargetWindowClass = dictionary["TargetWindowClass"].Value;
+            findWindowEditor.RefreshFromText(dictionary["TargetWindowClass"].Value, dictionary["TargetWindowTitle"].Value);
             (instance.IsWindowCapture.Editor as CheckBoxEditorViewModel).Value = bool.TryParse(dictionary["IsWindowCapture"].Value, out bool IsWindowCapture) ? IsWindowCapture : false;
             (instance.RetryTimes.Editor as IntegerValueEditorViewModel).Value = int.TryParse(dictionary["RetryTimes"].Value, out int retryTimes) ? retryTimes : 0;
             (instance.IsWantKeepFind.Editor as CheckBoxEditorViewModel).Value = bool.TryParse(dictionary["IsWantKeepFind"].Value, out bool IsWantKeepFind) ? IsWantKeepFind : false;

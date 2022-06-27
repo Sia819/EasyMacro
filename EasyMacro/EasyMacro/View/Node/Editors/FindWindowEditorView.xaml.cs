@@ -83,9 +83,7 @@ namespace EasyMacro.View.Node.Editors
         }
         #endregion
 
-        public IntPtr LastWindow { get; set; }
-        public string _targetWindowTitle = null;
-        public string _targetWindowClass = null;
+        //public IntPtr Value { get; set; }
         public FindWindowEditorView()
         {
             InitializeComponent();
@@ -93,99 +91,40 @@ namespace EasyMacro.View.Node.Editors
 
             this.WhenActivated(d =>
             {
-                this.Bind(ViewModel, vm => vm.TargetWindowTitle, v => v.targetWindowTitle.Text,
-                                (winTitle) => // VM -> View
-                                {
-                                    IntPtr hWnd = IntPtr.Zero;
-                                    if (winTitle != "")
-                                        hWnd = User32.FindWindow(targetWindowClass.Text, winTitle);
-                                    if (hWnd != IntPtr.Zero)
-                                    {
-                                        LastWindow = hWnd;
-                                    }
-                                    else
-                                    {
-                                        // Text로 Window Handle을 찾을 수 없다고 빨간색 잉크 표시
-                                    }
-                                    if (winTitle == "")
-                                    {
-                                        return _targetWindowTitle ?? "";
-                                    }
-                                    else
-                                    {
-                                        _targetWindowTitle = winTitle;
-                                        return winTitle;
-                                    }
-                                    
-                                },
-                                (winTitle) => winTitle);
-                this.Bind(ViewModel, vm => vm.TargetWindowClass, v => v.targetWindowClass.Text,
-                                (winClass) => // VM -> View
-                                {
-                                    IntPtr hWnd = IntPtr.Zero;
-                                    if (targetWindowTitle.Text != "")
-                                        if (winClass != "")
-                                            hWnd = User32.FindWindow(winClass, targetWindowTitle.Text);
-                                    if (hWnd != IntPtr.Zero)
-                                    {
-                                        LastWindow = hWnd;
-                                    }
-                                    else
-                                    {
-                                        // Text로 Window Handle을 찾을 수 없다고 빨간색 잉크 표시
-                                    }
-                                    if (winClass == "")
-                                    {
-                                        return _targetWindowClass ?? "";
-                                    }
-                                    else
-                                    {
-                                        _targetWindowClass = winClass;
-                                        return winClass;
-                                    }
-                                },
-                                (winClass) => winClass);
+                this.Bind(ViewModel, vm => vm.TargetWindowTitle, v => v.targetWindowTitle.Text);
+                this.Bind(ViewModel, vm => vm.TargetWindowClass, v => v.targetWindowClass.Text);
 
-
-                this.Bind(ViewModel, vm => vm.Value, v => v.targetWindowTitle.Text,
-                          (value) =>    // VM -> View
+                this.OneWayBind(ViewModel, vm => vm.Value, v => v.targetWindowTitle.Text,
+                          (hWnd) =>    // VM -> View
                           {
-                              if (value != IntPtr.Zero)
+                              if (hWnd != IntPtr.Zero)
                               {
-                                  LastWindow = value;
-                                  DisplayWindowInfo(value);
-                                  return User32.GetWindowText(value);
+                                  DisplayWindowInfo(hWnd);
+                                  return User32.GetWindowText(hWnd);
                               }
                               else
                               {
                                   return "";
                               }
-                          },
-                          (v) =>        // View -> VM
-                          {
-                              return LastWindow;
                           });
 
-                
-                this.Bind(ViewModel, vm => vm.Value, v => v.targetWindowClass.Text,
-                          (value) =>    // VM -> View
+
+                this.OneWayBind(ViewModel, vm => vm.Value, v => v.targetWindowClass.Text,
+                          (hWnd) =>    // VM -> View
                           {
-                              if (value != IntPtr.Zero)
+                              if (hWnd != IntPtr.Zero)
                               {
-                                  LastWindow = value;
-                                  DisplayWindowInfo(value);
-                                  return User32.GetWindowText(value);
+                                  DisplayWindowInfo(hWnd);
+                                  StringBuilder ClassName = new StringBuilder(256);
+                                  int ret = GetClassName(hWnd, ClassName, ClassName.Capacity);
+                                  return ClassName.ToString();
                               }
                               else
                               {
                                   return "";
                               }
-                          },
-                          (v) =>        // View -> VM
-                          {
-                              return LastWindow;
                           });
-                
+
             });
         }
 
@@ -220,68 +159,9 @@ namespace EasyMacro.View.Node.Editors
             }
         }
 
-        /// <summary>
-		/// return the window from the given point
-		/// </summary>
-		/// <param name="point"></param>
-		/// <returns>if return == IntPtr.Zero no window was found</returns>
-		static IntPtr ChildWindowFromPoint(POINT point)
-        {
-            IntPtr WindowPoint = User32.WindowFromPoint(point);
-            if (WindowPoint == IntPtr.Zero)
-                return IntPtr.Zero;
-
-            if (User32.ScreenToClient(WindowPoint, ref point) == false)
-                throw new Exception("ScreenToClient failed");
-
-            IntPtr IWindow = User32.ChildWindowFromPointEx(WindowPoint, point, 0);
-            if (IWindow == IntPtr.Zero)
-                return WindowPoint;
-
-            if (User32.ClientToScreen(WindowPoint, ref point) == false)
-                throw new Exception("ClientToScreen failed");
-
-            if (User32.IsChild(User32.GetParent(IWindow), IWindow) == false)
-                return IWindow;
-
-            // create a list to hold all childs under the point
-            ArrayList WindowList = new ArrayList();
-            while (IWindow != IntPtr.Zero)
-            {
-                User32.GetWindowRect(IWindow, out RECT rect);
-                if (RECTtoRectangle(rect).Contains(point))
-                    WindowList.Add(IWindow);
-                IWindow = User32.GetWindow(IWindow, User32.GetWindowCommands.GW_HWNDNEXT);
-            }
-
-            // search for the smallest window in the list
-            int MinPixel = User32.GetSystemMetrics(User32.SystemMetric.SM_CXFULLSCREEN) * User32.GetSystemMetrics(User32.SystemMetric.SM_CYFULLSCREEN);
-            for (int i = 0; i < WindowList.Count; ++i)
-            {
-                User32.GetWindowRect((IntPtr)WindowList[i], out RECT rect);
-                Rectangle drect = RECTtoRectangle(rect);
-                int ChildPixel = drect.Width * drect.Height;
-                if (ChildPixel < MinPixel)
-                {
-                    MinPixel = ChildPixel;
-                    IWindow = (IntPtr)WindowList[i];
-                }
-            }
-            return IWindow;
-        }
-
-        /// <summary>
-		/// Show informations about the given window
-		/// </summary>
-		/// <param name="window"></param>
+        /// <summary> Show informations about the given window </summary>
 		private void DisplayWindowInfo(IntPtr window)
         {
-            // Caption
-            /*
-            StringBuilder WindowText = new StringBuilder(ApiWrapper.Window.GetWindowTextLength(window) + 1);
-            ApiWrapper.Window.GetWindowText(window, WindowText, WindowText.Capacity);
-            textBoxCaption.Text = WindowText.ToString();
-            */
             try
             {
                 // Title
@@ -291,17 +171,10 @@ namespace EasyMacro.View.Node.Editors
                 int ret = GetClassName(window, ClassName, ClassName.Capacity);
                 this.targetWindowClass.Text = ClassName.ToString();
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
-
-
-            // Rect
-            // User32.GetWindowRect(window, out RECT rect);
-            // Rectangle drect = RECTtoRectangle(rect);
-            // ~~ = drect.ToString();
-
         }
 
         private static Rectangle GetWindowRect(IntPtr hWnd)
@@ -325,8 +198,7 @@ namespace EasyMacro.View.Node.Editors
         {
             if (Cursor != Cursors.Arrow)
             {
-                ShowInvertRectTracker(LastWindow);
-                LastWindow = IntPtr.Zero;
+                ShowInvertRectTracker(ViewModel.Value);
                 Cursor = Cursors.Arrow;
                 this.Mode = true;
             }
@@ -348,28 +220,24 @@ namespace EasyMacro.View.Node.Editors
                 // not this application
                 if (new WindowInteropHelper(Application.Current.MainWindow).Handle != FoundWindow)
                 {
-                    if (FoundWindow != LastWindow)
+                    if (FoundWindow != ViewModel.Value)
                     {
                         // clear old window
-                        ShowInvertRectTracker(LastWindow);
+                        ShowInvertRectTracker(ViewModel.Value);
                         // set new window
-                        LastWindow = FoundWindow;
+                        ViewModel.Value = FoundWindow;
                         // paint new window
-                        ShowInvertRectTracker(LastWindow);
+                        ShowInvertRectTracker(ViewModel.Value);
                     }
                     this.targetWindowTitle.Text += " "; // Event Raise...
-                    DisplayWindowInfo(LastWindow);
+                    DisplayWindowInfo(ViewModel.Value);
                 }
             }
         }
 
         private void Button_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            this.targetWindowTitle.Text = null;
-            _targetWindowTitle = null;
-            this.targetWindowClass.Text = null;
-            _targetWindowClass = null;
-            this.LastWindow = IntPtr.Zero;
+            ViewModel.Value = IntPtr.Zero;
         }
     }
 }

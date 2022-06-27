@@ -1,6 +1,7 @@
 ﻿using System;
 using EasyMacro.View.Node.Editors;
 using NodeNetwork.Toolkit.ValueNode;
+using PInvoke;
 using ReactiveUI;
 
 namespace EasyMacro.ViewModel.Node.Editors
@@ -29,6 +30,12 @@ namespace EasyMacro.ViewModel.Node.Editors
         }
         private string targetWindowClass;
         #endregion
+
+        public void RefreshFromText(string winClass, string winTitle)
+        {
+            IntPtr hwnd = User32.FindWindow(winClass, winTitle);
+            if (hwnd != IntPtr.Zero) this.Value = hwnd;
+        }
 
         public FindWindowEditorViewModel()
         {

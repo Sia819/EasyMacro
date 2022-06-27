@@ -10,8 +10,6 @@ namespace EasyMacroAPI.Command
         [DllImport("user32.dll")]
         public static extern bool GetWindowRect(IntPtr hwnd, ref Rect rectangle);
 
-        public MacroTypes MacroType => MacroTypes.FindWindowPosition;
-
         public IntPtr TargetWindow { get; set; }
 
         #region Property - ClientRect

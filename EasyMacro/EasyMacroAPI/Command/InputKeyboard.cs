@@ -12,8 +12,6 @@ namespace EasyMacroAPI.Command
 
         public KeyPressTypes KeyPressTypes { get; set; }
 
-        public MacroTypes MacroType => MacroTypes.InputKeyboard;
-
         #endregion
 
         public InputKeyboard() {  }

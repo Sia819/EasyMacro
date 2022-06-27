@@ -11,8 +11,6 @@ namespace EasyMacroAPI.Command
 
         public MouseClickTypes MouseClickType { get; set; }
 
-        public MacroTypes MacroType => MacroTypes.MouseClick;
-
         public InputMouse(MouseClickTypes presstype, int x, int y)
         {
             this.X = x;

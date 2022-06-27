@@ -5,8 +5,6 @@ namespace EasyMacroAPI.Command
 {
     class Folder : IAction
     {
-        public MacroTypes MacroType => MacroTypes.Folder;
-
         public string FolderName { get; set; }
         public List<IAction> ActionList { get; set; }
         public IAction Parent { get; set; }

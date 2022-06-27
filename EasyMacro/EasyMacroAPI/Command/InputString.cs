@@ -4,7 +4,6 @@ namespace EasyMacroAPI.Command
 {
     public class InputString : IAction
     {
-        public MacroTypes MacroType => MacroTypes.InputString;
         public string Text { get; set; }
         public InputString(string data)
         {

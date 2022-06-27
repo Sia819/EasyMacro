@@ -9,8 +9,6 @@ namespace EasyMacroAPI.Command
     [SupportedOSPlatform("Windows")]
     public class TempletMatch : IAction
     {
-        public MacroTypes MacroType => MacroTypes.TempletMatch;
-
         public Bitmap TargetImg { get; set; }
         public ScreenCapture ScreenCapture { get; set; }
         public Point FoundPoint { get; private set; }

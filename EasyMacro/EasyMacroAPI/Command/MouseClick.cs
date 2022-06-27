@@ -10,8 +10,6 @@ namespace EasyMacroAPI.Command
         public int Y { get; set; }
         public int Delay { get; set; }
 
-        public MacroTypes MacroType => MacroTypes.MouseClick;
-
         public MouseClick(int x, int y, int delay = 40)
         {
             this.X = x;

@@ -26,8 +26,6 @@ namespace EasyMacroAPI.Command
 
         public int Y { get; set; }
 
-        public MacroTypes MacroType => MacroTypes.FindMousePosition;
-
         private FindWindowPosition findWindowPostion;
 
         public FindMousePosition(string windowName = "")

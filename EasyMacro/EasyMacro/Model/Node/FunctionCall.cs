@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using EasyMacro.Model.Node.Compiler;
-
-namespace EasyMacro.Model.Node
+﻿namespace EasyMacro.Model.Node
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using EasyMacro.Model.Node.Compiler;
+
     public class FunctionCall : IStatement
     {
         public string FunctionName { get; set; }

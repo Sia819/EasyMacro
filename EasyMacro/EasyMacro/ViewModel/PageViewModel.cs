@@ -19,7 +19,6 @@ using ReactiveUI;
 using ExtendedXmlSerializer;
 using ExtendedXmlSerializer.ExtensionModel;
 using ExtendedXmlSerializer.Configuration;
-using ExtendedXmlSerializer.ExtensionModel.Xml;
 using System.Text;
 using System.Xml;
 using System.Windows.Forms;
@@ -131,37 +130,6 @@ namespace EasyMacro.ViewModel
                     Name = selectedGroupNode.Name
                 });
             }, isGroupNodeSelected);
-
-
-            OutputNodeViewModel output = new OutputNodeViewModel();
-            Network.Nodes.Add(output);
-
-            // 로직작성에 제한을 둚. 어떤 제한을 둘지 함수를 작성해서 (함수타입의)속성으로 등록
-            Network.Validator = network =>
-            {
-                // 노드는 루프형식을 띄면 안됨
-                bool containsLoops = GraphAlgorithms.FindLoops(network).Any();
-                if (containsLoops)
-                {
-                    return new NetworkValidationResult(false, false, new ErrorMessageViewModel("Network contains loops!"));
-                }
-
-                // 블록은 이어져있어야 함?
-                bool containsDivisionByZero = GraphAlgorithms.GetConnectedNodesBubbling(output)
-                    .OfType<DivisionNodeViewModel>()
-                    .Any(n => n.Input2.Value == 0);
-                if (containsDivisionByZero)
-                {
-                    return new NetworkValidationResult(false, true, new ErrorMessageViewModel("Network contains division by zero!"));
-                }
-
-                // 이외는 정상작동
-                return new NetworkValidationResult(true, true, null);
-            };
-
-            output.ResultInput.ValueChanged
-                .Select(v => (Network.LatestValidation?.IsValid ?? true) ? v.ToString() : "Error")
-                .BindTo(this, vm => vm.ValueLabel);
 
             // ListPanel에 추가하여 보여질 노드들
             this.NodeList = new NodeListViewModel();

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EasyMacro.Model.Node.Compiler.Error
+﻿namespace EasyMacro.Model.Node.Compiler.Error
 {
+    using System;
+
     public class VariableOutOfScopeException : CompilerException
     {
         public string VariableName { get; }

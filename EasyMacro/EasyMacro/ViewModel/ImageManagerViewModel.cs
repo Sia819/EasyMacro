@@ -10,6 +10,7 @@ using EasyMacro.Common;
 using ReactiveUI;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+using EasyMacro.Model;
 
 namespace EasyMacro.ViewModel
 {
@@ -29,28 +30,7 @@ namespace EasyMacro.ViewModel
         public ReactiveCommand<Unit, Unit> ImageAddCommand { get; }
         public ReactiveCommand<string, Unit> ImageDeleteCommand { get; }
 
-        public class ImageList : INotifyPropertyChanged
-        {
-            #region PropertyChanged
-            public event PropertyChangedEventHandler PropertyChanged;
-            #endregion
-
-            public string Name { get; set; }
-            public string FilePath { get; set; }
-            public Bitmap PreviewImage { get; set; }
-            public Bitmap ImageClone()
-            {
-                // 이미지를 클론하는 중, 멀티스레드 다중참조를 우려
-                return Application.Current.MainWindow.Dispatcher.Invoke(
-                    () => PreviewImage.Clone(new Rectangle(0, 0, PreviewImage.Width, PreviewImage.Height), PreviewImage.PixelFormat));
-            }
-            ~ImageList()
-            {
-                Name = null;
-                FilePath = null;
-                PreviewImage.Dispose();
-            }
-        }
+        
 
         /// <summary>
         /// Constructor

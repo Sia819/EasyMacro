@@ -43,7 +43,7 @@ namespace EasyMacro.View.Node.Editors
 
             this.WhenActivated(d =>
             {
-                // ImageManagerViewModel 에 있는 Dictionary에 바인딩합니다.
+                // ImageManagerViewModel에 등록된 이미지에 바인딩 합니다.
                 this.OneWayBind(ImageManagerViewModel.Instance, dc => dc.RegisterdImages, v => v.imageSelector.ItemsSource)
                     .DisposeWith(d);
                 this.Bind(ViewModel, vm => vm.SelectedIndex, v => v.imageSelector.SelectedIndex);
@@ -61,8 +61,8 @@ namespace EasyMacro.View.Node.Editors
                 if (selectedImageName is null)
                     throw new Exception("ComboBox에서 선택된 string은 null");
 
-
-                if (this.ViewModel.SelectedBitmap is not null) this.ViewModel.SelectedBitmap.Dispose(); // 이미지 교체전, 이전 이미지가 존재시 메모리해제
+                //if (this.ViewModel.SelectedBitmap is not null) 
+                //    this.ViewModel.SelectedBitmap.Dispose();      // 이미지 교체전, 이전 이미지가 존재시 메모리해제
                 this.ViewModel.SelectedBitmap = ImageManagerViewModel.Instance.RegisterdImages.Find(selectedImageName).ImageClone(); // 이미지를 클론함.
 
                 this.ViewModel.Value = selectedImageName; // 이후 Value-Changed 옵저버가 반응하여, 비트맵을 TemplateMatch객체에 전달함.

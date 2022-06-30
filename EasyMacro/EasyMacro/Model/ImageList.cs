@@ -28,5 +28,7 @@ namespace EasyMacro.Model
             FilePath = null;
             PreviewImage.Dispose();
         }
+
+        
     }
 }

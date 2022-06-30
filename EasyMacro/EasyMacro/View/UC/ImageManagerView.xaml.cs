@@ -1,6 +1,4 @@
-﻿using EasyMacro.ViewModel;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
@@ -11,7 +9,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-//using static EasyMacro.ViewModel.ImageManagerViewModel;
+using EasyMacro.ViewModel;
+using ReactiveUI;
 
 namespace EasyMacro.View.UC
 {
@@ -58,7 +57,7 @@ namespace EasyMacro.View.UC
             });
         }
 
-        public ObservableCollection<ImageManagerViewModel.ImageList> PreviewImages { get; set; }
+        public ObservableCollection<Model.ImageList> PreviewImages { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -92,7 +91,7 @@ namespace EasyMacro.View.UC
         {
             // 삭제버튼 
             Button btn = sender as Button;
-            ImageManagerViewModel.ImageList item = btn.DataContext as ImageManagerViewModel.ImageList;
+            Model.ImageList item = btn.DataContext as Model.ImageList;
             ViewModel.RegisterdImages.Remove(item);
             if (Directory.Exists("images"))
             {

@@ -321,7 +321,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                         templetMatch.ScreenCapture.hWnd = hWnd.Value;
                         templetMatch.ScreenCapture.IsWindowCapture = IsWindowCapture.Value ?? false;
                         templetMatch.IsWantKeepFinding = IsWantKeepFind.Value ?? false;
-                        templetMatch.retryTimes = RetryTimes.Value ?? 0;
+                        templetMatch.RetryTimes = RetryTimes.Value ?? 0;
                         templetMatch.Accuracy = (double)(Accuracy.Value ?? 80) / 100;
                         templetMatch.SetDelayTime(Delay.Value ?? 1000);
 

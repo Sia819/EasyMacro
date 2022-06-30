@@ -1,44 +1,30 @@
-﻿using System;
+﻿using EasyMacroAPI.Common;
+using System;
 using System.Drawing;
 using System.Runtime.Versioning;
-using OpenCvSharp;
 
 namespace EasyMacroAPI
 {
     [SupportedOSPlatform("Windows")]
-    public class CaptureManager
+    public static class CaptureManager
     {
-        public static CaptureManager instance;
-
-        public static CaptureManager Instance => instance ??= new CaptureManager();
-
-        [System.Runtime.InteropServices.DllImport("User32", EntryPoint = "FindWindow")]
-        private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        internal static extern bool PrintWindow(IntPtr hWnd, IntPtr hdcBlt, int nFlags);
-
-        public Bitmap WindowCapture(IntPtr hWnd)
+        public static Bitmap WindowCapture(IntPtr hWnd)
         {
             if (hWnd != IntPtr.Zero)
             {
-                //찾은 플레이어를 바탕으로 Graphics 정보를 가져옵니다.
-                Graphics Graphicsdata = Graphics.FromHwnd(hWnd);
-
-                //찾은 플레이어 창 크기 및 위치를 가져옵니다. 
-                Rectangle rect = Rectangle.Round(Graphicsdata.VisibleClipBounds);
-
-                //플레이어 창 크기 만큼의 비트맵을 선언해줍니다.
-                Bitmap bmp = new Bitmap(rect.Width, rect.Height);
-
-                //비트맵을 바탕으로 그래픽스 함수로 선언해줍니다.
-                using (Graphics g = Graphics.FromImage(bmp))
+                Bitmap result;
+                using (Graphics graphicsData = Graphics.FromHwnd(hWnd))// 찾은 플레이어를 바탕으로 Graphics 정보를 가져옵니다.
                 {
-                    //찾은 플레이어의 크기만큼 화면을 캡쳐합니다.
-                    IntPtr hdc = g.GetHdc();
-                    PrintWindow(hWnd, hdc, 0x2);
-                    g.ReleaseHdc(hdc);
+                    Rectangle rect = Rectangle.Round(graphicsData.VisibleClipBounds);   // 찾은 플레이어 창 크기 및 위치를 가져옵니다. 
+                    result = new Bitmap(rect.Width, rect.Height);                   // 플레이어 창 크기 만큼의 비트맵을 선언해줍니다.
+                    using (Graphics g = Graphics.FromImage(result))                        // 비트맵을 바탕으로 그래픽스 함수로 선언해줍니다.
+                    {
+                        IntPtr hdc = g.GetHdc();
+                        WinAPI.PrintWindow(hWnd, hdc, 0x2);
+                        g.ReleaseHdc(hdc);
+                    }
                 }
-                return bmp;
+                return result;
             }
             else
             {
@@ -47,38 +33,45 @@ namespace EasyMacroAPI
             }
         }
 
-        public Bitmap ScreenCapture()
+        public static Bitmap FullScreenCapture()
         {
-            Bitmap bmp = new Bitmap(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width,
-                                    System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height,
+            var screens = System.Windows.Forms.Screen.AllScreens;
+            var start = new System.Drawing.Point();
+            var end = new System.Drawing.Point();
+            for (int i = 0; i < screens.Length; i++)
+            {
+                if (start.X > screens[i].Bounds.Left) start.X = screens[i].Bounds.Left;
+                if (start.Y > screens[i].Bounds.Top) start.Y = screens[i].Bounds.Top;
+                if (end.X < screens[i].Bounds.Right) end.X = screens[i].Bounds.Width;
+                if (end.Y < screens[i].Bounds.Bottom) end.Y = screens[i].Bounds.Height;
+            }
+
+            Bitmap bmp = new Bitmap(end.X - start.X,
+                                    end.Y - start.Y,
                                     System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            Graphics gr = Graphics.FromImage(bmp);
-
-            gr.CopyFromScreen(0, 0, 0, 0, bmp.Size);
-
+            using (Graphics gr = Graphics.FromImage(bmp))
+            {
+                gr.CopyFromScreen(start.X, start.Y, 0, 0, bmp.Size);
+            }
             return bmp;
         }
 
-        public System.Drawing.Point TempletMatch(Bitmap screenImg, Bitmap targetImg, double accuracy)
+        public static Bitmap[] ScreenCapture()
         {
-            // 원본 이미지
-            using (Mat ScreenMat = OpenCvSharp.Extensions.BitmapConverter.ToMat(screenImg))
-
-            // 찾을 이미지
-            using (Mat targetMat = OpenCvSharp.Extensions.BitmapConverter.ToMat(targetImg))
-            using (Mat result = ScreenMat.MatchTemplate(targetMat, TemplateMatchModes.CCoeffNormed))
+            var screens = System.Windows.Forms.Screen.AllScreens;
+            var results = new Bitmap[screens.Length];
+            for (int i = 0; i < screens.Length; i++)
             {
-                double minval, maxval = 0;
-                OpenCvSharp.Point minloc, maxloc;
-                Cv2.MinMaxLoc(result, out minval, out maxval, out minloc, out maxloc);
-
-                if(maxval >= accuracy)
+                results[i] = new Bitmap(screens[i].Bounds.Width,
+                                        screens[i].Bounds.Height,
+                                        System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                using (Graphics gr = Graphics.FromImage(results[i]))
                 {
-                    //new Command.MouseMove(maxloc.X, maxloc.Y).Do();
-                    return new System.Drawing.Point(maxloc.X, maxloc.Y);
+                    gr.CopyFromScreen(screens[i].Bounds.Left, screens[i].Bounds.Top, 0, 0, results[i].Size);
                 }
-                return System.Drawing.Point.Empty;
             }
+            return results;
         }
+
     }
 }

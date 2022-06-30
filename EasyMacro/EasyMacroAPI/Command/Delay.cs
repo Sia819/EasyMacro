@@ -6,15 +6,10 @@ namespace EasyMacroAPI.Command
 {
     public class Delay : IAction
     {
-        /// <summary> 대기할 시간 </summary>
         public int Time { get; set; }
 
         private ManualResetEvent mre;
 
-        /// <summary>
-        /// 생성자
-        /// </summary>
-        /// <param name="time"></param>
         public Delay(int time)
         {
             this.Time = time;

@@ -33,11 +33,11 @@ namespace EasyMacroAPI.Command
 
             if (IsWindowCapture)
             {
-                CapturedImage = CaptureManager.Instance.WindowCapture(hWnd);
+                CapturedImage = CaptureManager.WindowCapture(hWnd);
             }
             else
             {
-                CapturedImage = CaptureManager.Instance.ScreenCapture();
+                CapturedImage = CaptureManager.FullScreenCapture();
             }
 
         }

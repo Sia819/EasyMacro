@@ -1,25 +1,12 @@
 ﻿using System.Drawing;
 using System.Runtime.InteropServices;
 using EasyMacroAPI.Model;
+using static EasyMacroAPI.Common.WinAPI;
 
 namespace EasyMacroAPI.Command
 {
-    public class FindMousePosition : IAction
+    internal class FindMousePosition : IAction
     {
-        [DllImport("user32.dll")]
-        public static extern bool GetCursorPos(out POINT lpPoint);
-
-        public struct POINT
-        {
-            public int X;
-            public int Y;
-
-            public static implicit operator Point(POINT point)
-            {
-                return new Point(point.X, point.Y);
-            }
-        }
-
         public POINT point;
 
         public int X { get; set; }
@@ -64,3 +51,4 @@ namespace EasyMacroAPI.Command
         }
     }
 }
+

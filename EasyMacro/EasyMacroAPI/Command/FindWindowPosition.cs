@@ -8,7 +8,6 @@ namespace EasyMacroAPI.Command
 {
     public class FindWindowPosition : IAction
     {
-
         public IntPtr TargetWindow { get; set; }
 
         #region Property - ClientRect
@@ -21,8 +20,6 @@ namespace EasyMacroAPI.Command
         #endregion
 
         public string WindowName { get; set; }
-
-        
 
         public FindWindowPosition(string windowName)
         {

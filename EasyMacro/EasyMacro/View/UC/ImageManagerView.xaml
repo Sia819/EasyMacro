@@ -133,7 +133,7 @@
                             </Grid.RowDefinitions>
 
                             <Border Grid.RowSpan="2" BorderBrush="Black" BorderThickness="1">
-                                <Image Name="listItemImage" Source="{Binding PreviewImage, Converter={StaticResource BitmapToImage}}" Stretch="Fill" />
+                                <Image Name="listItemImage" Source="{Binding PreviewImage.Snapshot100px, Converter={StaticResource BitmapToImage}}" Stretch="Fill" />
                             </Border>
 
                             <TextBox Name="listItemName" Grid.Column="1" Grid.Row="0" Text="{Binding Name}" />

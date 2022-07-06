@@ -8,7 +8,7 @@
         Title="HighlightBorder" Top="0" Left="0" Height="100" Width="100"
         WindowStyle="None" Background="Transparent" Topmost="True"
         AllowsTransparency="True" ShowInTaskbar="False" >
-    <Border x:Name="border" BorderBrush="Red" BorderThickness="3" Visibility="Hidden">
+    <Border x:Name="border" BorderBrush="Red" BorderThickness="3" Visibility="Hidden" d:Visibility="Visible">
         
     </Border>
 </Window>

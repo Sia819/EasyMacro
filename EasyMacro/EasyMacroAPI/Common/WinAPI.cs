@@ -73,7 +73,7 @@ namespace EasyMacroAPI.Common
             public int X;
             public int Y;
 
-            public static implicit operator System.Drawing.PointPoint(POINT point) => new System.Drawing.Point(point.X, point.Y);
+            public static implicit operator System.Drawing.Point(POINT point) => new System.Drawing.Point(point.X, point.Y);
         }
 
         #endregion

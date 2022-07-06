@@ -22,7 +22,7 @@ namespace EasyMacro.View.UC
         public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(nameof(ViewModel),
             typeof(ImageManagerViewModel), typeof(ImageManagerView), new PropertyMetadata(null));
 
-        public ImageManagerViewModel ViewModel 
+        public ImageManagerViewModel ViewModel
         {
             get => (ImageManagerViewModel)GetValue(ViewModelProperty);
             set => SetValue(ViewModelProperty, value);
@@ -39,7 +39,6 @@ namespace EasyMacro.View.UC
             InitializeComponent();
             this.ViewModel = ImageManagerViewModel.Instance;
 
-            // 디자이너 미리보기
             // Bitmap unknownImage = UnknownQuestionImage();
             // PreviewImages = new ObservableCollection<ImageManagerViewModel.ImageList>();
             // PreviewImages.Add(new ImageManagerViewModel.ImageList { FilePath = "preview/myFilePath/1.png", Name = "ImageName1", PreviewImage = unknownImage });
@@ -64,11 +63,13 @@ namespace EasyMacro.View.UC
         // 물음표 이미지 만들기
         public Bitmap UnknownQuestionImage()
         {
-            System.Drawing.Image unknownImage = new Bitmap(100, 100);
-            Graphics a = Graphics.FromImage(unknownImage);
-            a.FillRectangle(new SolidBrush(System.Drawing.Color.Pink), new RectangleF(0, 0, 100, 100));
-            a.DrawString("?", new Font("Microsoft JhengHei UI", 60), new SolidBrush(System.Drawing.Color.Red), new PointF(17, 0));
-            return (Bitmap)unknownImage;
+            Bitmap unknownImage = new Bitmap(100, 100);
+            using (Graphics a = Graphics.FromImage(unknownImage))
+            {
+                a.FillRectangle(new SolidBrush(System.Drawing.Color.Pink), new RectangleF(0, 0, 100, 100));
+                a.DrawString("?", new Font("Microsoft JhengHei UI", 60), new SolidBrush(System.Drawing.Color.Red), new PointF(17, 0));
+            }
+            return unknownImage;
         }
 
         public static ImageSource BitmapToImageSource(Bitmap bitmap)
@@ -87,16 +88,18 @@ namespace EasyMacro.View.UC
             return bitmapImage;
         }
 
+        /// <summary> ListBox in delete image button </summary>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            // 삭제버튼 
             Button btn = sender as Button;
             Model.ImageList item = btn.DataContext as Model.ImageList;
-            ViewModel.RegisterdImages.Remove(item);
-            if (Directory.Exists("images"))
-            {
-                File.Delete("images/" + item.Name + ".png");
-            }
+            item.PreviewImage.Dispose();
+            
+            // ViewModel.RegisterdImages.Remove(item);
+            // if (Directory.Exists("images"))
+            // {
+            //     File.Delete("images/" + item.Name + ".png");
+            // }
         }
     }
 }

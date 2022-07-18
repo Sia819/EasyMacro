@@ -39,6 +39,7 @@ namespace EasyMacro.View.UC
             InitializeComponent();
             this.ViewModel = ImageManagerViewModel.Instance;
 
+            // Designer Preview Image
             // Bitmap unknownImage = UnknownQuestionImage();
             // PreviewImages = new ObservableCollection<ImageManagerViewModel.ImageList>();
             // PreviewImages.Add(new ImageManagerViewModel.ImageList { FilePath = "preview/myFilePath/1.png", Name = "ImageName1", PreviewImage = unknownImage });

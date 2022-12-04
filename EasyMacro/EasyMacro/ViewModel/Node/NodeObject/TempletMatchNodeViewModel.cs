@@ -106,8 +106,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             (instance.BitmapDir.Editor as ImageManagerSelectorViewModel).SelectName(dictionary["BitmapDir"].Value); // 비트맵의 이름으로 ComboBox Selected Change
 
             FindWindowEditorViewModel findWindowEditor = (instance.hWnd.Editor as FindWindowEditorViewModel);
-            findWindowEditor.TargetWindowTitle = dictionary["TargetWindowTitle"].Value;
-            findWindowEditor.TargetWindowClass = dictionary["TargetWindowClass"].Value;
+            findWindowEditor.RefreshFromText(dictionary["TargetWindowClass"].Value, dictionary["TargetWindowTitle"].Value);
             (instance.IsWindowCapture.Editor as CheckBoxEditorViewModel).Value = bool.TryParse(dictionary["IsWindowCapture"].Value, out bool IsWindowCapture) ? IsWindowCapture : false;
             (instance.RetryTimes.Editor as IntegerValueEditorViewModel).Value = int.TryParse(dictionary["RetryTimes"].Value, out int retryTimes) ? retryTimes : 0;
             (instance.IsWantKeepFind.Editor as CheckBoxEditorViewModel).Value = bool.TryParse(dictionary["IsWantKeepFind"].Value, out bool IsWantKeepFind) ? IsWantKeepFind : false;
@@ -322,7 +321,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
                         templetMatch.ScreenCapture.hWnd = hWnd.Value;
                         templetMatch.ScreenCapture.IsWindowCapture = IsWindowCapture.Value ?? false;
                         templetMatch.IsWantKeepFinding = IsWantKeepFind.Value ?? false;
-                        templetMatch.retryTimes = RetryTimes.Value ?? 0;
+                        templetMatch.RetryTimes = RetryTimes.Value ?? 0;
                         templetMatch.Accuracy = (double)(Accuracy.Value ?? 80) / 100;
                         templetMatch.SetDelayTime(Delay.Value ?? 1000);
 

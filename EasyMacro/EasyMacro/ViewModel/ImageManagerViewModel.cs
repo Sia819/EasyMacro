@@ -10,6 +10,8 @@ using EasyMacro.Common;
 using ReactiveUI;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+using EasyMacro.Model;
+using System.Windows.Input;
 
 namespace EasyMacro.ViewModel
 {
@@ -29,41 +31,14 @@ namespace EasyMacro.ViewModel
         public ReactiveCommand<Unit, Unit> ImageAddCommand { get; }
         public ReactiveCommand<string, Unit> ImageDeleteCommand { get; }
 
-        public class ImageList : INotifyPropertyChanged
-        {
-            #region PropertyChanged
-            public event PropertyChangedEventHandler PropertyChanged;
-            #endregion
-
-            public string Name { get; set; }
-            public string FilePath { get; set; }
-            public Bitmap PreviewImage { get; set; }
-            public Bitmap ImageClone()
-            {
-                // 이미지를 클론하는 중, 멀티스레드 다중참조를 우려
-                return Application.Current.MainWindow.Dispatcher.Invoke(
-                    () => PreviewImage.Clone(new Rectangle(0, 0, PreviewImage.Width, PreviewImage.Height), PreviewImage.PixelFormat));
-            }
-            ~ImageList()
-            {
-                Name = null;
-                FilePath = null;
-                PreviewImage.Dispose();
-            }
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
+        /// <summary> Constructor </summary>
         private ImageManagerViewModel()
         {
             // Property Initialize
             this.RegisterdImages = new();
 
-            this.ImageAddCommand = ReactiveCommand.CreateFromObservable(ImageAdd_ExcuteCommand);
-
-            // TODO : ImageManager Delete 구현
-            //this.ImageDeleteCommand = ReactiveCommand.CreateFromObservable<Unit, string>(ImageDelCommand(path));  //ReactiveCommand.Create<string>(path => ImageDelCommand(path));
+            this.ImageAddCommand = ReactiveCommand.Create(ImageAdd_ExcuteCommand);
+            this.ImageDeleteCommand = ReactiveCommand.Create<string>((itemName) => DeleteImage_ExcuteCommand(itemName));
 
             if (Directory.Exists("images"))
             {
@@ -74,14 +49,14 @@ namespace EasyMacro.ViewModel
                     {
                         Name = dictDupeRename(Path.GetFileNameWithoutExtension(file)),
                         FilePath = file,
-                        PreviewImage = PathToBitmap(file)
+                        PreviewImage = new SafeBitmap(PathToBitmap(file))
                     };
                     RegisterdImages.Add(temp);
                 }
             }
         }
 
-        private IObservable<Unit> ImageAdd_ExcuteCommand()
+        private void ImageAdd_ExcuteCommand()
         {
             // Configure open file dialog box 
             OpenFileDialog dlg = new OpenFileDialog();
@@ -114,7 +89,7 @@ namespace EasyMacro.ViewModel
                     if (!isImage)
                     {
                         MessageBox.Show("이미지 형식 파일이 아닙니다!!");
-                        return Observable.Return(Unit.Default);
+                        return;
                     }
                     else
                     {
@@ -122,11 +97,11 @@ namespace EasyMacro.ViewModel
                         {
                             Name = dictDupeRename(Path.GetFileNameWithoutExtension(ImageFilePath)),
                             FilePath = ImageFilePath,
-                            PreviewImage = PathToBitmap(ImageFilePath)
+                            PreviewImage = new SafeBitmap(PathToBitmap(ImageFilePath))
                         };
                         RegisterdImages.Add(temp);
                         temp.PreviewImage.Save("images\\" + temp.Name, ImageFormat.Png);
-                        return Observable.Return(Unit.Default);
+                        return;
                     }
                 }
                 else // 올바르지 않은 문자열
@@ -135,7 +110,6 @@ namespace EasyMacro.ViewModel
                     this.ImageFilePath = "";
                 }
             }
-
 
             // 다이얼로그 기본 경로는 바탕화면
             if (String.IsNullOrEmpty(dlg.InitialDirectory))
@@ -164,13 +138,18 @@ namespace EasyMacro.ViewModel
                 {
                     Name = dictDupeRename(Path.GetFileNameWithoutExtension(dlg.FileName)),
                     FilePath = dlg.FileName,
-                    PreviewImage = PathToBitmap(dlg.FileName)
+                    PreviewImage = new SafeBitmap(PathToBitmap(dlg.FileName))
                 };
                 RegisterdImages.Add(temp);
                 if (System.IO.Directory.Exists("images") == false) Directory.CreateDirectory("images");
                 temp.PreviewImage.Save("images/" + temp.Name + ".png", ImageFormat.Png);
             }
-            return Observable.Return(Unit.Default);
+            return;
+        }
+
+        public void DeleteImage_ExcuteCommand(string imageName)
+        {
+            RegisterdImages.Remove(RegisterdImages.Find(imageName));
         }
 
         private Bitmap PathToBitmap(string path)
@@ -186,14 +165,9 @@ namespace EasyMacro.ViewModel
             return targetBmp;
         }
 
-        private void ImageDelCommand(string path)
+        public Bitmap CopyImg(string imageName)
         {
-            RegisterdImages.Remove(RegisterdImages.Find(path));
-        }
-
-        public Bitmap CopyImg(string path)
-        {
-            Bitmap cloneBitmap = (Bitmap)RegisterdImages.Find(path).PreviewImage.Clone();
+            Bitmap cloneBitmap = (Bitmap)RegisterdImages.Find(imageName).PreviewImage.Snapshot;
             return cloneBitmap;
         }
 
@@ -212,9 +186,6 @@ namespace EasyMacro.ViewModel
             }
             return key;
         }
-
-        
-         
     }
 
     public static class ObservableCollectionExtension
@@ -224,7 +195,7 @@ namespace EasyMacro.ViewModel
             var ob = obs;
             foreach (T i in ob)
             {
-                if (i is Tuple<string, ImageManagerViewModel.ImageList> result)
+                if (i is Tuple<string, ImageList> result)
                 {
                     if (result.Item1 == obj)
                         return true;
@@ -234,11 +205,11 @@ namespace EasyMacro.ViewModel
             return false;
         }
 
-        public static ImageManagerViewModel.ImageList Find<T>(this ObservableCollection<T> obs, string obj)
+        public static ImageList Find<T>(this ObservableCollection<T> obs, string obj)
         {
             foreach (T i in obs)
             {
-                if (i is ImageManagerViewModel.ImageList result)
+                if (i is ImageList result)
                 {
                     if (result.Name == obj)
                         return result;

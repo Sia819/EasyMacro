@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EasyMacro.UC
+namespace EasyMacro.View
 {
     /// <summary>
-    /// Interaction logic for SleepProperties.xaml
+    /// HighlightBorder.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class SleepProperties : UserControl
+    public partial class HighlightBorder : Window
     {
-        public SleepProperties()
+        public HighlightBorder()
         {
             InitializeComponent();
         }

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EasyMacro.Model.Node;
-
-namespace EasyMacro.Model.Node.Compiler
+﻿namespace EasyMacro.Model.Node.Compiler
 {
+    using System.Collections.Generic;
+
     public class ScopeDefinition
     {
         public string Identifier { get; }

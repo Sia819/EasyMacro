@@ -12,8 +12,6 @@ namespace EasyMacroAPI.Command
 
         private FindWindowPosition findWindowPosition;
 
-        public MacroTypes MacroType => MacroTypes.MouseClick;
-
         public RelativeMouseMove(string windowName, int x, int y)
         {
             this.X = x;

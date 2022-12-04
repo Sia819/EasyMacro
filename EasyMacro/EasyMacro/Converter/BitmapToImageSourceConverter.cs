@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EasyMacro.Common;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -36,7 +37,10 @@ namespace EasyMacro.Converter
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            if (IsDebugMode.Check is true)
+                throw new NotImplementedException();
+            else
+                return null;
         }
     }
 }

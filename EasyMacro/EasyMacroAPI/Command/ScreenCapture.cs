@@ -8,8 +8,6 @@ namespace EasyMacroAPI.Command
     [SupportedOSPlatform("Windows")]
     public class ScreenCapture : IAction
     {
-        public MacroTypes MacroType => MacroTypes.ScreenCapture;
-
         public IntPtr hWnd { get; set; }
 
         public bool IsWindowCapture { get; set; }
@@ -35,11 +33,11 @@ namespace EasyMacroAPI.Command
 
             if (IsWindowCapture)
             {
-                CapturedImage = CaptureManager.Instance.WindowCapture(hWnd);
+                CapturedImage = CaptureManager.WindowCapture(hWnd);
             }
             else
             {
-                CapturedImage = CaptureManager.Instance.ScreenCapture();
+                CapturedImage = CaptureManager.FullScreenCapture();
             }
 
         }

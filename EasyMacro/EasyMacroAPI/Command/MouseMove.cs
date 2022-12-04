@@ -9,8 +9,6 @@ namespace EasyMacroAPI.Command
         public int X { get; set; }
         public int Y { get; set; }
 
-        public MacroTypes MacroType => MacroTypes.MouseMove;
-
         public MouseMove(int x, int y)
         {
             this.X = x;

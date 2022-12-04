@@ -1,10 +1,10 @@
-﻿using EasyMacro.Model.Node.Compiler;
-using EasyMacro.ViewModel.Node.Editors;
-using System;
-using System.Windows;
-
-namespace EasyMacro.Model.Node
+﻿namespace EasyMacro.Model.Node
 {
+    using EasyMacro.Model.Node.Compiler;
+    using EasyMacro.ViewModel.Node.Editors;
+    using System;
+    using System.Windows;
+
     public class ForLoop : IStatement
     {
         public IStatement LoopBody { get; set; }

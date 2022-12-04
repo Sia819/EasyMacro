@@ -18,6 +18,7 @@ namespace EasyMacro.ViewModel.Node
         }
 
         public string Hash { get; protected set; }
+
         public List<string> ConnedtedHashs { get; }
 
         public abstract NodeOutputViewModel GetOutputViewModel { get; }

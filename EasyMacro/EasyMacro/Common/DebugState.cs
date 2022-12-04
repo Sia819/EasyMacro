@@ -1,7 +1,7 @@
 ﻿namespace EasyMacro.Common
 {
-    public static class DebugState
+    public static class IsDebugMode
     {
-        public static bool IsDebugMode => System.Diagnostics.Debugger.IsAttached;
+        public static bool Check => System.Diagnostics.Debugger.IsAttached;
     }
 }

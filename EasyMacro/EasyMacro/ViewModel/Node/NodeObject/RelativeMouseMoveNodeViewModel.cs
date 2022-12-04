@@ -111,8 +111,7 @@ namespace EasyMacro.ViewModel.Node.NodeObject
             Dictionary<string, XElement> dictionary = NodeSerializer.XElementToDictionary(xElement);
 
             FindWindowEditorViewModel findWindowEditor = (instance.hWnd.Editor as FindWindowEditorViewModel);
-            findWindowEditor.TargetWindowTitle = dictionary["TargetWindowTitle"].Value;
-            findWindowEditor.TargetWindowClass = dictionary["TargetWindowClass"].Value;
+            findWindowEditor.RefreshFromText(dictionary["TargetWindowClass"].Value, dictionary["TargetWindowTitle"].Value);
             (instance.MyPoint.Editor as PointRecordEditorViewModel).Value = new Point(int.TryParse(dictionary["PointX"].Value, out int x) ? x : 0,
                                                                                       int.TryParse(dictionary["PointY"].Value, out int y) ? y : 0);
 

@@ -8,8 +8,6 @@ namespace EasyMacroAPI.Command
         #region Public Propertes
         public List<Keys> Keys { get; set; }
 
-        public MacroTypes MacroType => MacroTypes.CombInputKeyboard;
-
         private InputKeyboard inputKeyboard;
         #endregion
 

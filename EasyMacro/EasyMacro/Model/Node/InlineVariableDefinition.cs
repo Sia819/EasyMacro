@@ -1,7 +1,7 @@
-﻿using EasyMacro.Model.Node.Compiler;
-
-namespace EasyMacro.Model.Node
+﻿namespace EasyMacro.Model.Node
 {
+    using EasyMacro.Model.Node.Compiler;
+
     public class InlineVariableDefinition<T> : ITypedVariableDefinition<T>
     {
         public string VariableName { get; private set; }

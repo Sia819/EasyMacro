@@ -8,7 +8,6 @@ namespace EasyMacro.ViewModel.Node.NodeObject
 {
     public interface INodeSerializable
     {
-        public string Hash { get; }
         public void Connect(INodeSerializable instance, List<INodeSerializable> obj);
     }
 }

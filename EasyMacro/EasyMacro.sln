@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyMacroAPI", "EasyMacroAP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyMacro", "EasyMacro\EasyMacro.csproj", "{82D9841E-BC78-4701-91B4-D9768FFC7ACB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyMacro.Test", "EasyMacro.Test\EasyMacro.Test.csproj", "{CA119BB8-D42E-4BBD-8749-31BCEB546E1A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,13 +16,15 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5DA04EE0-B0D4-469F-A59E-935469B7B154}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5DA04EE0-B0D4-469F-A59E-935469B7B154}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DA04EE0-B0D4-469F-A59E-935469B7B154}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DA04EE0-B0D4-469F-A59E-935469B7B154}.Release|Any CPU.Build.0 = Release|Any CPU
 		{82D9841E-BC78-4701-91B4-D9768FFC7ACB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{82D9841E-BC78-4701-91B4-D9768FFC7ACB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82D9841E-BC78-4701-91B4-D9768FFC7ACB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82D9841E-BC78-4701-91B4-D9768FFC7ACB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA119BB8-D42E-4BBD-8749-31BCEB546E1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA119BB8-D42E-4BBD-8749-31BCEB546E1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA119BB8-D42E-4BBD-8749-31BCEB546E1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA119BB8-D42E-4BBD-8749-31BCEB546E1A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

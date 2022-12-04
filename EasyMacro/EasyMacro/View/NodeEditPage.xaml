@@ -8,29 +8,29 @@
       xmlns:nodeObject="clr-namespace:EasyMacro.ViewModel.Node.NodeObject"
       xmlns:viewNode="clr-namespace:EasyMacro.View.Node"
       xmlns:viewLib="clr-namespace:NodeNetwork.Views;assembly=NodeNetwork"
-      xmlns:viewEditor="clr-namespace:NodeNetwork.Views;assembly=NodeNetwork"
-      xmlns:viewModel="clr-namespace:EasyMacro.ViewModel"
       xmlns:nodeList="clr-namespace:NodeNetwork.Toolkit.NodeList;assembly=NodeNetworkToolkit"
       xmlns:breadcrumbBar="clr-namespace:NodeNetwork.Toolkit.BreadcrumbBar;assembly=NodeNetworkToolkit"
       xmlns:uc="clr-namespace:EasyMacro.View.UC"
-      xmlns:reactiveUi="http://reactiveui.net"
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1080"
       Title="NodeEditPage"
       d:Background="White">
-    <!--<Page.DataContext>
-        <viewModel:PageViewModel/>
-    </Page.DataContext>-->
+
     <Page.Resources>
         <ResourceDictionary>
             <converters:TypeVisibilityCheck x:Key="TypeCheckToVisibility"/>
             <ContextMenu x:Key="nodeMenu" x:Shared="True">
                 <MenuItem x:Name="groupNodesButton" Header="Group nodes"/>
-                <MenuItem x:Name="ungroupNodesButton" Header="Ungroup nodes" Visibility="{Binding Converter={StaticResource TypeCheckToVisibility}, ConverterParameter={x:Type nodeObject:GroupNodeViewModel}}"/>
-                <MenuItem x:Name="openGroupButton" Header="Open group" Visibility="{Binding Converter={StaticResource TypeCheckToVisibility}, ConverterParameter={x:Type nodeObject:GroupNodeViewModel}}"/>
+                <MenuItem x:Name="ungroupNodesButton" Header="Ungroup nodes" 
+                          Visibility="{Binding Converter={StaticResource TypeCheckToVisibility}, 
+                          ConverterParameter={x:Type nodeObject:GroupNodeViewModel}}"/>
+                <MenuItem x:Name="openGroupButton" Header="Open group" 
+                          Visibility="{Binding Converter={StaticResource TypeCheckToVisibility}, 
+                    ConverterParameter={x:Type nodeObject:GroupNodeViewModel}}"/>
             </ContextMenu>
         </ResourceDictionary>
     </Page.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -55,21 +55,7 @@
                 <!-- Node List가 보이는 패널 -->
                 <nodeList:NodeListView x:Name="nodeList" Margin="0,0,0,0"/>
 
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="10, 0, 10, 8">
-                    <!-- 버튼을 둥글게, 스타일지정 -->
-                    <!--
-                    <StackPanel.Resources>
-                        <ResourceDictionary>
-                            <ResourceDictionary.MergedDictionaries>
-                                <ResourceDictionary Source="pack://application:,,,/Resource/RoundedButton.xaml"/>
-                            </ResourceDictionary.MergedDictionaries>
-                        </ResourceDictionary>
-                    </StackPanel.Resources>
-
-                    <Button Name="autoLayoutButton" Content="Auto-layout" />
-                    <Button Name="startAutoLayoutLiveButton" Margin="0, 5, 0, 0" Content="Start live auto-layout" />
-                    <Button Name="stopAutoLayoutLiveButton" Margin="0, 5, 0, 0" Content="Stop live auto-layout" />-->
-                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="10, 0, 10, 8"/>
             </Grid>
             <GridSplitter Grid.Row="1" Background="DarkGray"
                           VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
@@ -118,3 +104,4 @@
         </Grid>
     </Grid>
 </Page>
+    

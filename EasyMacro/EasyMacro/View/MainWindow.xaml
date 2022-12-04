@@ -21,6 +21,7 @@
         </ResourceDictionary>
     </Window.Resources>
 
+    <!-- 윈도우 타이틀바 우측에 표시되는 컨트롤로써 저장, 불러오기 버튼입니다. -->
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands ShowLastSeparator="False">
             <!-- Title bar additional controls of right-side -->
@@ -31,10 +32,9 @@
             <Button Content="Load" Click="ButtonLoad_Click"></Button>
             
         </mah:WindowCommands>
-        
     </mah:MetroWindow.RightWindowCommands>
 
-    <!-- 내용 -->
+    <!-- 윈도우의 내용이 표시됩니다. -->
     <Frame x:FieldModifier="public"  x:Name="mainFrame"
            Grid.Row="1"  NavigationUIVisibility="Hidden" >
     </Frame>

@@ -12,41 +12,45 @@ namespace HookLib
 
     public static class GlobalKeyboardHook
     {
-        private static SafeHookHandle hookHandle = null;
+        private static SafeHookHandle hookHandle = null; // OS에서 받아오는 SetWindowsHookEx 핸들 래퍼 클래스
 
-        private static WindowsHookDelegate callbackDelegate = null;
-        // 모든 감시할 키보드 키
-        private static Dictionary<Keys, bool> keyboardKeyStatus = null;
-        // 등록된 핫키에 대응하는 델리게이트
-        private static Dictionary<(Keys, KeyModifiers), KeyboardHotkeyDelegate> registeredHotkey = null;
+        private static WindowsHookDelegate callbackDelegate = null; // 모든 감시할 키보드 키
 
-        public delegate void KeyboardHotkeyDelegate(Keys keys, KeyModifiers keyModifiers = KeyModifiers.None);
+        private static Dictionary<Keys, bool> keyboardKeyStatus = null; // 등록된 핫키에 대응하는 델리게이트
 
+        private static Dictionary<(Keys, KeyModifiers), KeyboardHotkeyDelegate> registeredHotkey = null; // 등록된 단축키 (키/보조키) 조합
+
+        public delegate void KeyboardHotkeyDelegate(Keys keys, KeyModifiers keyModifiers = KeyModifiers.None); // 단축키가 눌려졌을 때, 이 클래스로부터 제공받을 콜백함수 규격
+        
+        // 새로운 단축키를 등록합니다.
         public static void AddKeyboardHotkey(Keys keys, KeyModifiers keyModifiers, KeyboardHotkeyDelegate hotkeyDelegate)
         {
             if (registeredHotkey.ContainsKey((keys, keyModifiers)) is not true)   // Dupe regist check
                 registeredHotkey.Add((keys, keyModifiers), hotkeyDelegate);
         }
 
+        // 등록된 단축키를 제거합니다.
         public static void RemoveKeyboardHotkey(Keys keys, KeyModifiers keyModifiers)
         {
             registeredHotkey.Remove((keys, keyModifiers));
         }
 
+        // 열거형 KeyModifiers -> Key 호환용 컨버터
         private static Keys KeyModifiersToKeyConverter(KeyModifiers keyModifiers)
         {
             switch (keyModifiers)
             {
                 case KeyModifiers.None: return Keys.None;
-                case KeyModifiers.Control: return Keys.Control;    //return Keys.LeftCtrl;
-                case KeyModifiers.Alt: return Keys.Alt;    //return Keys.LeftAlt;
-                case KeyModifiers.Shift: return Keys.Shift;  //return Keys.LeftShift;
+                case KeyModifiers.Control: return Keys.Control;  
+                case KeyModifiers.Alt: return Keys.Alt;    
+                case KeyModifiers.Shift: return Keys.Shift;
                 case KeyModifiers.Windows: return Keys.LWin;
 
                 default: return Keys.None;
             }
         }
 
+        // 열거형 Key -> KeyModifiers 호환용 컨버터
         private static KeyModifiers KeyToKeyModifiersConverter(Keys keys)
         {
             switch (keys)
@@ -69,6 +73,7 @@ namespace HookLib
             }
         }
 
+        // 현재 OS에서 눌려진 키보드의 보조키의 눌려진 상태가, 패러미터의 보조키와 일치하는지 여부를 확인
         private static bool KeyModifiersPressedFlagsCheck(KeyModifiers keyModifiers)
         {
             KeyModifiers pressedState = KeyModifiers.None;
@@ -105,6 +110,7 @@ namespace HookLib
             return (pressedState == keyModifiers);
         }
 
+        // 현재 OS에서 보조키가 눌려졌는지 확인
         private static bool IsKeyModifiersPressed()
         {
             return keyboardKeyStatus[Keys.Control]
@@ -124,8 +130,7 @@ namespace HookLib
                     || keyboardKeyStatus[Keys.CapsLock];
         }
 
-
-
+        // 단축키 작업의 시작을 위한 Hook 사전 준비입니다.
         public static void StartKeyboardHook()
         {
             if (hookHandle is not null) return;
@@ -144,12 +149,14 @@ namespace HookLib
             hookHandle = SetWindowsHookEx(User32.WindowsHookType.WH_KEYBOARD_LL, callbackDelegate, IntPtr.Zero, 0);  // 키보드 훅
         }
 
+        // 단축키 작업의 종료를 위한 Hook 사전 준비준비입니다.
         public static void StopKeyboardHook()
         {
             hookHandle.Dispose();   // Hook 핸들 해제
             hookHandle = null;      // Hook 중이 아닙니다.
         }
 
+        // OS로 부터 키보드의 키가 눌려진 경우 받아오는 콜백함수입니다.
         public static int KeyboardCallBack(int nCode, IntPtr wParam, IntPtr lParam)
         {
             if (lParam != IntPtr.Zero)
